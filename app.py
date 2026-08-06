@@ -204,6 +204,14 @@ def clean_and_format_phone(phone_str):
     return formatted, None
 
 
+def get_item_category(item_name, catalog):
+    """Finds which category an item belongs to within the selected catalog."""
+    for cat_name, items in catalog.items():
+        if item_name in items:
+            return cat_name
+    return "Special / Custom Requests"
+
+
 # 3. SIDEBAR NAVIGATION
 st.sidebar.title("🏪 Store Operations")
 selected_holiday = st.sidebar.selectbox(
@@ -532,35 +540,64 @@ with tab2:
     else:
         st.info("No matching orders found.")
 
-# TAB 3: KITCHEN PREP DASHBOARD
+# TAB 3: DYNAMIC KITCHEN PREP DASHBOARD
 with tab3:
-    st.subheader("Daily Kitchen Production Totals")
+    st.subheader("📊 Dynamic Kitchen Production & Prep Dashboard")
 
     conn = sqlite3.connect(DB_FILE)
     df_raw = pd.read_sql_query(
-        "SELECT pickup_date, pickup_time, item_name, variant as unit, quantity, notes, custom_flag FROM orders WHERE holiday = ?",
+        "SELECT pickup_date, pickup_time, phone, first_name, last_name, item_name, variant as unit, quantity, notes, custom_flag FROM orders WHERE holiday = ?",
         conn,
         params=(selected_holiday,),
     )
     conn.close()
 
     if not df_raw.empty:
-        available_dates = ["All Dates"] + sorted(
-            df_raw["pickup_date"].unique().tolist()
-        )
-        selected_date = st.selectbox(
-            "Filter Production Sheet by Pickup Date:", available_dates
+        catalog = HOLIDAY_CATALOGS[selected_holiday]
+        df_raw["category"] = df_raw["item_name"].apply(
+            lambda x: get_item_category(x, catalog)
         )
 
-        filtered_df = (
-            df_raw
-            if selected_date == "All Dates"
-            else df_raw[df_raw["pickup_date"] == selected_date]
-        )
+        f_col1, f_col2 = st.columns(2)
 
-        st.markdown("### 🥩 Total Production Quantities Needed")
+        with f_col1:
+            available_dates = ["All Dates"] + sorted(
+                df_raw["pickup_date"].unique().tolist()
+            )
+            selected_date = st.selectbox(
+                "🗓️ Filter by Pickup Date:", available_dates
+            )
+
+        with f_col2:
+            available_cats = ["All Categories"] + sorted(
+                df_raw["category"].unique().tolist()
+            )
+            selected_cat = st.selectbox(
+                "🥩 Filter by Item Category:", available_cats
+            )
+
+        filtered_df = df_raw.copy()
+        if selected_date != "All Dates":
+            filtered_df = filtered_df[filtered_df["pickup_date"] == selected_date]
+        if selected_cat != "All Categories":
+            filtered_df = filtered_df[filtered_df["category"] == selected_cat]
+
+        m1, m2, m3 = st.columns(3)
+        unique_orders_count = len(
+            filtered_df.groupby(["phone", "pickup_date"])
+        )
+        total_items_count = len(filtered_df)
+        high_alert_count = len(filtered_df[filtered_df["custom_flag"] == 1])
+
+        m1.metric("📦 Total Customer Orders", unique_orders_count)
+        m2.metric("🥩 Total Line Items", total_items_count)
+        m3.metric("🚨 Special / High-Priority Alerts", high_alert_count)
+
+        st.markdown("---")
+
+        st.markdown("### 📋 Production Summary Sheet")
         df_totals = (
-            filtered_df.groupby(["pickup_date", "item_name", "unit"])[
+            filtered_df.groupby(["pickup_date", "category", "item_name", "unit"])[
                 "quantity"
             ]
             .sum()
@@ -568,37 +605,72 @@ with tab3:
         )
         df_totals.columns = [
             "Pickup Date",
+            "Category",
             "Item Name",
             "Unit of Measure",
-            "Total Quantity",
+            "Total Quantity Needed",
         ]
-        df_totals["Total Quantity"] = df_totals["Total Quantity"].apply(
-            format_qty
-        )
+        df_totals["Total Quantity Needed"] = df_totals[
+            "Total Quantity Needed"
+        ].apply(format_qty)
+
         st.dataframe(df_totals, use_container_width=True)
 
+        csv_data = df_totals.to_csv(index=False).encode("utf-8")
+        st.download_button(
+            label="📥 Export Prep Sheet as CSV / Excel",
+            data=csv_data,
+            file_name="Kitchen_Prep_Sheet.csv",
+            mime="text/csv",
+        )
+
         st.markdown("---")
-        st.markdown("### ⚠️ Kitchen Alert: Special Custom Requests & Notes")
-        df_notes = filtered_df[filtered_df["notes"].str.strip() != ""][
-            ["pickup_date", "pickup_time", "item_name", "notes", "custom_flag"]
-        ]
-        if not df_notes.empty:
-            df_notes["Flag"] = df_notes["custom_flag"].apply(
-                lambda x: "🚨 HIGH PRIORITY" if x == 1 else "Note"
+        c_left, c_right = st.columns(2)
+
+        with c_left:
+            st.markdown("### ⏰ Hourly Store Pickup Load Schedule")
+            schedule_df = (
+                filtered_df.groupby(["pickup_time", "phone", "first_name", "last_name"])
+                .size()
+                .reset_index()
+                .groupby("pickup_time")
+                .size()
+                .reset_index(name="Scheduled Pickups")
             )
-            st.dataframe(
-                df_notes[
-                    [
-                        "Flag",
-                        "pickup_date",
-                        "pickup_time",
-                        "item_name",
-                        "notes",
-                    ]
-                ],
-                use_container_width=True,
-            )
-        else:
-            st.success("No special custom request notes for this date!")
+            st.dataframe(schedule_df, use_container_width=True)
+
+        with c_right:
+            st.markdown("### ⚠️ Special Requests & Custom Notes")
+            df_notes = filtered_df[filtered_df["notes"].str.strip() != ""][
+                [
+                    "pickup_date",
+                    "pickup_time",
+                    "first_name",
+                    "last_name",
+                    "item_name",
+                    "notes",
+                    "custom_flag",
+                ]
+            ]
+            if not df_notes.empty:
+                df_notes["Flag"] = df_notes["custom_flag"].apply(
+                    lambda x: "🚨 HIGH PRIORITY" if x == 1 else "Note"
+                )
+                st.dataframe(
+                    df_notes[
+                        [
+                            "Flag",
+                            "pickup_date",
+                            "pickup_time",
+                            "first_name",
+                            "last_name",
+                            "item_name",
+                            "notes",
+                        ]
+                    ],
+                    use_container_width=True,
+                )
+            else:
+                st.success("No special custom request notes for this filter!")
     else:
         st.info("No active orders found for this holiday.")
