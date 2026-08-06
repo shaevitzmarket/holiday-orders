@@ -1,40 +1,42 @@
+import base64
+import io
 import re
 import pandas as pd
+import requests
 import streamlit as st
-from streamlit_gsheets import GSheetsConnection
 
 st.set_page_config(
     page_title="Holiday Order Management System", page_icon="📦", layout="wide"
 )
 
-# 1. GOOGLE SHEETS CONNECTION
-conn = st.connection("gsheets", type=GSheetsConnection)
+# 1. GITHUB PERMANENT STORAGE HELPERS
+GITHUB_TOKEN = st.secrets.get("GITHUB_TOKEN", "")
+GITHUB_REPO = st.secrets.get("GITHUB_REPO", "")
+CSV_FILENAME = "orders.csv"
+
+HEADERS = {
+    "Authorization": f"token {GITHUB_TOKEN}",
+    "Accept": "application/vnd.github.v3+json",
+}
+API_URL = (
+    f"https://api.github.com/repos/{GITHUB_REPO}/contents/{CSV_FILENAME}"
+)
 
 
 def load_orders():
-    """Fetches real-time orders directly from Google Sheets."""
-    try:
-        df = conn.read(ttl=0)  # ttl=0 forces fresh fetch on every action
-        if df.empty or "id" not in df.columns:
-            return pd.DataFrame(
-                columns=[
-                    "id",
-                    "holiday",
-                    "first_name",
-                    "last_name",
-                    "phone",
-                    "email",
-                    "pickup_date",
-                    "pickup_time",
-                    "item_name",
-                    "unit",
-                    "quantity",
-                    "notes",
-                    "custom_flag",
-                ]
-            )
+    """Fetches real-time orders directly from orders.csv in your GitHub repository."""
+    if not GITHUB_TOKEN or not GITHUB_REPO:
+        st.warning("⚠️ GitHub Token or Repo name missing in Secrets.")
+        return pd.DataFrame()
+
+    res = requests.get(API_URL, headers=HEADERS)
+    if res.status_code == 200:
+        file_json = res.json()
+        content = base64.b64decode(file_json["content"]).decode("utf-8")
+        df = pd.read_csv(io.StringIO(content))
         return df
-    except Exception:
+    else:
+        # File doesn't exist yet, return empty structure
         return pd.DataFrame(
             columns=[
                 "id",
@@ -52,6 +54,29 @@ def load_orders():
                 "custom_flag",
             ]
         )
+
+
+def save_orders_to_github(df, commit_message="Update customer orders"):
+    """Saves updated dataframe back to orders.csv in your GitHub repository."""
+    csv_buffer = io.StringIO()
+    df.to_csv(csv_buffer, index=False)
+    raw_csv = csv_buffer.getvalue()
+
+    # Get current file SHA if file exists
+    res = requests.get(API_URL, headers=HEADERS)
+    sha = res.json()["sha"] if res.status_code == 200 else None
+
+    encoded_content = base64.b64encode(raw_csv.encode("utf-8")).decode("utf-8")
+
+    payload = {
+        "message": commit_message,
+        "content": encoded_content,
+    }
+    if sha:
+        payload["sha"] = sha
+
+    put_res = requests.put(API_URL, headers=HEADERS, json=payload)
+    return put_res.status_code in [200, 201]
 
 
 # 2. CATALOG LOADED FROM SPREADSHEET
@@ -296,7 +321,7 @@ with tab1:
         placeholder="e.g., Wants 2 lbs of unlisted Item X, or trim all excess fat from brisket.",
     )
 
-    if st.button("Save Order to Google Sheets", type="primary"):
+    if st.button("Save Order permanently to GitHub", type="primary"):
         formatted_phone, phone_error = clean_and_format_phone(phone_input)
 
         if not last_name or not pickup_date:
@@ -340,10 +365,16 @@ with tab1:
             df_updated = pd.concat(
                 [df_existing, pd.DataFrame(new_rows)], ignore_index=True
             )
-            conn.update(data=df_updated)
-            st.success(
-                f"Successfully saved order for {first_name} {last_name} ({formatted_phone}) to Google Sheets!"
+            success = save_orders_to_github(
+                df_updated,
+                f"Add order for {first_name} {last_name}",
             )
+            if success:
+                st.success(
+                    f"Successfully saved order for {first_name} {last_name} ({formatted_phone}) permanently!"
+                )
+            else:
+                st.error("Failed to save to GitHub. Check your GitHub Token in Secrets.")
 
 # TAB 2: SEARCH, EDIT & DELETE
 with tab2:
@@ -387,7 +418,7 @@ with tab2:
         )
 
         grouped["Flag"] = grouped["custom_flag"].apply(
-            lambda x: "🚨 CUSTOM" if x == 1 else "OK"
+            lambda x: "🚨 CUSTOM" if str(x) == "1" else "OK"
         )
 
         st.markdown("### 📋 Customer Orders Overview")
@@ -486,9 +517,9 @@ with tab2:
                             df_master.loc[mask, "notes"] = new_notes
                             df_master.loc[mask, "custom_flag"] = 1 if new_flag else 0
 
-                    conn.update(data=df_master)
+                    save_orders_to_github(df_master, f"Edit order for {first_row['first_name']} {first_row['last_name']}")
                     st.success(
-                        f"Order for {first_row['first_name']} {first_row['last_name']} updated successfully in Google Sheets!"
+                        f"Order for {first_row['first_name']} {first_row['last_name']} updated permanently!"
                     )
                     st.rerun()
 
@@ -510,9 +541,9 @@ with tab2:
                         & (df_master["pickup_date"] == first_row["pickup_date"])
                     )
                 ]
-                conn.update(data=df_master)
+                save_orders_to_github(df_master, f"Delete order for {cust_name}")
                 st.success(
-                    f"All items for {cust_name} deleted from Google Sheets!"
+                    f"All items for {cust_name} deleted from GitHub!"
                 )
                 st.rerun()
 
