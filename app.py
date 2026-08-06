@@ -1,3 +1,4 @@
+import re
 import sqlite3
 import pandas as pd
 import streamlit as st
@@ -6,7 +7,7 @@ st.set_page_config(
     page_title="Holiday Order Management System", page_icon="📦", layout="wide"
 )
 
-# 1. DATABASE SETUP
+# 1. DATABASE SETUP & AUTOMATIC MIGRATION
 DB_FILE = "holiday_orders.db"
 
 
@@ -24,111 +25,184 @@ def init_db():
             pickup_date TEXT,
             pickup_time TEXT,
             item_name TEXT,
-            quantity REAL
+            variant TEXT,
+            quantity REAL,
+            notes TEXT,
+            custom_flag INTEGER DEFAULT 0
         )
     """)
+    c.execute("PRAGMA table_info(orders)")
+    columns = [col[1] for col in c.fetchall()]
+    if "variant" not in columns:
+        c.execute("ALTER TABLE orders ADD COLUMN variant TEXT DEFAULT ''")
+    if "notes" not in columns:
+        c.execute("ALTER TABLE orders ADD COLUMN notes TEXT DEFAULT ''")
+    if "custom_flag" not in columns:
+        c.execute(
+            "ALTER TABLE orders ADD COLUMN custom_flag INTEGER DEFAULT 0"
+        )
+
     conn.commit()
     conn.close()
 
 
 init_db()
 
-# 2. MENU CATALOG
+# 2. CATALOG LOADED FROM SPREADSHEET
 ROSH_CATALOG = {
-    "Beef & Brisket": [
-        "Whole Brisket",
-        "1st Cut",
-        "2nd Cut",
-        "Rib Roast #",
-        "Rib Steak",
-        "Ribeye",
-        "Short Rib#",
-        "Skirt#",
-        "Family",
-        "ChuckEye #",
-        "Grnd D",
-        "Grnd W",
-        "Smoked Brisket",
-        "Braised",
-    ],
-    "Poultry": [
-        "Capon",
-        "Fryer",
-        "Breast (pc)",
-        "B/S (pc)",
-        "Leg (pc)",
-        "Thigh (pc)",
-        "B/S Thigh(#)",
-        "DrmStix (pc)",
-        "Wings (pk)",
-        "Chx Bones",
-        "Cornish",
-        "Grnd Chx",
-        "Chx Liver",
-        "ChxFat",
-        "Herb Chx",
-        "HerbChx",
-        "Schnitzel",
-        "Chicken",
-    ],
-    "Turkey": [
-        "Tky Breast",
-        "10-16 Turkey",
-        "16-20 Turkey",
-        "20-24Turkey",
-        "RoastBreast",
-        "Smoke Breast",
-        "S&S Tky",
-    ],
-    "Veal & Lamb": [
-        "Veal Chop",
-        "Veal Pocket",
-        "Lamb Chop",
-        "Lmb Shl Chop",
-        "GrndLamb",
-    ],
-    "Soups & Prepared Sides": [
-        "Matza Ball",
-        "Matza Qt",
-        "Noodle Qt",
-        "Broth Qt",
-        "Broth Gal",
-        "Broth",
-        "Kishke",
-        "KishChx",
-        "S&S",
-        "Corn",
-        "Squash",
-        "Kugel",
-        "Meatballs",
-        "Deli",
-        "LiverPlate",
-        "Potato",
-        "Sweet Pot",
-        "Carrots",
-        "Brussels",
-        "Brisket",
-    ],
-    "Deli & Specialty": [
-        "ChopLiver",
-        "Salami (pc)",
-        "Salami",
-        "Stix",
-        "Pickled",
-    ],
+    "Briskets": {
+        "Whole Brisket 8-10 lb": {"unit": "# of pc", "is_weight": False},
+        "Whole Brisket 10-12 lb": {"unit": "# of pc", "is_weight": False},
+        "Whole Brisket 12-14 lb": {"unit": "# of pc", "is_weight": False},
+        "Whole Brisket 14-16 lb": {"unit": "# of pc", "is_weight": False},
+        "Whole Brisket 16 lb or More": {"unit": "# of pc", "is_weight": False},
+        "1st Cut 3-4 #": {"unit": "# of pc", "is_weight": False},
+        "1st Cut 4-5 #": {"unit": "# of pc", "is_weight": False},
+        "1st Cut 5-6 #": {"unit": "# of pc", "is_weight": False},
+        "1st Cut 6-7 #": {"unit": "# of pc", "is_weight": False},
+        "1st Cut 7# or more": {"unit": "# of pc", "is_weight": False},
+        "Brisket Point": {"unit": "# of pc", "is_weight": False},
+    },
+    "Chicken": {
+        "Whole Capon": {"unit": "# of pc", "is_weight": False},
+        "Capon Cut in 1/8": {"unit": "# of pc", "is_weight": False},
+        "Capon Cut in 1/4": {"unit": "# of pc", "is_weight": False},
+        "Fryer Whole": {"unit": "# of pc", "is_weight": False},
+        "Fryer Cut in 1/8": {"unit": "# of pc", "is_weight": False},
+        "Fryer Cut in 1/4": {"unit": "# of pc", "is_weight": False},
+        "Breasts Bone-In": {"unit": "# of pc", "is_weight": False},
+        "B/S Breast": {"unit": "by the #", "is_weight": True},
+        "B/S breast Thin Cut": {"unit": "# packs", "is_weight": False},
+        "Thighs": {"unit": "# packs", "is_weight": False},
+        "B/S Thighs": {"unit": "lb", "is_weight": True},
+        "Drumsticls": {"unit": "# of pc", "is_weight": False},
+        "Wings": {"unit": "pack", "is_weight": False},
+        "Chicken Bones": {"unit": "pack", "is_weight": False},
+        "Necks": {"unit": "pack", "is_weight": False},
+        "Ground Breast": {"unit": "lb", "is_weight": True},
+        "Ground Thigh": {"unit": "lb", "is_weight": True},
+        "Chicken Liver": {"unit": "pack", "is_weight": False},
+        "Chx Fat": {"unit": "each", "is_weight": False},
+        "cornish hen": {"unit": "each", "is_weight": False},
+    },
+    "Turkey": {
+        "Turkey Breast": {"unit": "# of pc", "is_weight": False},
+        "12-16 lb Turkey": {"unit": "# of pc", "is_weight": False},
+        "16-20 lb Turkey": {"unit": "# of pc", "is_weight": False},
+        "20-24 lb Turkey": {"unit": "# of pc", "is_weight": False},
+        "Ground Turkey Thigh": {"unit": "lb", "is_weight": True},
+        "Ground Turkey Breast": {"unit": "lb", "is_weight": True},
+    },
+    "Beef": {
+        "Rib Steak": {"unit": "# of pc", "is_weight": False},
+        "Ribeye Steak": {"unit": "# of pc", "is_weight": False},
+        "Bone-in Rib Roast": {"unit": "lb", "is_weight": True},
+        "Boneless Ribeye Roast": {"unit": "lb", "is_weight": True},
+        "Short Rib": {"unit": "lb", "is_weight": True},
+        "Skirt Steak": {"unit": "lb", "is_weight": True},
+        "Family Steak": {"unit": "# of pc", "is_weight": False},
+        "Denver Steak": {"unit": "lb", "is_weight": True},
+        "Chuck Eye Roast": {"unit": "lb", "is_weight": True},
+        "Boston Roast": {"unit": "lb", "is_weight": True},
+        "Ground 80/20": {"unit": "lb", "is_weight": True},
+        "Ground Beef Lean": {"unit": "lb", "is_weight": True},
+    },
+    "Lamb & Veal": {
+        "Lamb Rib Chops": {"unit": "# of pc", "is_weight": False},
+        "Lamb Sholder Chop": {"unit": "# of pc", "is_weight": False},
+        "Ground Lamb": {"unit": "lb", "is_weight": True},
+        "Lamb Stew": {"unit": "lb", "is_weight": True},
+        "Veal Chop 1st Cut": {"unit": "# of pc", "is_weight": False},
+    },
+    "Soup, Deli, and Pre-Cooked": {
+        "Matzah Balls": {"unit": "Each", "is_weight": False},
+        "Noodle Soup Qt": {"unit": "Each", "is_weight": False},
+        "Chicken Broth Qt": {"unit": "Each", "is_weight": False},
+        "Chicken Broth 1/2 Gallon": {"unit": "Each", "is_weight": False},
+        "Kishke": {"unit": "Each", "is_weight": False},
+        "Chopped Liver": {"unit": "lb", "is_weight": True},
+        "Salami Whole": {"unit": "Each", "is_weight": False},
+        "Pickled Brisket": {"unit": "Each", "is_weight": False},
+        "Roast Turkey Breast": {"unit": "Each", "is_weight": False},
+        "Herb Roasted Chicken": {"unit": "Each", "is_weight": False},
+        "Kishke Chicken": {"unit": "Each", "is_weight": False},
+        "Meatballs": {"unit": "Each", "is_weight": False},
+        "Turkey Meatballs": {"unit": "Each", "is_weight": False},
+        "Corn Souffle": {"unit": "Each", "is_weight": False},
+        "Potato Kugel": {"unit": "Each", "is_weight": False},
+        "Squash Souffle": {"unit": "Each", "is_weight": False},
+    },
+    "Catering Trays": {
+        "Complete Dinner": {"unit": "Each", "is_weight": False},
+        "Deli Platter": {"unit": "Each", "is_weight": False},
+        "Braised Brisket": {"unit": "Each", "is_weight": False},
+        "Smoked Brisket": {"unit": "Each", "is_weight": False},
+        "Braised Short Rib": {"unit": "Each", "is_weight": False},
+        "Schnitzel": {"unit": "Each", "is_weight": False},
+        "Herb Chicken Tray": {"unit": "Each", "is_weight": False},
+        "Meatsballs Tray": {"unit": "Each", "is_weight": False},
+        "Squash Souffle Tray": {"unit": "Each", "is_weight": False},
+        "Roasted Potato": {"unit": "Each", "is_weight": False},
+        "Maple Carrots": {"unit": "Each", "is_weight": False},
+        "Roast Sweet Potatoes": {"unit": "Each", "is_weight": False},
+    },
 }
 
 HOLIDAY_CATALOGS = {
     "Rosh Hashanah 2026": ROSH_CATALOG,
     "Passover 2027": {
-        "Poultry": ["Capon", "Fryer", "Breast (pc)"],
-        "Sides": ["Potato Souffle", "Matza Qt"],
+        "Poultry": {
+            "Whole Capon": {"unit": "# of pc", "is_weight": False},
+            "Fryer Whole": {"unit": "# of pc", "is_weight": False},
+        },
+        "Sides": {
+            "Matzah Balls": {"unit": "Each", "is_weight": False},
+            "Potato Kugel": {"unit": "Each", "is_weight": False},
+        },
     },
     "Thanksgiving 2026": {
-        "Turkeys": ["10-16 Turkey", "16-20 Turkey"],
-        "Sides": ["Stuffing", "Gravy Qt"],
+        "Turkeys": {
+            "12-16 lb Turkey": {"unit": "# of pc", "is_weight": False},
+            "16-20 lb Turkey": {"unit": "# of pc", "is_weight": False},
+        },
+        "Sides": {
+            "Corn Souffle": {"unit": "Each", "is_weight": False},
+        },
     },
 }
+
+TIME_SLOTS = [
+    "9:00 AM - 10:00 AM",
+    "10:00 AM - 11:00 AM",
+    "11:00 AM - 12:00 PM",
+    "12:00 PM - 1:00 PM",
+    "1:00 PM - 2:00 PM",
+    "2:00 PM - 3:00 PM",
+    "3:00 PM - 4:00 PM",
+    "4:00 PM - 5:00 PM",
+]
+
+
+def format_qty(val):
+    """Cleanly format quantities: whole numbers display as integers (1), weights display to 1 decimal place (1.5)."""
+    if pd.isna(val):
+        return ""
+    if val == int(val):
+        return str(int(val))
+    return f"{val:.1f}"
+
+
+def clean_and_format_phone(phone_str):
+    """Extracts digits and formats phone to (###) ### - ####. Returns (formatted_str, error_msg)."""
+    digits = re.sub(r"\D", "", phone_str)
+    if len(digits) != 10:
+        return (
+            None,
+            f"Phone number must contain exactly 10 digits (currently has {len(digits)}).",
+        )
+    formatted = f"({digits[:3]}) {digits[3:6]} - {digits[6:]}"
+    return formatted, None
+
 
 # 3. SIDEBAR NAVIGATION
 st.sidebar.title("🏪 Store Operations")
@@ -142,7 +216,7 @@ tab1, tab2, tab3 = st.tabs(
     [
         "📝 Take New Order",
         "🔍 Search / Edit Customer Orders",
-        "📊 Daily Kitchen Prep Totals",
+        "📊 Kitchen Prep Dashboard",
     ]
 )
 
@@ -152,12 +226,15 @@ with tab1:
     c1, c2 = st.columns(2)
     with c1:
         first_name = st.text_input("First Name")
-        phone = st.text_input("Phone Number")
+        phone_input = st.text_input(
+            "Phone Number", placeholder="e.g. 8475551234 or (847) 555-1234"
+        )
         pickup_date = st.date_input("Pickup Date")
+        st.caption(f"🗓️ Selected Day: **{pickup_date.strftime('%A')}**")
     with c2:
         last_name = st.text_input("Last Name")
         email = st.text_input("Email Address")
-        pickup_time = st.time_input("Pickup Time")
+        pickup_time = st.selectbox("Pickup Time Slot", TIME_SLOTS)
 
     st.markdown("---")
     st.subheader("Select Ordered Items & Quantities")
@@ -167,48 +244,89 @@ with tab1:
 
     for category, items in catalog.items():
         with st.expander(f"📁 {category}"):
-            cols = st.columns(3)
-            for idx, item in enumerate(items):
-                col = cols[idx % 3]
-                qty = col.number_input(
-                    f"{item}",
-                    min_value=0.0,
-                    step=1.0,
-                    key=f"{selected_holiday}_{item}",
-                )
+            cols = st.columns(2)
+            for idx, (item_name, item_info) in enumerate(items.items()):
+                col = cols[idx % 2]
+                unit_str = item_info["unit"]
+                is_weight = item_info["is_weight"]
+
+                if is_weight:
+                    qty = col.number_input(
+                        f"{item_name} ({unit_str})",
+                        min_value=0.0,
+                        step=0.1,
+                        format="%.1f",
+                        key=f"{selected_holiday}_{item_name}",
+                    )
+                else:
+                    qty = float(
+                        col.number_input(
+                            f"{item_name} ({unit_str})",
+                            min_value=0,
+                            step=1,
+                            key=f"{selected_holiday}_{item_name}",
+                        )
+                    )
+
                 if qty > 0:
-                    order_items.append((item, qty))
+                    order_items.append((item_name, unit_str, qty))
+
+    st.markdown("---")
+    st.subheader("📝 Special Notes & Off-Menu Requests")
+    custom_flag = st.checkbox(
+        "🚨 Flag as High Maintenance / Custom Request (Needs Kitchen Attention)"
+    )
+    order_notes = st.text_area(
+        "Custom Items, Special Trims, or Special Instructions:",
+        placeholder="e.g., Wants 2 lbs of unlisted Item X, or trim all excess fat from brisket.",
+    )
 
     if st.button("Save Order", type="primary"):
+        formatted_phone, phone_error = clean_and_format_phone(phone_input)
+
         if not last_name or not pickup_date:
             st.error("Please enter at least Last Name and Pickup Date.")
-        elif not order_items:
-            st.error("Please enter a quantity for at least one item.")
+        elif phone_error:
+            st.error(f"Invalid Phone Number: {phone_error}")
+        elif not order_items and not order_notes:
+            st.error(
+                "Please select at least one item or enter a custom order note."
+            )
         else:
+            formatted_date = f"{pickup_date} ({pickup_date.strftime('%a')})"
+            flag_val = 1 if custom_flag else 0
+
             conn = sqlite3.connect(DB_FILE)
             cursor = conn.cursor()
-            for item_name, qty in order_items:
+
+            if not order_items:
+                order_items.append(("Custom Request Only", "N/A", 1.0))
+
+            for item_name, variant, qty in order_items:
                 cursor.execute(
                     """
-                    INSERT INTO orders (holiday, first_name, last_name, phone, email, pickup_date, pickup_time, item_name, quantity)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    INSERT INTO orders (holiday, first_name, last_name, phone, email, pickup_date, pickup_time, item_name, variant, quantity, notes, custom_flag)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                     (
                         selected_holiday,
                         first_name,
                         last_name,
-                        phone,
+                        formatted_phone,
                         email,
-                        str(pickup_date),
+                        formatted_date,
                         str(pickup_time),
                         item_name,
-                        qty,
+                        variant,
+                        round(qty, 1),
+                        order_notes,
+                        flag_val,
                     ),
                 )
             conn.commit()
             conn.close()
             st.success(
-                f"Successfully saved order for {first_name} {last_name}!"
+                f"Successfully saved order for {first_name} {last_name} ({formatted_phone})!"
             )
 
 # TAB 2: SEARCH & LOOKUP
@@ -217,12 +335,13 @@ with tab2:
     search_term = st.text_input("Search by Last Name or Phone Number:")
 
     conn = sqlite3.connect(DB_FILE)
+    query = """
+        SELECT id, first_name, last_name, phone, pickup_date, pickup_time, item_name, variant as unit, quantity, notes, custom_flag
+        FROM orders 
+        WHERE holiday = ?
+    """
     if search_term:
-        query = """
-            SELECT id, first_name, last_name, phone, pickup_date, pickup_time, item_name, quantity 
-            FROM orders 
-            WHERE holiday = ? AND (last_name LIKE ? OR phone LIKE ?)
-        """
+        query += " AND (last_name LIKE ? OR phone LIKE ?)"
         df_search = pd.read_sql_query(
             query,
             conn,
@@ -232,44 +351,101 @@ with tab2:
                 f"%{search_term}%",
             ),
         )
-        st.dataframe(df_search, use_container_width=True)
     else:
-        df_all = pd.read_sql_query(
-            "SELECT * FROM orders WHERE holiday = ?",
-            conn,
-            params=(selected_holiday,),
+        df_search = pd.read_sql_query(
+            query, conn, params=(selected_holiday,)
         )
-        st.dataframe(df_all, use_container_width=True)
     conn.close()
+
+    if not df_search.empty:
+        df_search["Flag"] = df_search["custom_flag"].apply(
+            lambda x: "🚨 CUSTOM" if x == 1 else "OK"
+        )
+        df_search["quantity"] = df_search["quantity"].apply(format_qty)
+        df_display = df_search[
+            [
+                "id",
+                "Flag",
+                "first_name",
+                "last_name",
+                "phone",
+                "pickup_date",
+                "pickup_time",
+                "item_name",
+                "unit",
+                "quantity",
+                "notes",
+            ]
+        ]
+        st.dataframe(df_display, use_container_width=True)
+    else:
+        st.info("No matching orders found.")
 
 # TAB 3: KITCHEN PREP DASHBOARD
 with tab3:
-    st.subheader("Daily Item Totals (Kitchen Production)")
+    st.subheader("Daily Kitchen Production Totals")
+
     conn = sqlite3.connect(DB_FILE)
-    df_kitchen = pd.read_sql_query(
-        """
-        SELECT pickup_date, item_name, SUM(quantity) as total_needed
-        FROM orders
-        WHERE holiday = ?
-        GROUP BY pickup_date, item_name
-        ORDER BY pickup_date, item_name
-    """,
+    df_raw = pd.read_sql_query(
+        "SELECT pickup_date, pickup_time, item_name, variant as unit, quantity, notes, custom_flag FROM orders WHERE holiday = ?",
         conn,
         params=(selected_holiday,),
     )
     conn.close()
 
-    if not df_kitchen.empty:
+    if not df_raw.empty:
         available_dates = ["All Dates"] + sorted(
-            df_kitchen["pickup_date"].unique().tolist()
+            df_raw["pickup_date"].unique().tolist()
         )
         selected_date = st.selectbox(
             "Filter Production Sheet by Pickup Date:", available_dates
         )
 
-        if selected_date != "All Dates":
-            df_kitchen = df_kitchen[df_kitchen["pickup_date"] == selected_date]
+        filtered_df = (
+            df_raw
+            if selected_date == "All Dates"
+            else df_raw[df_raw["pickup_date"] == selected_date]
+        )
 
-        st.dataframe(df_kitchen, use_container_width=True)
+        st.markdown("### 🥩 Total Production Quantities Needed")
+        df_totals = (
+            filtered_df.groupby(["pickup_date", "item_name", "unit"])["quantity"]
+            .sum()
+            .reset_index()
+        )
+        df_totals.columns = [
+            "Pickup Date",
+            "Item Name",
+            "Unit of Measure",
+            "Total Quantity",
+        ]
+        df_totals["Total Quantity"] = df_totals["Total Quantity"].apply(
+            format_qty
+        )
+        st.dataframe(df_totals, use_container_width=True)
+
+        st.markdown("---")
+        st.markdown("### ⚠️ Kitchen Alert: Special Custom Requests & Notes")
+        df_notes = filtered_df[filtered_df["notes"].str.strip() != ""][
+            ["pickup_date", "pickup_time", "item_name", "notes", "custom_flag"]
+        ]
+        if not df_notes.empty:
+            df_notes["Flag"] = df_notes["custom_flag"].apply(
+                lambda x: "🚨 HIGH PRIORITY" if x == 1 else "Note"
+            )
+            st.dataframe(
+                df_notes[
+                    [
+                        "Flag",
+                        "pickup_date",
+                        "pickup_time",
+                        "item_name",
+                        "notes",
+                    ]
+                ],
+                use_container_width=True,
+            )
+        else:
+            st.success("No special custom request notes for this date!")
     else:
         st.info("No active orders found for this holiday.")
