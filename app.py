@@ -22,61 +22,67 @@ API_URL = (
     f"https://api.github.com/repos/{GITHUB_REPO}/contents/{CSV_FILENAME}"
 )
 
+EMPTY_COLUMNS = [
+    "id",
+    "holiday",
+    "first_name",
+    "last_name",
+    "phone",
+    "email",
+    "pickup_date",
+    "pickup_time",
+    "item_name",
+    "unit",
+    "quantity",
+    "notes",
+    "custom_flag",
+]
+
 
 def load_orders():
     """Fetches real-time orders directly from orders.csv in your GitHub repository."""
     if not GITHUB_TOKEN or not GITHUB_REPO:
         st.warning("⚠️ GitHub Token or Repo name missing in Secrets.")
-        return pd.DataFrame()
+        return pd.DataFrame(columns=EMPTY_COLUMNS)
 
-    res = requests.get(API_URL, headers=HEADERS)
-    if res.status_code == 200:
-        file_json = res.json()
-        content = base64.b64decode(file_json["content"]).decode("utf-8")
-        df = pd.read_csv(io.StringIO(content))
-        return df
-    else:
-        # File doesn't exist yet, return empty structure
-        return pd.DataFrame(
-            columns=[
-                "id",
-                "holiday",
-                "first_name",
-                "last_name",
-                "phone",
-                "email",
-                "pickup_date",
-                "pickup_time",
-                "item_name",
-                "unit",
-                "quantity",
-                "notes",
-                "custom_flag",
-            ]
-        )
+    try:
+        res = requests.get(API_URL, headers=HEADERS)
+        if res.status_code == 200:
+            file_json = res.json()
+            content = base64.b64decode(file_json["content"]).decode("utf-8")
+            if not content.strip():
+                return pd.DataFrame(columns=EMPTY_COLUMNS)
+            df = pd.read_csv(io.StringIO(content))
+            return df
+        else:
+            return pd.DataFrame(columns=EMPTY_COLUMNS)
+    except Exception:
+        return pd.DataFrame(columns=EMPTY_COLUMNS)
 
 
 def save_orders_to_github(df, commit_message="Update customer orders"):
     """Saves updated dataframe back to orders.csv in your GitHub repository."""
-    csv_buffer = io.StringIO()
-    df.to_csv(csv_buffer, index=False)
-    raw_csv = csv_buffer.getvalue()
+    try:
+        csv_buffer = io.StringIO()
+        df.to_csv(csv_buffer, index=False)
+        raw_csv = csv_buffer.getvalue()
 
-    # Get current file SHA if file exists
-    res = requests.get(API_URL, headers=HEADERS)
-    sha = res.json()["sha"] if res.status_code == 200 else None
+        res = requests.get(API_URL, headers=HEADERS)
+        sha = res.json()["sha"] if res.status_code == 200 else None
 
-    encoded_content = base64.b64encode(raw_csv.encode("utf-8")).decode("utf-8")
+        encoded_content = base64.b64encode(raw_csv.encode("utf-8")).decode("utf-8")
 
-    payload = {
-        "message": commit_message,
-        "content": encoded_content,
-    }
-    if sha:
-        payload["sha"] = sha
+        payload = {
+            "message": commit_message,
+            "content": encoded_content,
+        }
+        if sha:
+            payload["sha"] = sha
 
-    put_res = requests.put(API_URL, headers=HEADERS, json=payload)
-    return put_res.status_code in [200, 201]
+        put_res = requests.put(API_URL, headers=HEADERS, json=payload)
+        return put_res.status_code in [200, 201]
+    except Exception:
+        return False
 
 
 # 2. CATALOG LOADED FROM SPREADSHEET
@@ -384,7 +390,7 @@ with tab2:
     df_all = load_orders()
     df_raw = (
         df_all[df_all["holiday"] == selected_holiday].copy()
-        if not df_all.empty
+        if not df_all.empty and "holiday" in df_all.columns
         else pd.DataFrame()
     )
 
@@ -447,105 +453,108 @@ with tab2:
             label = f"{row['first_name']} {row['last_name']} | {row['phone']} | {row['pickup_date']} @ {row['pickup_time']}"
             order_list.append((label, row["phone"], row["pickup_date"]))
 
-        selected_order = st.selectbox(
-            "Select Customer Order:",
-            options=order_list,
-            format_func=lambda x: x[0],
-        )
-
-        sel_phone = selected_order[1]
-        sel_date = selected_order[2]
-
-        df_order_items = df_raw[
-            (df_raw["phone"] == sel_phone) & (df_raw["pickup_date"] == sel_date)
-        ].copy()
-
-        first_row = df_order_items.iloc[0]
-
-        st.markdown(
-            f"### 📦 Order Detail View: **{first_row['first_name']} {first_row['last_name']}**"
-        )
-        st.info(
-            f"📞 **Phone:** {first_row['phone']} | ✉️ **Email:** {first_row['email'] or 'N/A'} | 🗓️ **Pickup:** {first_row['pickup_date']} @ {first_row['pickup_time']}"
-        )
-
-        col_edit, col_del = st.columns(2)
-
-        with col_edit:
-            st.markdown("#### ✏️ Edit Order Items & Pickup Time")
-            with st.form("edit_full_order_form"):
-                new_time = st.selectbox(
-                    "Pickup Time Slot:",
-                    TIME_SLOTS,
-                    index=TIME_SLOTS.index(first_row["pickup_time"])
-                    if first_row["pickup_time"] in TIME_SLOTS
-                    else 0,
-                )
-                new_notes = st.text_area(
-                    "Order Notes / Instructions:", value=str(first_row["notes"])
-                )
-                new_flag = st.checkbox(
-                    "🚨 Flag as High Maintenance / Custom Request",
-                    value=bool(first_row["custom_flag"]),
-                )
-
-                st.markdown("##### Item Quantities:")
-                updated_quantities = {}
-                for _, item_row in df_order_items.iterrows():
-                    item_id = item_row["id"]
-                    item_label = (
-                        f"{item_row['item_name']} ({item_row['unit']})"
-                    )
-                    updated_quantities[item_id] = st.number_input(
-                        item_label,
-                        min_value=0.0,
-                        value=float(item_row["quantity"]),
-                        step=0.1,
-                        format="%.1f",
-                        key=f"edit_qty_{item_id}",
-                    )
-
-                if st.form_submit_button("💾 Save All Order Changes"):
-                    df_master = load_orders()
-                    for item_id, q_val in updated_quantities.items():
-                        if q_val <= 0:
-                            df_master = df_master[df_master["id"] != item_id]
-                        else:
-                            mask = df_master["id"] == item_id
-                            df_master.loc[mask, "quantity"] = round(q_val, 1)
-                            df_master.loc[mask, "pickup_time"] = new_time
-                            df_master.loc[mask, "notes"] = new_notes
-                            df_master.loc[mask, "custom_flag"] = 1 if new_flag else 0
-
-                    save_orders_to_github(df_master, f"Edit order for {first_row['first_name']} {first_row['last_name']}")
-                    st.success(
-                        f"Order for {first_row['first_name']} {first_row['last_name']} updated permanently!"
-                    )
-                    st.rerun()
-
-        with col_del:
-            st.markdown("#### 🗑️ Delete Entire Order")
-            st.warning(
-                "Deletions are permanent and will remove all items associated with this customer pickup."
+        if order_list:
+            selected_order = st.selectbox(
+                "Select Customer Order:",
+                options=order_list,
+                format_func=lambda x: x[0] if x is not None else "",
             )
-            cust_name = f"{first_row['first_name']} {first_row['last_name']}"
-            if st.button(
-                f"💥 Delete ALL Items for {cust_name} on {first_row['pickup_date']}",
-                type="primary",
-            ):
-                df_master = load_orders()
-                df_master = df_master[
-                    ~(
-                        (df_master["holiday"] == selected_holiday)
-                        & (df_master["phone"] == first_row["phone"])
-                        & (df_master["pickup_date"] == first_row["pickup_date"])
+
+            if selected_order is not None:
+                sel_phone = selected_order[1]
+                sel_date = selected_order[2]
+
+                df_order_items = df_raw[
+                    (df_raw["phone"] == sel_phone) & (df_raw["pickup_date"] == sel_date)
+                ].copy()
+
+                if not df_order_items.empty:
+                    first_row = df_order_items.iloc[0]
+
+                    st.markdown(
+                        f"### 📦 Order Detail View: **{first_row['first_name']} {first_row['last_name']}**"
                     )
-                ]
-                save_orders_to_github(df_master, f"Delete order for {cust_name}")
-                st.success(
-                    f"All items for {cust_name} deleted from GitHub!"
-                )
-                st.rerun()
+                    st.info(
+                        f"📞 **Phone:** {first_row['phone']} | ✉️ **Email:** {first_row['email'] or 'N/A'} | 🗓️ **Pickup:** {first_row['pickup_date']} @ {first_row['pickup_time']}"
+                    )
+
+                    col_edit, col_del = st.columns(2)
+
+                    with col_edit:
+                        st.markdown("#### ✏️ Edit Order Items & Pickup Time")
+                        with st.form("edit_full_order_form"):
+                            new_time = st.selectbox(
+                                "Pickup Time Slot:",
+                                TIME_SLOTS,
+                                index=TIME_SLOTS.index(first_row["pickup_time"])
+                                if first_row["pickup_time"] in TIME_SLOTS
+                                else 0,
+                            )
+                            new_notes = st.text_area(
+                                "Order Notes / Instructions:", value=str(first_row["notes"])
+                            )
+                            new_flag = st.checkbox(
+                                "🚨 Flag as High Maintenance / Custom Request",
+                                value=bool(first_row["custom_flag"]),
+                            )
+
+                            st.markdown("##### Item Quantities:")
+                            updated_quantities = {}
+                            for _, item_row in df_order_items.iterrows():
+                                item_id = item_row["id"]
+                                item_label = (
+                                    f"{item_row['item_name']} ({item_row['unit']})"
+                                )
+                                updated_quantities[item_id] = st.number_input(
+                                    item_label,
+                                    min_value=0.0,
+                                    value=float(item_row["quantity"]),
+                                    step=0.1,
+                                    format="%.1f",
+                                    key=f"edit_qty_{item_id}",
+                                )
+
+                            if st.form_submit_button("💾 Save All Order Changes"):
+                                df_master = load_orders()
+                                for item_id, q_val in updated_quantities.items():
+                                    if q_val <= 0:
+                                        df_master = df_master[df_master["id"] != item_id]
+                                    else:
+                                        mask = df_master["id"] == item_id
+                                        df_master.loc[mask, "quantity"] = round(q_val, 1)
+                                        df_master.loc[mask, "pickup_time"] = new_time
+                                        df_master.loc[mask, "notes"] = new_notes
+                                        df_master.loc[mask, "custom_flag"] = 1 if new_flag else 0
+
+                                save_orders_to_github(df_master, f"Edit order for {first_row['first_name']} {first_row['last_name']}")
+                                st.success(
+                                    f"Order for {first_row['first_name']} {first_row['last_name']} updated permanently!"
+                                )
+                                st.rerun()
+
+                    with col_del:
+                        st.markdown("#### 🗑️ Delete Entire Order")
+                        st.warning(
+                            "Deletions are permanent and will remove all items associated with this customer pickup."
+                        )
+                        cust_name = f"{first_row['first_name']} {first_row['last_name']}"
+                        if st.button(
+                            f"💥 Delete ALL Items for {cust_name} on {first_row['pickup_date']}",
+                            type="primary",
+                        ):
+                            df_master = load_orders()
+                            df_master = df_master[
+                                ~(
+                                    (df_master["holiday"] == selected_holiday)
+                                    & (df_master["phone"] == first_row["phone"])
+                                    & (df_master["pickup_date"] == first_row["pickup_date"])
+                                )
+                            ]
+                            save_orders_to_github(df_master, f"Delete order for {cust_name}")
+                            st.success(
+                                f"All items for {cust_name} deleted from GitHub!"
+                            )
+                            st.rerun()
 
     else:
         st.info("No matching orders found.")
@@ -557,7 +566,7 @@ with tab3:
     df_all = load_orders()
     df_raw = (
         df_all[df_all["holiday"] == selected_holiday].copy()
-        if not df_all.empty
+        if not df_all.empty and "holiday" in df_all.columns
         else pd.DataFrame()
     )
 
