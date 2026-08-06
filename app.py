@@ -1,52 +1,58 @@
 import re
-import sqlite3
 import pandas as pd
 import streamlit as st
+from streamlit_gsheets import GSheetsConnection
 
 st.set_page_config(
     page_title="Holiday Order Management System", page_icon="📦", layout="wide"
 )
 
-# 1. DATABASE SETUP & AUTOMATIC MIGRATION
-DB_FILE = "holiday_orders.db"
+# 1. GOOGLE SHEETS CONNECTION
+conn = st.connection("gsheets", type=GSheetsConnection)
 
 
-def init_db():
-    conn = sqlite3.connect(DB_FILE)
-    c = conn.cursor()
-    c.execute("""
-        CREATE TABLE IF NOT EXISTS orders (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            holiday TEXT,
-            first_name TEXT,
-            last_name TEXT,
-            phone TEXT,
-            email TEXT,
-            pickup_date TEXT,
-            pickup_time TEXT,
-            item_name TEXT,
-            variant TEXT,
-            quantity REAL,
-            notes TEXT,
-            custom_flag INTEGER DEFAULT 0
+def load_orders():
+    """Fetches real-time orders directly from Google Sheets."""
+    try:
+        df = conn.read(ttl=0)  # ttl=0 forces fresh fetch on every action
+        if df.empty or "id" not in df.columns:
+            return pd.DataFrame(
+                columns=[
+                    "id",
+                    "holiday",
+                    "first_name",
+                    "last_name",
+                    "phone",
+                    "email",
+                    "pickup_date",
+                    "pickup_time",
+                    "item_name",
+                    "unit",
+                    "quantity",
+                    "notes",
+                    "custom_flag",
+                ]
+            )
+        return df
+    except Exception:
+        return pd.DataFrame(
+            columns=[
+                "id",
+                "holiday",
+                "first_name",
+                "last_name",
+                "phone",
+                "email",
+                "pickup_date",
+                "pickup_time",
+                "item_name",
+                "unit",
+                "quantity",
+                "notes",
+                "custom_flag",
+            ]
         )
-    """)
-    c.execute("PRAGMA table_info(orders)")
-    columns = [col[1] for col in c.fetchall()]
-    if "variant" not in columns:
-        c.execute("ALTER TABLE orders ADD COLUMN variant TEXT DEFAULT ''")
-    if "notes" not in columns:
-        c.execute("ALTER TABLE orders ADD COLUMN notes TEXT DEFAULT ''")
-    if "custom_flag" not in columns:
-        c.execute(
-            "ALTER TABLE orders ADD COLUMN custom_flag INTEGER DEFAULT 0"
-        )
 
-    conn.commit()
-    conn.close()
-
-
-init_db()
 
 # 2. CATALOG LOADED FROM SPREADSHEET
 ROSH_CATALOG = {
@@ -184,17 +190,19 @@ TIME_SLOTS = [
 
 
 def format_qty(val):
-    """Cleanly format quantities: whole numbers display as integers (1), weights display to 1 decimal place (1.5)."""
     if pd.isna(val):
         return ""
-    if val == int(val):
-        return str(int(val))
-    return f"{val:.1f}"
+    try:
+        val_f = float(val)
+        if val_f == int(val_f):
+            return str(int(val_f))
+        return f"{val_f:.1f}"
+    except Exception:
+        return str(val)
 
 
 def clean_and_format_phone(phone_str):
-    """Extracts digits and formats phone to (###) ### - ####. Returns (formatted_str, error_msg)."""
-    digits = re.sub(r"\D", "", phone_str)
+    digits = re.sub(r"\D", "", str(phone_str))
     if len(digits) != 10:
         return (
             None,
@@ -205,7 +213,6 @@ def clean_and_format_phone(phone_str):
 
 
 def get_item_category(item_name, catalog):
-    """Finds which category an item belongs to within the selected catalog."""
     for cat_name, items in catalog.items():
         if item_name in items:
             return cat_name
@@ -289,7 +296,7 @@ with tab1:
         placeholder="e.g., Wants 2 lbs of unlisted Item X, or trim all excess fat from brisket.",
     )
 
-    if st.button("Save Order", type="primary"):
+    if st.button("Save Order to Google Sheets", type="primary"):
         formatted_phone, phone_error = clean_and_format_phone(phone_input)
 
         if not last_name or not pickup_date:
@@ -301,69 +308,60 @@ with tab1:
                 "Please select at least one item or enter a custom order note."
             )
         else:
+            df_existing = load_orders()
+            next_id = int(df_existing["id"].max() + 1) if not df_existing.empty and "id" in df_existing.columns and pd.notna(df_existing["id"].max()) else 1
             formatted_date = f"{pickup_date} ({pickup_date.strftime('%a')})"
             flag_val = 1 if custom_flag else 0
-
-            conn = sqlite3.connect(DB_FILE)
-            cursor = conn.cursor()
 
             if not order_items:
                 order_items.append(("Custom Request Only", "N/A", 1.0))
 
-            for item_name, variant, qty in order_items:
-                cursor.execute(
-                    """
-                    INSERT INTO orders (holiday, first_name, last_name, phone, email, pickup_date, pickup_time, item_name, variant, quantity, notes, custom_flag)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """,
-                    (
-                        selected_holiday,
-                        first_name,
-                        last_name,
-                        formatted_phone,
-                        email,
-                        formatted_date,
-                        str(pickup_time),
-                        item_name,
-                        variant,
-                        round(qty, 1),
-                        order_notes,
-                        flag_val,
-                    ),
+            new_rows = []
+            for item_name, unit_str, qty in order_items:
+                new_rows.append(
+                    {
+                        "id": next_id,
+                        "holiday": selected_holiday,
+                        "first_name": first_name,
+                        "last_name": last_name,
+                        "phone": formatted_phone,
+                        "email": email,
+                        "pickup_date": formatted_date,
+                        "pickup_time": str(pickup_time),
+                        "item_name": item_name,
+                        "unit": unit_str,
+                        "quantity": round(qty, 1),
+                        "notes": order_notes,
+                        "custom_flag": flag_val,
+                    }
                 )
-            conn.commit()
-            conn.close()
+                next_id += 1
+
+            df_updated = pd.concat(
+                [df_existing, pd.DataFrame(new_rows)], ignore_index=True
+            )
+            conn.update(data=df_updated)
             st.success(
-                f"Successfully saved order for {first_name} {last_name} ({formatted_phone})!"
+                f"Successfully saved order for {first_name} {last_name} ({formatted_phone}) to Google Sheets!"
             )
 
-# TAB 2: SEARCH, EDIT & DELETE (GROUPED BY CUSTOMER ORDER)
+# TAB 2: SEARCH, EDIT & DELETE
 with tab2:
     st.subheader("Search & Manage Customer Orders")
     search_term = st.text_input("Search by Last Name or Phone Number:")
 
-    conn = sqlite3.connect(DB_FILE)
-    query = """
-        SELECT id, first_name, last_name, phone, email, pickup_date, pickup_time, item_name, variant as unit, quantity, notes, custom_flag
-        FROM orders 
-        WHERE holiday = ?
-    """
-    if search_term:
-        query += " AND (last_name LIKE ? OR phone LIKE ?)"
-        df_raw = pd.read_sql_query(
-            query,
-            conn,
-            params=(
-                selected_holiday,
-                f"%{search_term}%",
-                f"%{search_term}%",
-            ),
-        )
-    else:
-        df_raw = pd.read_sql_query(
-            query, conn, params=(selected_holiday,)
-        )
-    conn.close()
+    df_all = load_orders()
+    df_raw = (
+        df_all[df_all["holiday"] == selected_holiday].copy()
+        if not df_all.empty
+        else pd.DataFrame()
+    )
+
+    if not df_raw.empty and search_term:
+        df_raw = df_raw[
+            (df_raw["last_name"].astype(str).str.contains(search_term, case=False, na=False))
+            | (df_raw["phone"].astype(str).str.contains(search_term, case=False, na=False))
+        ]
 
     if not df_raw.empty:
         df_raw["item_summary_str"] = df_raw.apply(
@@ -477,33 +475,20 @@ with tab2:
                     )
 
                 if st.form_submit_button("💾 Save All Order Changes"):
-                    conn = sqlite3.connect(DB_FILE)
-                    cursor = conn.cursor()
-
+                    df_master = load_orders()
                     for item_id, q_val in updated_quantities.items():
                         if q_val <= 0:
-                            cursor.execute(
-                                "DELETE FROM orders WHERE id = ?", (item_id,)
-                            )
+                            df_master = df_master[df_master["id"] != item_id]
                         else:
-                            cursor.execute(
-                                """
-                                UPDATE orders 
-                                SET quantity = ?, pickup_time = ?, notes = ?, custom_flag = ?
-                                WHERE id = ?
-                            """,
-                                (
-                                    round(q_val, 1),
-                                    new_time,
-                                    new_notes,
-                                    1 if new_flag else 0,
-                                    item_id,
-                                ),
-                            )
-                    conn.commit()
-                    conn.close()
+                            mask = df_master["id"] == item_id
+                            df_master.loc[mask, "quantity"] = round(q_val, 1)
+                            df_master.loc[mask, "pickup_time"] = new_time
+                            df_master.loc[mask, "notes"] = new_notes
+                            df_master.loc[mask, "custom_flag"] = 1 if new_flag else 0
+
+                    conn.update(data=df_master)
                     st.success(
-                        f"Order for {first_row['first_name']} {first_row['last_name']} updated successfully!"
+                        f"Order for {first_row['first_name']} {first_row['last_name']} updated successfully in Google Sheets!"
                     )
                     st.rerun()
 
@@ -517,23 +502,17 @@ with tab2:
                 f"💥 Delete ALL Items for {cust_name} on {first_row['pickup_date']}",
                 type="primary",
             ):
-                conn = sqlite3.connect(DB_FILE)
-                cursor = conn.cursor()
-                cursor.execute(
-                    """
-                    DELETE FROM orders 
-                    WHERE holiday = ? AND phone = ? AND pickup_date = ?
-                """,
-                    (
-                        selected_holiday,
-                        first_row["phone"],
-                        first_row["pickup_date"],
-                    ),
-                )
-                conn.commit()
-                conn.close()
+                df_master = load_orders()
+                df_master = df_master[
+                    ~(
+                        (df_master["holiday"] == selected_holiday)
+                        & (df_master["phone"] == first_row["phone"])
+                        & (df_master["pickup_date"] == first_row["pickup_date"])
+                    )
+                ]
+                conn.update(data=df_master)
                 st.success(
-                    f"All items for {cust_name} have been completely deleted!"
+                    f"All items for {cust_name} deleted from Google Sheets!"
                 )
                 st.rerun()
 
@@ -544,13 +523,12 @@ with tab2:
 with tab3:
     st.subheader("📊 Dynamic Kitchen Production & Prep Dashboard")
 
-    conn = sqlite3.connect(DB_FILE)
-    df_raw = pd.read_sql_query(
-        "SELECT pickup_date, pickup_time, phone, first_name, last_name, item_name, variant as unit, quantity, notes, custom_flag FROM orders WHERE holiday = ?",
-        conn,
-        params=(selected_holiday,),
+    df_all = load_orders()
+    df_raw = (
+        df_all[df_all["holiday"] == selected_holiday].copy()
+        if not df_all.empty
+        else pd.DataFrame()
     )
-    conn.close()
 
     if not df_raw.empty:
         catalog = HOLIDAY_CATALOGS[selected_holiday]
@@ -596,8 +574,10 @@ with tab3:
         st.markdown("---")
 
         st.markdown("### 📋 Production Summary Sheet")
+        df_raw_sum = filtered_df.copy()
+        df_raw_sum["quantity"] = pd.to_numeric(df_raw_sum["quantity"], errors="coerce")
         df_totals = (
-            filtered_df.groupby(["pickup_date", "category", "item_name", "unit"])[
+            df_raw_sum.groupby(["pickup_date", "category", "item_name", "unit"])[
                 "quantity"
             ]
             .sum()
@@ -641,7 +621,7 @@ with tab3:
 
         with c_right:
             st.markdown("### ⚠️ Special Requests & Custom Notes")
-            df_notes = filtered_df[filtered_df["notes"].str.strip() != ""][
+            df_notes = filtered_df[filtered_df["notes"].astype(str).str.strip() != ""][
                 [
                     "pickup_date",
                     "pickup_time",
@@ -654,7 +634,7 @@ with tab3:
             ]
             if not df_notes.empty:
                 df_notes["Flag"] = df_notes["custom_flag"].apply(
-                    lambda x: "🚨 HIGH PRIORITY" if x == 1 else "Note"
+                    lambda x: "🚨 HIGH PRIORITY" if str(x) == "1" else "Note"
                 )
                 st.dataframe(
                     df_notes[
