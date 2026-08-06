@@ -215,7 +215,7 @@ st.title(f"📦 Holiday Orders: {selected_holiday}")
 tab1, tab2, tab3 = st.tabs(
     [
         "📝 Take New Order",
-        "🔍 Search / Edit Customer Orders",
+        "🔍 Search / Edit / Delete Orders",
         "📊 Kitchen Prep Dashboard",
     ]
 )
@@ -329,20 +329,20 @@ with tab1:
                 f"Successfully saved order for {first_name} {last_name} ({formatted_phone})!"
             )
 
-# TAB 2: SEARCH & LOOKUP
+# TAB 2: SEARCH, EDIT & DELETE (GROUPED BY CUSTOMER ORDER)
 with tab2:
-    st.subheader("Search Customer Orders")
+    st.subheader("Search & Manage Customer Orders")
     search_term = st.text_input("Search by Last Name or Phone Number:")
 
     conn = sqlite3.connect(DB_FILE)
     query = """
-        SELECT id, first_name, last_name, phone, pickup_date, pickup_time, item_name, variant as unit, quantity, notes, custom_flag
+        SELECT id, first_name, last_name, phone, email, pickup_date, pickup_time, item_name, variant as unit, quantity, notes, custom_flag
         FROM orders 
         WHERE holiday = ?
     """
     if search_term:
         query += " AND (last_name LIKE ? OR phone LIKE ?)"
-        df_search = pd.read_sql_query(
+        df_raw = pd.read_sql_query(
             query,
             conn,
             params=(
@@ -352,32 +352,183 @@ with tab2:
             ),
         )
     else:
-        df_search = pd.read_sql_query(
+        df_raw = pd.read_sql_query(
             query, conn, params=(selected_holiday,)
         )
     conn.close()
 
-    if not df_search.empty:
-        df_search["Flag"] = df_search["custom_flag"].apply(
-            lambda x: "🚨 CUSTOM" if x == 1 else "OK"
+    if not df_raw.empty:
+        df_raw["item_summary_str"] = df_raw.apply(
+            lambda r: f"{format_qty(r['quantity'])}x {r['item_name']}", axis=1
         )
-        df_search["quantity"] = df_search["quantity"].apply(format_qty)
-        df_display = df_search[
+
+        grouped = df_raw.groupby(
             [
-                "id",
-                "Flag",
                 "first_name",
                 "last_name",
                 "phone",
+                "email",
                 "pickup_date",
                 "pickup_time",
-                "item_name",
-                "unit",
-                "quantity",
                 "notes",
-            ]
-        ]
-        st.dataframe(df_display, use_container_width=True)
+            ],
+            as_index=False,
+        ).agg(
+            {
+                "custom_flag": "max",
+                "item_summary_str": lambda x: ", ".join(x),
+            }
+        )
+
+        grouped["Flag"] = grouped["custom_flag"].apply(
+            lambda x: "🚨 CUSTOM" if x == 1 else "OK"
+        )
+
+        st.markdown("### 📋 Customer Orders Overview")
+        st.dataframe(
+            grouped[
+                [
+                    "Flag",
+                    "first_name",
+                    "last_name",
+                    "phone",
+                    "email",
+                    "pickup_date",
+                    "pickup_time",
+                    "item_summary_str",
+                    "notes",
+                ]
+            ],
+            use_container_width=True,
+        )
+
+        st.markdown("---")
+        st.subheader("🔍 Select an Order to View, Edit, or Delete")
+
+        order_list = []
+        for idx, row in grouped.iterrows():
+            label = f"{row['first_name']} {row['last_name']} | {row['phone']} | {row['pickup_date']} @ {row['pickup_time']}"
+            order_list.append((label, row["phone"], row["pickup_date"]))
+
+        selected_order = st.selectbox(
+            "Select Customer Order:",
+            options=order_list,
+            format_func=lambda x: x[0],
+        )
+
+        sel_phone = selected_order[1]
+        sel_date = selected_order[2]
+
+        df_order_items = df_raw[
+            (df_raw["phone"] == sel_phone) & (df_raw["pickup_date"] == sel_date)
+        ].copy()
+
+        first_row = df_order_items.iloc[0]
+
+        st.markdown(
+            f"### 📦 Order Detail View: **{first_row['first_name']} {first_row['last_name']}**"
+        )
+        st.info(
+            f"📞 **Phone:** {first_row['phone']} | ✉️ **Email:** {first_row['email'] or 'N/A'} | 🗓️ **Pickup:** {first_row['pickup_date']} @ {first_row['pickup_time']}"
+        )
+
+        col_edit, col_del = st.columns(2)
+
+        with col_edit:
+            st.markdown("#### ✏️ Edit Order Items & Pickup Time")
+            with st.form("edit_full_order_form"):
+                new_time = st.selectbox(
+                    "Pickup Time Slot:",
+                    TIME_SLOTS,
+                    index=TIME_SLOTS.index(first_row["pickup_time"])
+                    if first_row["pickup_time"] in TIME_SLOTS
+                    else 0,
+                )
+                new_notes = st.text_area(
+                    "Order Notes / Instructions:", value=str(first_row["notes"])
+                )
+                new_flag = st.checkbox(
+                    "🚨 Flag as High Maintenance / Custom Request",
+                    value=bool(first_row["custom_flag"]),
+                )
+
+                st.markdown("##### Item Quantities:")
+                updated_quantities = {}
+                for _, item_row in df_order_items.iterrows():
+                    item_id = item_row["id"]
+                    item_label = (
+                        f"{item_row['item_name']} ({item_row['unit']})"
+                    )
+                    updated_quantities[item_id] = st.number_input(
+                        item_label,
+                        min_value=0.0,
+                        value=float(item_row["quantity"]),
+                        step=0.1,
+                        format="%.1f",
+                        key=f"edit_qty_{item_id}",
+                    )
+
+                if st.form_submit_button("💾 Save All Order Changes"):
+                    conn = sqlite3.connect(DB_FILE)
+                    cursor = conn.cursor()
+
+                    for item_id, q_val in updated_quantities.items():
+                        if q_val <= 0:
+                            cursor.execute(
+                                "DELETE FROM orders WHERE id = ?", (item_id,)
+                            )
+                        else:
+                            cursor.execute(
+                                """
+                                UPDATE orders 
+                                SET quantity = ?, pickup_time = ?, notes = ?, custom_flag = ?
+                                WHERE id = ?
+                            """,
+                                (
+                                    round(q_val, 1),
+                                    new_time,
+                                    new_notes,
+                                    1 if new_flag else 0,
+                                    item_id,
+                                ),
+                            )
+                    conn.commit()
+                    conn.close()
+                    st.success(
+                        f"Order for {first_row['first_name']} {first_row['last_name']} updated successfully!"
+                    )
+                    st.rerun()
+
+        with col_del:
+            st.markdown("#### 🗑️ Delete Entire Order")
+            st.warning(
+                "Deletions are permanent and will remove all items associated with this customer pickup."
+            )
+            cust_name = f"{first_row['first_name']} {first_row['last_name']}"
+            if st.button(
+                f"💥 Delete ALL Items for {cust_name} on {first_row['pickup_date']}",
+                type="primary",
+            ):
+                conn = sqlite3.connect(DB_FILE)
+                cursor = conn.cursor()
+                cursor.execute(
+                    """
+                    DELETE FROM orders 
+                    WHERE holiday = ? AND phone = ? AND pickup_date = ?
+                """,
+                    (
+                        selected_holiday,
+                        first_row["phone"],
+                        first_row["pickup_date"],
+                    ),
+                )
+                conn.commit()
+                conn.close()
+                st.success(
+                    f"All items for {cust_name} have been completely deleted!"
+                )
+                st.rerun()
+
     else:
         st.info("No matching orders found.")
 
@@ -409,7 +560,9 @@ with tab3:
 
         st.markdown("### 🥩 Total Production Quantities Needed")
         df_totals = (
-            filtered_df.groupby(["pickup_date", "item_name", "unit"])["quantity"]
+            filtered_df.groupby(["pickup_date", "item_name", "unit"])[
+                "quantity"
+            ]
             .sum()
             .reset_index()
         )
