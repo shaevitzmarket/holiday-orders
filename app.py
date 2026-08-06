@@ -208,14 +208,6 @@ def clean_and_format_phone(phone_str):
     return formatted, None
 
 
-def get_item_category(item_name, catalog):
-    """Finds which category an item belongs to within the selected catalog."""
-    for cat_name, items in catalog.items():
-        if item_name in items:
-            return cat_name
-    return "Special / Custom Requests"
-
-
 # 3. SIDEBAR NAVIGATION
 st.sidebar.title("🏪 Store Operations")
 selected_holiday = st.sidebar.selectbox(
@@ -255,10 +247,10 @@ with tab1:
     order_items = []
 
     for category, items in catalog.items():
-        with st.expander(f"📁 {{category}} ({{len(items)}} items)"):
-            cols = st.columns(3)  # 3 Clean Columns Layout
+        with st.expander(f"📁 {{category}}"):
+            cols = st.columns(2)
             for idx, (item_name, item_info) in enumerate(items.items()):
-                col = cols[idx % 3]
+                col = cols[idx % 2]
                 unit_str = item_info["unit"]
                 is_weight = item_info["is_weight"]
 
@@ -370,33 +362,25 @@ with tab2:
     conn.close()
 
     if not df_raw.empty:
+        # Create item text representation
         df_raw["item_summary_str"] = df_raw.apply(
             lambda r: f"{{format_qty(r['quantity'])}}x {{r['item_name']}}", axis=1
         )
 
+        # Group rows by order header fields
         grouped = df_raw.groupby(
-            [
-                "first_name",
-                "last_name",
-                "phone",
-                "email",
-                "pickup_date",
-                "pickup_time",
-                "notes",
-            ],
-            as_index=False,
-        ).agg(
-            {{
-                "custom_flag": "max",
-                "item_summary_str": lambda x: ", ".join(x),
-            }}
-        )
+            ["first_name", "last_name", "phone", "email", "pickup_date", "pickup_time", "notes"],
+            as_index=False
+        ).agg({{
+            "custom_flag": "max",
+            "item_summary_str": lambda x: ", ".join(x)
+        }})
 
         grouped["Flag"] = grouped["custom_flag"].apply(
             lambda x: "🚨 CUSTOM" if x == 1 else "OK"
         )
 
-        st.markdown("### 📋 Customer Orders Overview")
+        st.markdown("### 📋 All Customer Orders (Single Row per Order)")
         st.dataframe(
             grouped[
                 [
@@ -417,32 +401,30 @@ with tab2:
         st.markdown("---")
         st.subheader("🔍 Select an Order to View, Edit, or Delete")
 
+        # Create list of orders for dropdown
         order_list = []
         for idx, row in grouped.iterrows():
             label = f"{{row['first_name']}} {{row['last_name']}} | {{row['phone']}} | {{row['pickup_date']}} @ {{row['pickup_time']}}"
-            order_list.append((label, row["phone"], row["pickup_date"]))
+            order_list.append((label, row['phone'], row['pickup_date']))
 
         selected_order = st.selectbox(
             "Select Customer Order:",
             options=order_list,
-            format_func=lambda x: x[0],
+            format_func=lambda x: x[0]
         )
 
         sel_phone = selected_order[1]
         sel_date = selected_order[2]
 
+        # Fetch all line items for this specific order
         df_order_items = df_raw[
             (df_raw["phone"] == sel_phone) & (df_raw["pickup_date"] == sel_date)
         ].copy()
 
         first_row = df_order_items.iloc[0]
 
-        st.markdown(
-            f"### 📦 Order Detail View: **{{first_row['first_name']}} {{first_row['last_name']}}**"
-        )
-        st.info(
-            f"📞 **Phone:** {{first_row['phone']}} | ✉️ **Email:** {{first_row['email'] or 'N/A'}} | 🗓️ **Pickup:** {{first_row['pickup_date']}} @ {{first_row['pickup_time']}}"
-        )
+        st.markdown(f"### 📦 Order Detail View: **{{first_row['first_name']}} {{first_row['last_name']}}**")
+        st.info(f"📞 **Phone:** {{first_row['phone']}} | ✉️ **Email:** {{first_row['email'] or 'N/A'}} | 🗓️ **Pickup:** {{first_row['pickup_date']}} @ {{first_row['pickup_time']}}")
 
         col_edit, col_del = st.columns(2)
 
@@ -456,9 +438,7 @@ with tab2:
                     if first_row["pickup_time"] in TIME_SLOTS
                     else 0,
                 )
-                new_notes = st.text_area(
-                    "Order Notes / Instructions:", value=str(first_row["notes"])
-                )
+                new_notes = st.text_area("Order Notes / Instructions:", value=str(first_row["notes"]))
                 new_flag = st.checkbox(
                     "🚨 Flag as High Maintenance / Custom Request",
                     value=bool(first_row["custom_flag"]),
@@ -468,27 +448,24 @@ with tab2:
                 updated_quantities = {{}}
                 for _, item_row in df_order_items.iterrows():
                     item_id = item_row["id"]
-                    item_label = (
-                        f"{{item_row['item_name']}} ({{item_row['unit']}})"
-                    )
+                    item_label = f"{{item_row['item_name']}} ({{item_row['unit']}})"
                     updated_quantities[item_id] = st.number_input(
                         item_label,
                         min_value=0.0,
                         value=float(item_row["quantity"]),
                         step=0.1,
                         format="%.1f",
-                        key=f"edit_qty_{{item_id}}",
+                        key=f"edit_qty_{{item_id}}"
                     )
 
                 if st.form_submit_button("💾 Save All Order Changes"):
                     conn = sqlite3.connect(DB_FILE)
                     cursor = conn.cursor()
-
+                    
                     for item_id, q_val in updated_quantities.items():
                         if q_val <= 0:
-                            cursor.execute(
-                                "DELETE FROM orders WHERE id = ?", (item_id,)
-                            )
+                            # If quantity reduced to 0, delete that item row
+                            cursor.execute("DELETE FROM orders WHERE id = ?", (item_id,))
                         else:
                             cursor.execute(
                                 """
@@ -496,26 +473,16 @@ with tab2:
                                 SET quantity = ?, pickup_time = ?, notes = ?, custom_flag = ?
                                 WHERE id = ?
                             """,
-                                (
-                                    round(q_val, 1),
-                                    new_time,
-                                    new_notes,
-                                    1 if new_flag else 0,
-                                    item_id,
-                                ),
+                                (round(q_val, 1), new_time, new_notes, 1 if new_flag else 0, item_id),
                             )
                     conn.commit()
                     conn.close()
-                    st.success(
-                        f"Order for {{first_row['first_name']}} {{first_row['last_name']}} updated successfully!"
-                    )
+                    st.success(f"Order for {{first_row['first_name']}} {{first_row['last_name']}} updated successfully!")
                     st.rerun()
 
         with col_del:
             st.markdown("#### 🗑️ Delete Entire Order")
-            st.warning(
-                "Deletions are permanent and will remove all items associated with this customer pickup."
-            )
+            st.warning("Deletions are permanent and will remove all items associated with this customer pickup.")
             cust_name = f"{{first_row['first_name']}} {{first_row['last_name']}}"
             if st.button(
                 f"💥 Delete ALL Items for {{cust_name}} on {{first_row['pickup_date']}}",
@@ -528,80 +495,45 @@ with tab2:
                     DELETE FROM orders 
                     WHERE holiday = ? AND phone = ? AND pickup_date = ?
                 """,
-                    (
-                        selected_holiday,
-                        first_row["phone"],
-                        first_row["pickup_date"],
-                    ),
+                    (selected_holiday, first_row["phone"], first_row["pickup_date"]),
                 )
                 conn.commit()
                 conn.close()
-                st.success(
-                    f"All items for {{cust_name}} have been completely deleted!"
-                )
+                st.success(f"All items for {{cust_name}} have been completely deleted!")
                 st.rerun()
 
     else:
         st.info("No matching orders found.")
 
-# TAB 3: DYNAMIC KITCHEN PREP DASHBOARD
+# TAB 3: KITCHEN PREP DASHBOARD
 with tab3:
-    st.subheader("📊 Dynamic Kitchen Production & Prep Dashboard")
+    st.subheader("Daily Kitchen Production Totals")
 
     conn = sqlite3.connect(DB_FILE)
     df_raw = pd.read_sql_query(
-        "SELECT pickup_date, pickup_time, phone, first_name, last_name, item_name, variant as unit, quantity, notes, custom_flag FROM orders WHERE holiday = ?",
+        "SELECT pickup_date, pickup_time, item_name, variant as unit, quantity, notes, custom_flag FROM orders WHERE holiday = ?",
         conn,
         params=(selected_holiday,),
     )
     conn.close()
 
     if not df_raw.empty:
-        catalog = HOLIDAY_CATALOGS[selected_holiday]
-        df_raw["category"] = df_raw["item_name"].apply(
-            lambda x: get_item_category(x, catalog)
+        available_dates = ["All Dates"] + sorted(
+            df_raw["pickup_date"].unique().tolist()
+        )
+        selected_date = st.selectbox(
+            "Filter Production Sheet by Pickup Date:", available_dates
         )
 
-        f_col1, f_col2 = st.columns(2)
-
-        with f_col1:
-            available_dates = ["All Dates"] + sorted(
-                df_raw["pickup_date"].unique().tolist()
-            )
-            selected_date = st.selectbox(
-                "🗓️ Filter by Pickup Date:", available_dates
-            )
-
-        with f_col2:
-            available_cats = ["All Categories"] + sorted(
-                df_raw["category"].unique().tolist()
-            )
-            selected_cat = st.selectbox(
-                "🥩 Filter by Item Category:", available_cats
-            )
-
-        filtered_df = df_raw.copy()
-        if selected_date != "All Dates":
-            filtered_df = filtered_df[filtered_df["pickup_date"] == selected_date]
-        if selected_cat != "All Categories":
-            filtered_df = filtered_df[filtered_df["category"] == selected_cat]
-
-        m1, m2, m3 = st.columns(3)
-        unique_orders_count = len(
-            filtered_df.groupby(["phone", "pickup_date"])
+        filtered_df = (
+            df_raw
+            if selected_date == "All Dates"
+            else df_raw[df_raw["pickup_date"] == selected_date]
         )
-        total_items_count = len(filtered_df)
-        high_alert_count = len(filtered_df[filtered_df["custom_flag"] == 1])
 
-        m1.metric("📦 Total Customer Orders", unique_orders_count)
-        m2.metric("🥩 Total Line Items", total_items_count)
-        m3.metric("🚨 Special / High-Priority Alerts", high_alert_count)
-
-        st.markdown("---")
-
-        st.markdown("### 📋 Production Summary Sheet")
+        st.markdown("### 🥩 Total Production Quantities Needed")
         df_totals = (
-            filtered_df.groupby(["pickup_date", "category", "item_name", "unit"])[
+            filtered_df.groupby(["pickup_date", "item_name", "unit"])[
                 "quantity"
             ]
             .sum()
@@ -609,76 +541,41 @@ with tab3:
         )
         df_totals.columns = [
             "Pickup Date",
-            "Category",
             "Item Name",
             "Unit of Measure",
-            "Total Quantity Needed",
+            "Total Quantity",
         ]
-        df_totals["Total Quantity Needed"] = df_totals[
-            "Total Quantity Needed"
-        ].apply(format_qty)
-
+        df_totals["Total Quantity"] = df_totals["Total Quantity"].apply(
+            format_qty
+        )
         st.dataframe(df_totals, use_container_width=True)
 
-        csv_data = df_totals.to_csv(index=False).encode("utf-8")
-        st.download_button(
-            label="📥 Export Prep Sheet as CSV / Excel",
-            data=csv_data,
-            file_name="Kitchen_Prep_Sheet.csv",
-            mime="text/csv",
-        )
-
         st.markdown("---")
-        c_left, c_right = st.columns(2)
-
-        with c_left:
-            st.markdown("### ⏰ Hourly Store Pickup Load Schedule")
-            schedule_df = (
-                filtered_df.groupby(["pickup_time", "phone", "first_name", "last_name"])
-                .size()
-                .reset_index()
-                .groupby("pickup_time")
-                .size()
-                .reset_index(name="Scheduled Pickups")
+        st.markdown("### ⚠️ Kitchen Alert: Special Custom Requests & Notes")
+        df_notes = filtered_df[filtered_df["notes"].str.strip() != ""][
+            ["pickup_date", "pickup_time", "item_name", "notes", "custom_flag"]
+        ]
+        if not df_notes.empty:
+            df_notes["Flag"] = df_notes["custom_flag"].apply(
+                lambda x: "🚨 HIGH PRIORITY" if x == 1 else "Note"
             )
-            st.dataframe(schedule_df, use_container_width=True)
-
-        with c_right:
-            st.markdown("### ⚠️ Special Requests & Custom Notes")
-            df_notes = filtered_df[filtered_df["notes"].str.strip() != ""][
-                [
-                    "pickup_date",
-                    "pickup_time",
-                    "first_name",
-                    "last_name",
-                    "item_name",
-                    "notes",
-                    "custom_flag",
-                ]
-            ]
-            if not df_notes.empty:
-                df_notes["Flag"] = df_notes["custom_flag"].apply(
-                    lambda x: "🚨 HIGH PRIORITY" if x == 1 else "Note"
-                )
-                st.dataframe(
-                    df_notes[
-                        [
-                            "Flag",
-                            "pickup_date",
-                            "pickup_time",
-                            "first_name",
-                            "last_name",
-                            "item_name",
-                            "notes",
-                        ]
-                    ],
-                    use_container_width=True,
-                )
-            else:
-                st.success("No special custom request notes for this filter!")
+            st.dataframe(
+                df_notes[
+                    [
+                        "Flag",
+                        "pickup_date",
+                        "pickup_time",
+                        "item_name",
+                        "notes",
+                    ]
+                ],
+                use_container_width=True,
+            )
+        else:
+            st.success("No special custom request notes for this date!")
     else:
         st.info("No active orders found for this holiday.")
 '''
 
 compiled = compile(app_code, "<string>", "exec")
-print("Compiled 3-column layout code successfully!")
+print("Full app_code with Grouped Orders compiled successfully!")
