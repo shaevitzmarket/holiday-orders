@@ -605,7 +605,9 @@ with tab3:
             filtered_df.groupby(["phone", "pickup_date"])
         )
         total_items_count = len(filtered_df)
-        high_alert_count = len(filtered_df[filtered_df["custom_flag"] == 1])
+        
+        high_alert_df = filtered_df[filtered_df["custom_flag"].astype(str) == "1"]
+        high_alert_count = len(high_alert_df.groupby(["phone", "pickup_date"])) if not high_alert_df.empty else 0
 
         m1.metric("📦 Total Customer Orders", unique_orders_count)
         m2.metric("🥩 Total Line Items", total_items_count)
@@ -661,18 +663,16 @@ with tab3:
 
         with c_right:
             st.markdown("### ⚠️ Special Requests & Custom Notes")
-            df_notes = filtered_df[filtered_df["notes"].astype(str).str.strip() != ""][
-                [
-                    "pickup_date",
-                    "pickup_time",
-                    "first_name",
-                    "last_name",
-                    "item_name",
-                    "notes",
-                    "custom_flag",
-                ]
+            df_notes_raw = filtered_df[
+                (filtered_df["notes"].astype(str).str.strip() != "") |
+                (filtered_df["custom_flag"].astype(str) == "1")
             ]
-            if not df_notes.empty:
+            if not df_notes_raw.empty:
+                df_notes = df_notes_raw.groupby(
+                    ["pickup_date", "pickup_time", "first_name", "last_name", "phone", "notes", "custom_flag"],
+                    as_index=False
+                ).size()
+                
                 df_notes["Flag"] = df_notes["custom_flag"].apply(
                     lambda x: "🚨 HIGH PRIORITY" if str(x) == "1" else "Note"
                 )
@@ -684,7 +684,6 @@ with tab3:
                             "pickup_time",
                             "first_name",
                             "last_name",
-                            "item_name",
                             "notes",
                         ]
                     ],
