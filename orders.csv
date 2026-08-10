@@ -1,23 +1,27 @@
-id,holiday,first_name,last_name,phone,email,pickup_date,pickup_time,item_name,unit,quantity,notes,custom_flag
-1,Rosh Hashanah 2026,SHERI,GREENBAUM,(248) 302 - 5058,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Bone-in Rib Roast,lb,10.0,SHE WANTS 2- 10LB BONE IN RIB ROASTS,0
-2,Rosh Hashanah 2026,SHERI,GREENBAUM,(248) 302 - 5058,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Bone-in Rib Roast,lb,10.0,**********SHE WANTS 2- 10LB BONE IN RIB ROASTS************,1
-3,Rosh Hashanah 2026,PAM,SCHWARTZ,(847) 710 - 7194,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Whole Brisket 14-16 lb,# of pc,1.0,,1
-4,Rosh Hashanah 2026,PAM,SCHWARTZ,(847) 710 - 7194,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Bone-in Rib Roast,lb,10.0,,1
-5,Rosh Hashanah 2026,PAM,SCHWARTZ,(847) 710 - 7194,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Kishke,Each,2.0,,1
-6,Rosh Hashanah 2026,PAM,SCHWARTZ,(847) 710 - 7194,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Whole Brisket 14-16 lb,# of pc,1.0,********WANTS BRISKET FROZEN***********,1
-7,Rosh Hashanah 2026,PAM,SCHWARTZ,(847) 710 - 7194,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Bone-in Rib Roast,lb,10.0,********WANTS BRISKET FROZEN***********,1
-8,Rosh Hashanah 2026,PAM,SCHWARTZ,(847) 710 - 7194,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Kishke,Each,2.0,********WANTS BRISKET FROZEN***********,1
-9,Rosh Hashanah 2026,,GOLDMAN,(847) 421 - 1497,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Whole Brisket 14-16 lb,# of pc,1.0,********WANTS 9LBS***********,1
-10,Rosh Hashanah 2026,,GOLDMAN,(847) 421 - 1497,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Turkey Breast,# of pc,1.0,********WANTS 9LBS***********,1
-11,Rosh Hashanah 2026,,GOLDMAN,(847) 421 - 1497,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Bone-in Rib Roast,lb,10.0,********WANTS 9LBS***********,1
-12,Rosh Hashanah 2026,,GOLDMAN,(847) 421 - 1497,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Kishke,Each,2.0,********WANTS 9LBS***********,1
-13,Rosh Hashanah 2026,MARYL,DAYAN,(847) 217 - 2105,,2026-09-09 (Wed),1:00 PM - 2:00 PM,Whole Brisket 14-16 lb,# of pc,1.0,********LIGHT TRIM ON BRISKET***********,1
-14,Rosh Hashanah 2026,MARYL,DAYAN,(847) 217 - 2105,,2026-09-09 (Wed),1:00 PM - 2:00 PM,Fryer Whole,# of pc,2.0,********LIGHT TRIM ON BRISKET***********,1
-15,Rosh Hashanah 2026,MARYL,DAYAN,(847) 217 - 2105,,2026-09-09 (Wed),1:00 PM - 2:00 PM,Turkey Breast,# of pc,1.0,********LIGHT TRIM ON BRISKET***********,1
-16,Rosh Hashanah 2026,MARYL,DAYAN,(847) 217 - 2105,,2026-09-09 (Wed),1:00 PM - 2:00 PM,Bone-in Rib Roast,lb,10.0,********LIGHT TRIM ON BRISKET***********,1
-17,Rosh Hashanah 2026,MARYL,DAYAN,(847) 217 - 2105,,2026-09-09 (Wed),1:00 PM - 2:00 PM,Ground Lamb,lb,4.0,********LIGHT TRIM ON BRISKET***********,1
-18,Rosh Hashanah 2026,MARYL,DAYAN,(847) 217 - 2105,,2026-09-09 (Wed),1:00 PM - 2:00 PM,Kishke,Each,2.0,********LIGHT TRIM ON BRISKET***********,1
-19,Rosh Hashanah 2026,MYRA,FEINBERG,(847) 477 - 1893,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Brisket Point,# of pc,3.0,********WANTS 6-7# TOTAL OF SECOND CUT***********,1
-20,Rosh Hashanah 2026,MYRA,FEINBERG,(847) 477 - 1893,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Turkey Breast,# of pc,1.0,********WANTS 6-7# TOTAL OF SECOND CUT***********,1
-21,Rosh Hashanah 2026,MYRA,FEINBERG,(847) 477 - 1893,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Bone-in Rib Roast,lb,10.0,********WANTS 6-7# TOTAL OF SECOND CUT***********,1
-22,Rosh Hashanah 2026,MYRA,FEINBERG,(847) 477 - 1893,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Kishke,Each,2.0,********WANTS 6-7# TOTAL OF SECOND CUT***********,1
+id,holiday,first_name,last_name,phone,email,pickup_date,pickup_time,item_name,unit,quantity,notes,custom_flag,item_note
+1,Rosh Hashanah 2026,SHERI,GREENBAUM,(248) 302 - 5058,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Bone-in Rib Roast,lb,10.0,SHE WANTS 2- 10LB BONE IN RIB ROASTS,0,
+2,Rosh Hashanah 2026,SHERI,GREENBAUM,(248) 302 - 5058,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Bone-in Rib Roast,lb,10.0,**********SHE WANTS 2- 10LB BONE IN RIB ROASTS************,1,
+3,Rosh Hashanah 2026,PAM,SCHWARTZ,(847) 710 - 7194,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Whole Brisket 14-16 lb,# of pc,1.0,,1,
+4,Rosh Hashanah 2026,PAM,SCHWARTZ,(847) 710 - 7194,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Bone-in Rib Roast,lb,10.0,,1,
+5,Rosh Hashanah 2026,PAM,SCHWARTZ,(847) 710 - 7194,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Kishke,Each,2.0,,1,
+6,Rosh Hashanah 2026,PAM,SCHWARTZ,(847) 710 - 7194,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Whole Brisket 14-16 lb,# of pc,1.0,********WANTS BRISKET FROZEN***********,1,
+7,Rosh Hashanah 2026,PAM,SCHWARTZ,(847) 710 - 7194,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Bone-in Rib Roast,lb,10.0,********WANTS BRISKET FROZEN***********,1,
+8,Rosh Hashanah 2026,PAM,SCHWARTZ,(847) 710 - 7194,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Kishke,Each,2.0,********WANTS BRISKET FROZEN***********,1,
+9,Rosh Hashanah 2026,,GOLDMAN,(847) 421 - 1497,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Whole Brisket 14-16 lb,# of pc,1.0,********WANTS 9LBS***********,1,
+10,Rosh Hashanah 2026,,GOLDMAN,(847) 421 - 1497,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Turkey Breast,# of pc,1.0,********WANTS 9LBS***********,1,
+11,Rosh Hashanah 2026,,GOLDMAN,(847) 421 - 1497,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Bone-in Rib Roast,lb,10.0,********WANTS 9LBS***********,1,
+12,Rosh Hashanah 2026,,GOLDMAN,(847) 421 - 1497,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Kishke,Each,2.0,********WANTS 9LBS***********,1,
+13,Rosh Hashanah 2026,MARYL,DAYAN,(847) 217 - 2105,,2026-09-09 (Wed),1:00 PM - 2:00 PM,Whole Brisket 14-16 lb,# of pc,1.0,********LIGHT TRIM ON BRISKET***********,1,
+14,Rosh Hashanah 2026,MARYL,DAYAN,(847) 217 - 2105,,2026-09-09 (Wed),1:00 PM - 2:00 PM,Fryer Whole,# of pc,2.0,********LIGHT TRIM ON BRISKET***********,1,
+15,Rosh Hashanah 2026,MARYL,DAYAN,(847) 217 - 2105,,2026-09-09 (Wed),1:00 PM - 2:00 PM,Turkey Breast,# of pc,1.0,********LIGHT TRIM ON BRISKET***********,1,
+16,Rosh Hashanah 2026,MARYL,DAYAN,(847) 217 - 2105,,2026-09-09 (Wed),1:00 PM - 2:00 PM,Bone-in Rib Roast,lb,10.0,********LIGHT TRIM ON BRISKET***********,1,
+17,Rosh Hashanah 2026,MARYL,DAYAN,(847) 217 - 2105,,2026-09-09 (Wed),1:00 PM - 2:00 PM,Ground Lamb,lb,4.0,********LIGHT TRIM ON BRISKET***********,1,
+18,Rosh Hashanah 2026,MARYL,DAYAN,(847) 217 - 2105,,2026-09-09 (Wed),1:00 PM - 2:00 PM,Kishke,Each,2.0,********LIGHT TRIM ON BRISKET***********,1,
+19,Rosh Hashanah 2026,MYRA,FEINBERG,(847) 477 - 1893,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Brisket Point,# of pc,3.0,********WANTS 6-7# TOTAL OF SECOND CUT***********,1,
+20,Rosh Hashanah 2026,MYRA,FEINBERG,(847) 477 - 1893,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Turkey Breast,# of pc,1.0,********WANTS 6-7# TOTAL OF SECOND CUT***********,1,
+21,Rosh Hashanah 2026,MYRA,FEINBERG,(847) 477 - 1893,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Bone-in Rib Roast,lb,10.0,********WANTS 6-7# TOTAL OF SECOND CUT***********,1,
+22,Rosh Hashanah 2026,MYRA,FEINBERG,(847) 477 - 1893,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Kishke,Each,2.0,********WANTS 6-7# TOTAL OF SECOND CUT***********,1,
+23,Rosh Hashanah 2026,bob,brisket eater,(847) 432 - 8334,brisketsgalore@theweb,2026-09-01 (Tue),11:00 AM - 12:00 PM,Whole Brisket 8-10 lb,# of pc,2.0,,0,
+24,Rosh Hashanah 2026,bob,brisket eater,(847) 432 - 8334,brisketsgalore@theweb,2026-09-01 (Tue),11:00 AM - 12:00 PM,Capon Cut in 1/8,# of pc,1.0,,0,no skin
+25,Rosh Hashanah 2026,bob,brisket eater,(847) 432 - 8334,brisketsgalore@theweb,2026-09-01 (Tue),11:00 AM - 12:00 PM,Turkey Breast,# of pc,1.0,,0,
+26,Rosh Hashanah 2026,bob,brisket eater,(847) 432 - 8334,brisketsgalore@theweb,2026-09-01 (Tue),11:00 AM - 12:00 PM,Matzah Balls,Each,10.0,,0,
