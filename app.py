@@ -9,6 +9,13 @@ st.set_page_config(
     page_title="Holiday Order Management System", page_icon="📦", layout="wide"
 )
 
+# Initialize Session State for Auto-Clearing Form
+if "form_key" not in st.session_state:
+    st.session_state.form_key = 0
+if "success_msg" not in st.session_state:
+    st.session_state.success_msg = ""
+
+
 # 1. GITHUB PERMANENT STORAGE HELPERS
 GITHUB_TOKEN = st.secrets.get("GITHUB_TOKEN", "")
 GITHUB_REPO = st.secrets.get("GITHUB_REPO", "")
@@ -52,7 +59,21 @@ def load_orders():
             content = base64.b64decode(file_json["content"]).decode("utf-8")
             if not content.strip():
                 return pd.DataFrame(columns=EMPTY_COLUMNS)
+            
             df = pd.read_csv(io.StringIO(content))
+            
+            # Dynamically Generate Alphabetical Daily Order Numbers
+            if not df.empty and "pickup_date" in df.columns:
+                df["first_name"] = df["first_name"].fillna("")
+                df["last_name"] = df["last_name"].fillna("")
+                df["phone"] = df["phone"].fillna("")
+                
+                orders = df[['pickup_date', 'last_name', 'first_name', 'phone']].drop_duplicates()
+                orders = orders.sort_values(by=['pickup_date', 'last_name', 'first_name', 'phone'])
+                orders['Daily Order #'] = orders.groupby('pickup_date').cumcount() + 1
+                
+                df = df.merge(orders, on=['pickup_date', 'last_name', 'first_name', 'phone'], how='left')
+                
             return df
         else:
             return pd.DataFrame(columns=EMPTY_COLUMNS)
@@ -63,6 +84,10 @@ def load_orders():
 def save_orders_to_github(df, commit_message="Update customer orders"):
     """Saves updated dataframe back to orders.csv in your GitHub repository."""
     try:
+        # Drop the dynamically generated Daily Order # before saving cleanly to DB
+        if "Daily Order #" in df.columns:
+            df = df.drop(columns=["Daily Order #"])
+
         csv_buffer = io.StringIO()
         df.to_csv(csv_buffer, index=False)
         raw_csv = csv_buffer.getvalue()
@@ -221,7 +246,8 @@ TIME_SLOTS = [
 
 
 def format_qty(val):
-    if pd.isna(val):
+    """Cleanly format quantities: whole numbers display as integers (1), weights display to 1 decimal place (1.5)."""
+    if pd.isna(val) or val == "":
         return ""
     try:
         val_f = float(val)
@@ -233,6 +259,7 @@ def format_qty(val):
 
 
 def clean_and_format_phone(phone_str):
+    """Extracts digits and formats phone to (###) ### - ####. Returns (formatted_str, error_msg)."""
     digits = re.sub(r"\D", "", str(phone_str))
     if len(digits) != 10:
         return (
@@ -244,6 +271,7 @@ def clean_and_format_phone(phone_str):
 
 
 def get_item_category(item_name, catalog):
+    """Finds which category an item belongs to within the selected catalog."""
     for cat_name, items in catalog.items():
         if item_name in items:
             return cat_name
@@ -268,19 +296,31 @@ tab1, tab2, tab3 = st.tabs(
 
 # TAB 1: ORDER ENTRY
 with tab1:
+    # Display success message after auto-clearing
+    if st.session_state.success_msg:
+        st.success(st.session_state.success_msg)
+        st.session_state.success_msg = ""
+
     st.subheader("Customer & Pickup Information")
     c1, c2 = st.columns(2)
     with c1:
-        first_name = st.text_input("First Name")
+        first_name = st.text_input("First Name", key=f"fn_{st.session_state.form_key}")
         phone_input = st.text_input(
-            "Phone Number", placeholder="e.g. 8475551234 or (847) 555-1234"
+            "Phone Number", placeholder="e.g. 8475551234 or (847) 555-1234", key=f"phone_{st.session_state.form_key}"
         )
-        pickup_date = st.date_input("Pickup Date")
+        pickup_date = st.date_input("Pickup Date", key=f"date_{st.session_state.form_key}")
+        
+        # SATURDAY BLACKOUT VALIDATION
+        is_saturday = pickup_date.weekday() == 5
+        if is_saturday:
+            st.error("❌ We are closed on Saturdays. Please select a different pickup date.")
+            
         st.caption(f"🗓️ Selected Day: **{pickup_date.strftime('%A')}**")
+        
     with c2:
-        last_name = st.text_input("Last Name")
-        email = st.text_input("Email Address")
-        pickup_time = st.selectbox("Pickup Time Slot", TIME_SLOTS)
+        last_name = st.text_input("Last Name", key=f"ln_{st.session_state.form_key}")
+        email = st.text_input("Email Address", key=f"email_{st.session_state.form_key}")
+        pickup_time = st.selectbox("Pickup Time Slot", TIME_SLOTS, key=f"time_{st.session_state.form_key}")
 
     st.markdown("---")
     st.subheader("Select Ordered Items & Quantities")
@@ -302,7 +342,7 @@ with tab1:
                         min_value=0.0,
                         step=0.1,
                         format="%.1f",
-                        key=f"{selected_holiday}_{item_name}",
+                        key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}",
                     )
                 else:
                     qty = float(
@@ -310,7 +350,7 @@ with tab1:
                             f"{item_name} ({unit_str})",
                             min_value=0,
                             step=1,
-                            key=f"{selected_holiday}_{item_name}",
+                            key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}",
                         )
                     )
 
@@ -320,24 +360,25 @@ with tab1:
     st.markdown("---")
     st.subheader("📝 Special Notes & Off-Menu Requests")
     custom_flag = st.checkbox(
-        "🚨 Flag as High Maintenance / Custom Request (Needs Kitchen Attention)"
+        "🚨 Flag as High Maintenance / Custom Request (Needs Kitchen Attention)", key=f"flag_{st.session_state.form_key}"
     )
     order_notes = st.text_area(
         "Custom Items, Special Trims, or Special Instructions:",
         placeholder="e.g., Wants 2 lbs of unlisted Item X, or trim all excess fat from brisket.",
+        key=f"notes_{st.session_state.form_key}"
     )
 
     if st.button("Save Order permanently to GitHub", type="primary"):
         formatted_phone, phone_error = clean_and_format_phone(phone_input)
 
-        if not last_name or not pickup_date:
+        if is_saturday:
+            st.error("Cannot save order: We are closed on the selected pickup date (Saturday).")
+        elif not last_name or not pickup_date:
             st.error("Please enter at least Last Name and Pickup Date.")
         elif phone_error:
             st.error(f"Invalid Phone Number: {phone_error}")
         elif not order_items and not order_notes:
-            st.error(
-                "Please select at least one item or enter a custom order note."
-            )
+            st.error("Please select at least one item or enter a custom order note.")
         else:
             df_existing = load_orders()
             next_id = int(df_existing["id"].max() + 1) if not df_existing.empty and "id" in df_existing.columns and pd.notna(df_existing["id"].max()) else 1
@@ -376,11 +417,12 @@ with tab1:
                 f"Add order for {first_name} {last_name}",
             )
             if success:
-                st.success(
-                    f"Successfully saved order for {first_name} {last_name} ({formatted_phone}) permanently!"
-                )
+                st.session_state.success_msg = f"Successfully saved order for {first_name} {last_name} ({formatted_phone}) permanently!"
+                st.session_state.form_key += 1
+                st.rerun()
             else:
                 st.error("Failed to save to GitHub. Check your GitHub Token in Secrets.")
+
 
 # TAB 2: SEARCH, EDIT & DELETE
 with tab2:
@@ -394,63 +436,64 @@ with tab2:
         else pd.DataFrame()
     )
 
-    if not df_raw.empty and search_term:
-        df_raw = df_raw[
-            (df_raw["last_name"].astype(str).str.contains(search_term, case=False, na=False))
-            | (df_raw["phone"].astype(str).str.contains(search_term, case=False, na=False))
-        ]
+    if not df_raw.empty:
+        df_raw["first_name"] = df_raw["first_name"].fillna("")
+        df_raw["last_name"] = df_raw["last_name"].fillna("")
+        df_raw["phone"] = df_raw["phone"].fillna("")
+        df_raw["email"] = df_raw["email"].fillna("")
+        df_raw["notes"] = df_raw["notes"].fillna("")
+
+        if search_term:
+            df_raw = df_raw[
+                (df_raw["last_name"].astype(str).str.contains(search_term, case=False, na=False))
+                | (df_raw["phone"].astype(str).str.contains(search_term, case=False, na=False))
+            ]
 
     if not df_raw.empty:
-        df_raw["item_summary_str"] = df_raw.apply(
-            lambda r: f"{format_qty(r['quantity'])}x {r['item_name']}", axis=1
-        )
+        # Generate Flag for Pivot Row Display
+        df_raw['Flag'] = df_raw.groupby(['pickup_date', 'last_name', 'first_name', 'phone'])['custom_flag'].transform('max')
+        df_raw['Flag'] = df_raw['Flag'].apply(lambda x: "🚨 CUSTOM" if str(x) == "1" else "OK")
 
-        grouped = df_raw.groupby(
-            [
-                "first_name",
-                "last_name",
-                "phone",
-                "email",
-                "pickup_date",
-                "pickup_time",
-                "notes",
-            ],
-            as_index=False,
-        ).agg(
-            {
-                "custom_flag": "max",
-                "item_summary_str": lambda x: ", ".join(x),
-            }
-        )
+        # 1. PIVOT TABLE: Turns items into columns
+        pivot_df = df_raw.pivot_table(
+            index=['Daily Order #', 'Flag', 'first_name', 'last_name', 'phone', 'email', 'pickup_date', 'pickup_time', 'notes'],
+            columns='item_name',
+            values='quantity',
+            aggfunc='sum'
+        ).reset_index()
 
-        grouped["Flag"] = grouped["custom_flag"].apply(
-            lambda x: "🚨 CUSTOM" if str(x) == "1" else "OK"
-        )
+        pivot_df.fillna("", inplace=True)
+        pivot_df.columns.name = None
+        
+        # Cleanly Format Item Quantities inside the columns
+        for col in pivot_df.columns:
+            if col not in ['Daily Order #', 'Flag', 'first_name', 'last_name', 'phone', 'email', 'pickup_date', 'pickup_time', 'notes']:
+                pivot_df[col] = pivot_df[col].apply(format_qty)
 
-        st.markdown("### 📋 Customer Orders Overview")
-        st.dataframe(
-            grouped[
-                [
-                    "Flag",
-                    "first_name",
-                    "last_name",
-                    "phone",
-                    "email",
-                    "pickup_date",
-                    "pickup_time",
-                    "item_summary_str",
-                    "notes",
-                ]
-            ],
-            use_container_width=True,
+        pivot_df = pivot_df.sort_values(by=['pickup_date', 'Daily Order #'])
+
+        st.markdown("### 📋 Wide Customer Orders Overview")
+        st.dataframe(pivot_df, use_container_width=True)
+        
+        # EXPORT WIDE CSV
+        csv_orders = pivot_df.to_csv(index=False).encode("utf-8")
+        st.download_button(
+            label="📥 Export Wide Orders Table (CSV)",
+            data=csv_orders,
+            file_name="Customer_Orders_Wide_Format.csv",
+            mime="text/csv",
         )
 
         st.markdown("---")
         st.subheader("🔍 Select an Order to View, Edit, or Delete")
 
+        # Order selection maintains underlying normalized data for safe editing
         order_list = []
-        for idx, row in grouped.iterrows():
-            label = f"{row['first_name']} {row['last_name']} | {row['phone']} | {row['pickup_date']} @ {row['pickup_time']}"
+        unique_orders = df_raw[['Daily Order #', 'first_name', 'last_name', 'phone', 'pickup_date', 'pickup_time']].drop_duplicates()
+        unique_orders = unique_orders.sort_values(by=['pickup_date', 'Daily Order #'])
+        
+        for idx, row in unique_orders.iterrows():
+            label = f"#{row['Daily Order #']} - {row['first_name']} {row['last_name']} | {row['phone']} | {row['pickup_date']} @ {row['pickup_time']}"
             order_list.append((label, row["phone"], row["pickup_date"]))
 
         if order_list:
@@ -559,6 +602,7 @@ with tab2:
     else:
         st.info("No matching orders found.")
 
+
 # TAB 3: DYNAMIC KITCHEN PREP DASHBOARD
 with tab3:
     st.subheader("📊 Dynamic Kitchen Production & Prep Dashboard")
@@ -571,6 +615,12 @@ with tab3:
     )
 
     if not df_raw.empty:
+        df_raw["first_name"] = df_raw["first_name"].fillna("")
+        df_raw["last_name"] = df_raw["last_name"].fillna("")
+        df_raw["phone"] = df_raw["phone"].fillna("")
+        df_raw["email"] = df_raw["email"].fillna("")
+        df_raw["notes"] = df_raw["notes"].fillna("")
+
         catalog = HOLIDAY_CATALOGS[selected_holiday]
         df_raw["category"] = df_raw["item_name"].apply(
             lambda x: get_item_category(x, catalog)
@@ -605,7 +655,7 @@ with tab3:
             filtered_df.groupby(["phone", "pickup_date"])
         )
         total_items_count = len(filtered_df)
-        
+
         high_alert_df = filtered_df[filtered_df["custom_flag"].astype(str) == "1"]
         high_alert_count = len(high_alert_df.groupby(["phone", "pickup_date"])) if not high_alert_df.empty else 0
 
@@ -669,16 +719,18 @@ with tab3:
             ]
             if not df_notes_raw.empty:
                 df_notes = df_notes_raw.groupby(
-                    ["pickup_date", "pickup_time", "first_name", "last_name", "phone", "notes", "custom_flag"],
-                    as_index=False
-                ).size()
-                
+                    ["Daily Order #", "pickup_date", "pickup_time", "first_name", "last_name", "phone", "notes", "custom_flag"],
+                    as_index=False,
+                    dropna=False
+                ).agg({"id": "count"}).reset_index()
+
                 df_notes["Flag"] = df_notes["custom_flag"].apply(
                     lambda x: "🚨 HIGH PRIORITY" if str(x) == "1" else "Note"
                 )
                 st.dataframe(
                     df_notes[
                         [
+                            "Daily Order #",
                             "Flag",
                             "pickup_date",
                             "pickup_time",
