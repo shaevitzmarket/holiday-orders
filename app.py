@@ -63,22 +63,22 @@ def load_orders():
             
             df = pd.read_csv(io.StringIO(content))
             
-            # Ensure new columns exist for legacy compatibility
             if "item_note" not in df.columns:
                 df["item_note"] = ""
             
-            # Dynamically Generate Alphabetical Daily Order Numbers
+            # Dynamically Generate Alphabetical Daily Order Numbers (Differentiating by Email as well)
             if not df.empty and "pickup_date" in df.columns:
                 df["first_name"] = df["first_name"].fillna("")
                 df["last_name"] = df["last_name"].fillna("")
                 df["phone"] = df["phone"].fillna("")
+                df["email"] = df["email"].fillna("")
                 df["item_note"] = df["item_note"].fillna("")
                 
-                orders = df[['pickup_date', 'last_name', 'first_name', 'phone']].drop_duplicates()
-                orders = orders.sort_values(by=['pickup_date', 'last_name', 'first_name', 'phone'])
+                orders = df[['pickup_date', 'last_name', 'first_name', 'phone', 'email']].drop_duplicates()
+                orders = orders.sort_values(by=['pickup_date', 'last_name', 'first_name', 'phone', 'email'])
                 orders['Daily Order #'] = orders.groupby('pickup_date').cumcount() + 1
                 
-                df = df.merge(orders, on=['pickup_date', 'last_name', 'first_name', 'phone'], how='left')
+                df = df.merge(orders, on=['pickup_date', 'last_name', 'first_name', 'phone', 'email'], how='left')
                 
             return df
         else:
@@ -90,7 +90,6 @@ def load_orders():
 def save_orders_to_github(df, commit_message="Update customer orders"):
     """Saves updated dataframe back to orders.csv in your GitHub repository."""
     try:
-        # Drop the dynamically generated Daily Order # before saving cleanly to DB
         if "Daily Order #" in df.columns:
             df = df.drop(columns=["Daily Order #"])
 
@@ -258,7 +257,6 @@ def format_qty(val):
         val_f = float(val)
         if val_f == int(val_f):
             return str(int(val_f))
-        # Format to 2 decimal places, then remove trailing zeros and decimal point if clean
         return f"{val_f:.2f}".rstrip("0").rstrip(".")
     except Exception:
         return str(val)
@@ -283,7 +281,6 @@ def get_item_category(item_name, catalog):
 
 
 def get_item_is_weight(item_name, catalog):
-    """Helper to check if an item is sold by weight for the Edit tab."""
     for cat_name, items in catalog.items():
         if item_name in items:
             return items[item_name].get("is_weight", False)
@@ -308,7 +305,6 @@ tab1, tab2, tab3 = st.tabs(
 
 # TAB 1: ORDER ENTRY
 with tab1:
-    # Display success message after auto-clearing
     if st.session_state.success_msg:
         st.success(st.session_state.success_msg)
         st.session_state.success_msg = ""
@@ -322,7 +318,6 @@ with tab1:
         )
         pickup_date = st.date_input("Pickup Date", key=f"date_{st.session_state.form_key}")
         
-        # SATURDAY BLACKOUT VALIDATION
         is_saturday = pickup_date.weekday() == 5
         if is_saturday:
             st.error("❌ We are closed on Saturdays. Please select a different pickup date.")
@@ -366,7 +361,6 @@ with tab1:
                         )
                     )
 
-                # ITEM SPECIFIC NOTES (Only appear if quantity > 0)
                 item_note = ""
                 if qty > 0:
                     item_note = col.text_input(
@@ -472,7 +466,7 @@ with tab2:
 
     if not df_raw.empty:
         # Generate Flag for Pivot Row Display
-        df_raw['Flag'] = df_raw.groupby(['pickup_date', 'last_name', 'first_name', 'phone'])['custom_flag'].transform('max')
+        df_raw['Flag'] = df_raw.groupby(['pickup_date', 'last_name', 'first_name', 'phone', 'email'])['custom_flag'].transform('max')
         df_raw['Flag'] = df_raw['Flag'].apply(lambda x: "🚨 CUSTOM" if str(x) == "1" else "OK")
 
         def make_pivot_val(row):
@@ -511,14 +505,15 @@ with tab2:
         st.markdown("---")
         st.subheader("🔍 Select an Order to View, Edit, or Delete")
 
-        # Order selection maintains underlying normalized data for safe editing
+        # Differentiate unique orders by Name, Phone, Date, AND Email
         order_list = []
-        unique_orders = df_raw[['Daily Order #', 'first_name', 'last_name', 'phone', 'pickup_date', 'pickup_time']].drop_duplicates()
+        unique_orders = df_raw[['Daily Order #', 'first_name', 'last_name', 'phone', 'email', 'pickup_date', 'pickup_time']].drop_duplicates()
         unique_orders = unique_orders.sort_values(by=['pickup_date', 'Daily Order #'])
         
         for idx, row in unique_orders.iterrows():
-            label = f"#{row['Daily Order #']} - {row['first_name']} {row['last_name']} | {row['phone']} | {row['pickup_date']} @ {row['pickup_time']}"
-            order_list.append((label, row["phone"], row["pickup_date"]))
+            email_part = f" | {row['email']}" if row['email'] else ""
+            label = f"#{row['Daily Order #']} - {row['first_name']} {row['last_name']} | {row['phone']}{email_part} | {row['pickup_date']} @ {row['pickup_time']}"
+            order_list.append((label, row["phone"], row["pickup_date"], row["email"]))
 
         if order_list:
             selected_order = st.selectbox(
@@ -530,9 +525,10 @@ with tab2:
             if selected_order is not None:
                 sel_phone = selected_order[1]
                 sel_date = selected_order[2]
+                sel_email = selected_order[3]
 
                 df_order_items = df_raw[
-                    (df_raw["phone"] == sel_phone) & (df_raw["pickup_date"] == sel_date)
+                    (df_raw["phone"] == sel_phone) & (df_raw["pickup_date"] == sel_date) & (df_raw["email"] == sel_email)
                 ].copy()
 
                 if not df_order_items.empty:
@@ -628,11 +624,11 @@ with tab2:
                     with col_del:
                         st.markdown("#### 🗑️ Delete Entire Order")
                         st.warning(
-                            "Deletions are permanent and will remove all items associated with this customer pickup."
+                            "Deletions are permanent and will remove all items associated with this specific order entry."
                         )
                         cust_name = f"{first_row['first_name']} {first_row['last_name']}"
                         if st.button(
-                            f"💥 Delete ALL Items for {cust_name} on {first_row['pickup_date']}",
+                            f"💥 Delete ALL Items for {cust_name} ({first_row['email']}) on {first_row['pickup_date']}",
                             type="primary",
                         ):
                             df_master = load_orders()
@@ -641,11 +637,12 @@ with tab2:
                                     (df_master["holiday"] == selected_holiday)
                                     & (df_master["phone"] == first_row["phone"])
                                     & (df_master["pickup_date"] == first_row["pickup_date"])
+                                    & (df_master["email"] == first_row["email"])
                                 )
                             ]
-                            save_orders_to_github(df_master, f"Delete order for {cust_name}")
+                            save_orders_to_github(df_master, f"Delete order for {cust_name} ({first_row['email']})")
                             st.success(
-                                f"All items for {cust_name} deleted from GitHub!"
+                                f"All items for {cust_name} ({first_row['email']}) deleted from GitHub!"
                             )
                             st.rerun()
 
@@ -732,12 +729,12 @@ with tab3:
 
         m1, m2, m3 = st.columns(3)
         unique_orders_count = len(
-            filtered_df.groupby(["phone", "pickup_date"])
+            filtered_df.groupby(["phone", "pickup_date", "email"])
         )
         total_items_count = len(filtered_df)
 
         high_alert_df = filtered_df[filtered_df["custom_flag"].astype(str) == "1"]
-        high_alert_count = len(high_alert_df.groupby(["phone", "pickup_date"])) if not high_alert_df.empty else 0
+        high_alert_count = len(high_alert_df.groupby(["phone", "pickup_date", "email"])) if not high_alert_df.empty else 0
 
         m1.metric("📦 Filtered Customer Orders", unique_orders_count)
         m2.metric("🥩 Filtered Line Items", total_items_count)
@@ -784,7 +781,7 @@ with tab3:
             drill_df = filtered_df[filtered_df["item_name"] == selected_drilldown].copy()
             drill_df["Customer Name"] = drill_df["first_name"] + " " + drill_df["last_name"]
             
-            display_cols = ["Daily Order #", "Customer Name", "phone", "pickup_date", "pickup_time", "quantity", "item_note"]
+            display_cols = ["Daily Order #", "Customer Name", "phone", "email", "pickup_date", "pickup_time", "quantity", "item_note"]
             drill_display = drill_df[display_cols].sort_values(by=["pickup_date", "Daily Order #"])
             drill_display["quantity"] = drill_display["quantity"].apply(format_qty)
             
@@ -797,7 +794,7 @@ with tab3:
         with c_left:
             st.markdown("### ⏰ Hourly Store Pickup Load Schedule")
             schedule_df = (
-                filtered_df.groupby(["pickup_time", "phone", "first_name", "last_name"])
+                filtered_df.groupby(["pickup_time", "phone", "email", "first_name", "last_name"])
                 .size()
                 .reset_index()
                 .groupby("pickup_time")
@@ -814,7 +811,7 @@ with tab3:
             ]
             if not df_notes_raw.empty:
                 df_notes = df_notes_raw.groupby(
-                    ["Daily Order #", "pickup_date", "pickup_time", "first_name", "last_name", "phone", "notes", "custom_flag"],
+                    ["Daily Order #", "pickup_date", "pickup_time", "first_name", "last_name", "phone", "email", "notes", "custom_flag"],
                     as_index=False,
                     dropna=False
                 ).agg({"id": "count"}).reset_index()
