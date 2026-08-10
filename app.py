@@ -258,7 +258,8 @@ def format_qty(val):
         val_f = float(val)
         if val_f == int(val_f):
             return str(int(val_f))
-        return f"{val_f:.1f}"
+        # Format to 2 decimal places, then remove trailing zeros and decimal point if clean
+        return f"{val_f:.2f}".rstrip("0").rstrip(".")
     except Exception:
         return str(val)
 
@@ -279,6 +280,14 @@ def get_item_category(item_name, catalog):
         if item_name in items:
             return cat_name
     return "Special / Custom Requests"
+
+
+def get_item_is_weight(item_name, catalog):
+    """Helper to check if an item is sold by weight for the Edit tab."""
+    for cat_name, items in catalog.items():
+        if item_name in items:
+            return items[item_name].get("is_weight", False)
+    return False
 
 
 # 3. SIDEBAR NAVIGATION
@@ -343,8 +352,8 @@ with tab1:
                     qty = col.number_input(
                         f"{item_name} ({unit_str})",
                         min_value=0.0,
-                        step=0.1,
-                        format="%.1f",
+                        step=0.25,
+                        format="%.2f",
                         key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}",
                     )
                 else:
@@ -412,7 +421,7 @@ with tab1:
                         "pickup_time": str(pickup_time),
                         "item_name": item_name,
                         "unit": unit_str,
-                        "quantity": round(qty, 1),
+                        "quantity": round(qty, 2),
                         "item_note": i_note,
                         "notes": order_notes,
                         "custom_flag": flag_val,
@@ -559,21 +568,36 @@ with tab2:
                             st.markdown("##### Item Quantities & Specific Notes:")
                             updated_quantities = {}
                             updated_item_notes = {}
+                            
+                            catalog = HOLIDAY_CATALOGS[selected_holiday]
+                            
                             for _, item_row in df_order_items.iterrows():
                                 item_id = item_row["id"]
+                                is_item_weight = get_item_is_weight(item_row["item_name"], catalog)
                                 
                                 st.markdown(f"**{item_row['item_name']} ({item_row['unit']})**")
                                 c_qty, c_note = st.columns([1, 2])
                                 
-                                updated_quantities[item_id] = c_qty.number_input(
-                                    "Qty",
-                                    min_value=0.0,
-                                    value=float(item_row["quantity"]),
-                                    step=0.1,
-                                    format="%.1f",
-                                    key=f"edit_qty_{item_id}",
-                                    label_visibility="collapsed"
-                                )
+                                if is_item_weight:
+                                    updated_quantities[item_id] = c_qty.number_input(
+                                        "Qty",
+                                        min_value=0.0,
+                                        value=float(item_row["quantity"]),
+                                        step=0.25,
+                                        format="%.2f",
+                                        key=f"edit_qty_{item_id}",
+                                        label_visibility="collapsed"
+                                    )
+                                else:
+                                    updated_quantities[item_id] = float(c_qty.number_input(
+                                        "Qty",
+                                        min_value=0,
+                                        value=int(float(item_row["quantity"])),
+                                        step=1,
+                                        key=f"edit_qty_{item_id}",
+                                        label_visibility="collapsed"
+                                    ))
+                                    
                                 updated_item_notes[item_id] = c_note.text_input(
                                     "Item Note",
                                     value=str(item_row.get("item_note", "")),
@@ -589,7 +613,7 @@ with tab2:
                                         df_master = df_master[df_master["id"] != item_id]
                                     else:
                                         mask = df_master["id"] == item_id
-                                        df_master.loc[mask, "quantity"] = round(q_val, 1)
+                                        df_master.loc[mask, "quantity"] = round(q_val, 2)
                                         df_master.loc[mask, "item_note"] = updated_item_notes[item_id]
                                         df_master.loc[mask, "pickup_time"] = new_time
                                         df_master.loc[mask, "notes"] = new_notes
@@ -653,6 +677,35 @@ with tab3:
             lambda x: get_item_category(x, catalog)
         )
 
+        st.markdown("### 🏆 Grand Totals (All Dates)")
+        
+        # GRAND TOTALS FILTER
+        gt_cats = ["All Categories"] + sorted(df_raw["category"].unique().tolist())
+        selected_gt_cat = st.selectbox("🥩 Filter Grand Totals by Category:", gt_cats, key="gt_cat_filter")
+        
+        df_grand_totals = df_raw.copy()
+        if selected_gt_cat != "All Categories":
+            df_grand_totals = df_grand_totals[df_grand_totals["category"] == selected_gt_cat]
+            
+        df_grand_totals["quantity"] = pd.to_numeric(df_grand_totals["quantity"], errors="coerce")
+        df_gt_sum = (
+            df_grand_totals.groupby(["category", "item_name", "unit"])["quantity"]
+            .sum()
+            .reset_index()
+        )
+        df_gt_sum.columns = [
+            "Category",
+            "Item Name",
+            "Unit of Measure",
+            "Grand Total Quantity Needed",
+        ]
+        df_gt_sum["Grand Total Quantity Needed"] = df_gt_sum["Grand Total Quantity Needed"].apply(format_qty)
+        
+        st.dataframe(df_gt_sum, use_container_width=True)
+
+        st.markdown("---")
+        st.markdown("### 📅 Daily Production Summary Sheet")
+
         f_col1, f_col2 = st.columns(2)
 
         with f_col1:
@@ -686,13 +739,10 @@ with tab3:
         high_alert_df = filtered_df[filtered_df["custom_flag"].astype(str) == "1"]
         high_alert_count = len(high_alert_df.groupby(["phone", "pickup_date"])) if not high_alert_df.empty else 0
 
-        m1.metric("📦 Total Customer Orders", unique_orders_count)
-        m2.metric("🥩 Total Line Items", total_items_count)
+        m1.metric("📦 Filtered Customer Orders", unique_orders_count)
+        m2.metric("🥩 Filtered Line Items", total_items_count)
         m3.metric("🚨 Special / High-Priority Alerts", high_alert_count)
 
-        st.markdown("---")
-
-        st.markdown("### 📋 Production Summary Sheet")
         df_raw_sum = filtered_df.copy()
         df_raw_sum["quantity"] = pd.to_numeric(df_raw_sum["quantity"], errors="coerce")
         df_totals = (
@@ -717,9 +767,9 @@ with tab3:
 
         csv_data = df_totals.to_csv(index=False).encode("utf-8")
         st.download_button(
-            label="📥 Export Prep Sheet as CSV / Excel",
+            label="📥 Export Daily Prep Sheet as CSV / Excel",
             data=csv_data,
-            file_name="Kitchen_Prep_Sheet.csv",
+            file_name=f"Daily_Prep_Sheet_{selected_date}.csv",
             mime="text/csv",
         )
 
@@ -728,7 +778,7 @@ with tab3:
         # 🔍 ITEM DRILL-DOWN FEATURE
         st.markdown("### 🔍 Item Drill-Down")
         item_choices = ["(Select an item)"] + sorted(filtered_df["item_name"].unique().tolist())
-        selected_drilldown = st.selectbox("Select an item to see exactly who ordered it:", item_choices)
+        selected_drilldown = st.selectbox("Select an item to see exactly who ordered it (based on current date filter):", item_choices)
         
         if selected_drilldown != "(Select an item)":
             drill_df = filtered_df[filtered_df["item_name"] == selected_drilldown].copy()
