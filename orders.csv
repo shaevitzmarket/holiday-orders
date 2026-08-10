@@ -1,5 +1,5 @@
 id,holiday,first_name,last_name,phone,email,pickup_date,pickup_time,item_name,unit,quantity,notes,custom_flag,item_note
-1,Rosh Hashanah 2026,SHERI,GREENBAUM,(248) 302 - 5058,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Bone-in Rib Roast,lb,10.0,2 - 10LB BONE IN RIB ROASTS,0,
+1,Rosh Hashanah 2026,SHERI,GREENBAUM,(248) 302 - 5058,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Bone-in Rib Roast,lb,20.0,2 - 10LB BONE IN RIB ROASTS,0,
 3,Rosh Hashanah 2026,PAM,SCHWARTZ,(847) 710 - 7194,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Whole Brisket 14-16 lb,# of pc,1.0,,0,
 4,Rosh Hashanah 2026,PAM,SCHWARTZ,(847) 710 - 7194,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Bone-in Rib Roast,lb,10.0,,0,
 5,Rosh Hashanah 2026,PAM,SCHWARTZ,(847) 710 - 7194,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Kishke,Each,2.0,,0,
