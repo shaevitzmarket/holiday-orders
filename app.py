@@ -462,10 +462,9 @@ with tab2:
             aggfunc='sum'
         ).reset_index()
 
-        pivot_df.fillna("", inplace=True)
         pivot_df.columns.name = None
         
-        # Cleanly Format Item Quantities inside the columns
+        # Cleanly Format Item Quantities inside the columns (this handles empty/NaN values safely)
         for col in pivot_df.columns:
             if col not in ['Daily Order #', 'Flag', 'first_name', 'last_name', 'phone', 'email', 'pickup_date', 'pickup_time', 'notes']:
                 pivot_df[col] = pivot_df[col].apply(format_qty)
