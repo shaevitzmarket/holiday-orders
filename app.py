@@ -41,6 +41,7 @@ EMPTY_COLUMNS = [
     "item_name",
     "unit",
     "quantity",
+    "item_note",
     "notes",
     "custom_flag",
 ]
@@ -62,11 +63,16 @@ def load_orders():
             
             df = pd.read_csv(io.StringIO(content))
             
+            # Ensure new columns exist for legacy compatibility
+            if "item_note" not in df.columns:
+                df["item_note"] = ""
+            
             # Dynamically Generate Alphabetical Daily Order Numbers
             if not df.empty and "pickup_date" in df.columns:
                 df["first_name"] = df["first_name"].fillna("")
                 df["last_name"] = df["last_name"].fillna("")
                 df["phone"] = df["phone"].fillna("")
+                df["item_note"] = df["item_note"].fillna("")
                 
                 orders = df[['pickup_date', 'last_name', 'first_name', 'phone']].drop_duplicates()
                 orders = orders.sort_values(by=['pickup_date', 'last_name', 'first_name', 'phone'])
@@ -246,7 +252,6 @@ TIME_SLOTS = [
 
 
 def format_qty(val):
-    """Cleanly format quantities: whole numbers display as integers (1), weights display to 1 decimal place (1.5)."""
     if pd.isna(val) or val == "":
         return ""
     try:
@@ -259,7 +264,6 @@ def format_qty(val):
 
 
 def clean_and_format_phone(phone_str):
-    """Extracts digits and formats phone to (###) ### - ####. Returns (formatted_str, error_msg)."""
     digits = re.sub(r"\D", "", str(phone_str))
     if len(digits) != 10:
         return (
@@ -271,7 +275,6 @@ def clean_and_format_phone(phone_str):
 
 
 def get_item_category(item_name, catalog):
-    """Finds which category an item belongs to within the selected catalog."""
     for cat_name, items in catalog.items():
         if item_name in items:
             return cat_name
@@ -354,8 +357,15 @@ with tab1:
                         )
                     )
 
+                # ITEM SPECIFIC NOTES (Only appear if quantity > 0)
+                item_note = ""
                 if qty > 0:
-                    order_items.append((item_name, unit_str, qty))
+                    item_note = col.text_input(
+                        f"📝 Note for {item_name}:",
+                        placeholder="e.g. 2 - 10lb pieces",
+                        key=f"inote_{selected_holiday}_{item_name}_{st.session_state.form_key}"
+                    )
+                    order_items.append((item_name, unit_str, qty, item_note))
 
     st.markdown("---")
     st.subheader("📝 Special Notes & Off-Menu Requests")
@@ -386,10 +396,10 @@ with tab1:
             flag_val = 1 if custom_flag else 0
 
             if not order_items:
-                order_items.append(("Custom Request Only", "N/A", 1.0))
+                order_items.append(("Custom Request Only", "N/A", 1.0, ""))
 
             new_rows = []
-            for item_name, unit_str, qty in order_items:
+            for item_name, unit_str, qty, i_note in order_items:
                 new_rows.append(
                     {
                         "id": next_id,
@@ -403,6 +413,7 @@ with tab1:
                         "item_name": item_name,
                         "unit": unit_str,
                         "quantity": round(qty, 1),
+                        "item_note": i_note,
                         "notes": order_notes,
                         "custom_flag": flag_val,
                     }
@@ -442,6 +453,7 @@ with tab2:
         df_raw["phone"] = df_raw["phone"].fillna("")
         df_raw["email"] = df_raw["email"].fillna("")
         df_raw["notes"] = df_raw["notes"].fillna("")
+        df_raw["item_note"] = df_raw["item_note"].fillna("")
 
         if search_term:
             df_raw = df_raw[
@@ -454,24 +466,28 @@ with tab2:
         df_raw['Flag'] = df_raw.groupby(['pickup_date', 'last_name', 'first_name', 'phone'])['custom_flag'].transform('max')
         df_raw['Flag'] = df_raw['Flag'].apply(lambda x: "🚨 CUSTOM" if str(x) == "1" else "OK")
 
+        def make_pivot_val(row):
+            val = format_qty(row['quantity'])
+            note = str(row.get('item_note', '')).strip()
+            if note and note.lower() != 'nan':
+                return f"{val} 💬"
+            return val
+            
+        df_raw['pivot_val'] = df_raw.apply(make_pivot_val, axis=1)
+
         # 1. PIVOT TABLE: Turns items into columns
         pivot_df = df_raw.pivot_table(
             index=['Daily Order #', 'Flag', 'first_name', 'last_name', 'phone', 'email', 'pickup_date', 'pickup_time', 'notes'],
             columns='item_name',
-            values='quantity',
-            aggfunc='sum'
+            values='pivot_val',
+            aggfunc=lambda x: ' + '.join(str(v) for v in x)
         ).reset_index()
 
+        pivot_df.fillna("", inplace=True)
         pivot_df.columns.name = None
-        
-        # Cleanly Format Item Quantities inside the columns (this handles empty/NaN values safely)
-        for col in pivot_df.columns:
-            if col not in ['Daily Order #', 'Flag', 'first_name', 'last_name', 'phone', 'email', 'pickup_date', 'pickup_time', 'notes']:
-                pivot_df[col] = pivot_df[col].apply(format_qty)
-
         pivot_df = pivot_df.sort_values(by=['pickup_date', 'Daily Order #'])
 
-        st.markdown("### 📋 Wide Customer Orders Overview")
+        st.markdown("### 📋 Wide Customer Orders Overview (💬 = Item Note)")
         st.dataframe(pivot_df, use_container_width=True)
         
         # EXPORT WIDE CSV
@@ -533,27 +549,37 @@ with tab2:
                                 else 0,
                             )
                             new_notes = st.text_area(
-                                "Order Notes / Instructions:", value=str(first_row["notes"])
+                                "General Order Notes / Instructions:", value=str(first_row["notes"])
                             )
                             new_flag = st.checkbox(
                                 "🚨 Flag as High Maintenance / Custom Request",
                                 value=bool(first_row["custom_flag"]),
                             )
 
-                            st.markdown("##### Item Quantities:")
+                            st.markdown("##### Item Quantities & Specific Notes:")
                             updated_quantities = {}
+                            updated_item_notes = {}
                             for _, item_row in df_order_items.iterrows():
                                 item_id = item_row["id"]
-                                item_label = (
-                                    f"{item_row['item_name']} ({item_row['unit']})"
-                                )
-                                updated_quantities[item_id] = st.number_input(
-                                    item_label,
+                                
+                                st.markdown(f"**{item_row['item_name']} ({item_row['unit']})**")
+                                c_qty, c_note = st.columns([1, 2])
+                                
+                                updated_quantities[item_id] = c_qty.number_input(
+                                    "Qty",
                                     min_value=0.0,
                                     value=float(item_row["quantity"]),
                                     step=0.1,
                                     format="%.1f",
                                     key=f"edit_qty_{item_id}",
+                                    label_visibility="collapsed"
+                                )
+                                updated_item_notes[item_id] = c_note.text_input(
+                                    "Item Note",
+                                    value=str(item_row.get("item_note", "")),
+                                    placeholder="Specific note for this item...",
+                                    key=f"edit_inote_{item_id}",
+                                    label_visibility="collapsed"
                                 )
 
                             if st.form_submit_button("💾 Save All Order Changes"):
@@ -564,6 +590,7 @@ with tab2:
                                     else:
                                         mask = df_master["id"] == item_id
                                         df_master.loc[mask, "quantity"] = round(q_val, 1)
+                                        df_master.loc[mask, "item_note"] = updated_item_notes[item_id]
                                         df_master.loc[mask, "pickup_time"] = new_time
                                         df_master.loc[mask, "notes"] = new_notes
                                         df_master.loc[mask, "custom_flag"] = 1 if new_flag else 0
@@ -619,6 +646,7 @@ with tab3:
         df_raw["phone"] = df_raw["phone"].fillna("")
         df_raw["email"] = df_raw["email"].fillna("")
         df_raw["notes"] = df_raw["notes"].fillna("")
+        df_raw["item_note"] = df_raw["item_note"].fillna("")
 
         catalog = HOLIDAY_CATALOGS[selected_holiday]
         df_raw["category"] = df_raw["item_name"].apply(
@@ -696,6 +724,24 @@ with tab3:
         )
 
         st.markdown("---")
+        
+        # 🔍 ITEM DRILL-DOWN FEATURE
+        st.markdown("### 🔍 Item Drill-Down")
+        item_choices = ["(Select an item)"] + sorted(filtered_df["item_name"].unique().tolist())
+        selected_drilldown = st.selectbox("Select an item to see exactly who ordered it:", item_choices)
+        
+        if selected_drilldown != "(Select an item)":
+            drill_df = filtered_df[filtered_df["item_name"] == selected_drilldown].copy()
+            drill_df["Customer Name"] = drill_df["first_name"] + " " + drill_df["last_name"]
+            
+            display_cols = ["Daily Order #", "Customer Name", "phone", "pickup_date", "pickup_time", "quantity", "item_note"]
+            drill_display = drill_df[display_cols].sort_values(by=["pickup_date", "Daily Order #"])
+            drill_display["quantity"] = drill_display["quantity"].apply(format_qty)
+            
+            st.dataframe(drill_display, use_container_width=True)
+
+        st.markdown("---")
+
         c_left, c_right = st.columns(2)
 
         with c_left:
@@ -711,7 +757,7 @@ with tab3:
             st.dataframe(schedule_df, use_container_width=True)
 
         with c_right:
-            st.markdown("### ⚠️ Special Requests & Custom Notes")
+            st.markdown("### ⚠️ General Order Requests & Notes")
             df_notes_raw = filtered_df[
                 (filtered_df["notes"].astype(str).str.strip() != "") |
                 (filtered_df["custom_flag"].astype(str) == "1")
@@ -741,6 +787,6 @@ with tab3:
                     use_container_width=True,
                 )
             else:
-                st.success("No special custom request notes for this filter!")
+                st.success("No general custom request notes for this filter!")
     else:
         st.info("No active orders found for this holiday.")
