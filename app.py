@@ -95,7 +95,7 @@ def save_orders_to_github(df, commit_message="Update customer orders"):
 
         csv_buffer = io.StringIO()
         df.to_csv(csv_buffer, index=False)
-        raw_csv = csv_buffer.getvalue()
+        raw_csv = buffer = csv_buffer.getvalue()
 
         res = requests.get(API_URL, headers=HEADERS)
         sha = res.json()["sha"] if res.status_code == 200 else None
@@ -465,8 +465,7 @@ with tab2:
             ]
 
     if not df_raw.empty:
-        # Generate Flag for Pivot Row Display
-        df_raw['Flag'] = df_raw.groupby(['pickup_date', 'last_name', 'first_name', 'phone', 'email'])['custom_flag'].transform('max')
+        df_raw['Flag'] = df_raw.groupby(['pickup_date', 'last_name', 'first_name', 'phone'])['custom_flag'].transform('max')
         df_raw['Flag'] = df_raw['Flag'].apply(lambda x: "🚨 CUSTOM" if str(x) == "1" else "OK")
 
         def make_pivot_val(row):
@@ -478,7 +477,6 @@ with tab2:
             
         df_raw['pivot_val'] = df_raw.apply(make_pivot_val, axis=1)
 
-        # 1. PIVOT TABLE: Turns items into columns
         pivot_df = df_raw.pivot_table(
             index=['Daily Order #', 'Flag', 'first_name', 'last_name', 'phone', 'email', 'pickup_date', 'pickup_time', 'notes'],
             columns='item_name',
@@ -493,7 +491,6 @@ with tab2:
         st.markdown("### 📋 Wide Customer Orders Overview (💬 = Item Note)")
         st.dataframe(pivot_df, use_container_width=True)
         
-        # EXPORT WIDE CSV
         csv_orders = pivot_df.to_csv(index=False).encode("utf-8")
         st.download_button(
             label="📥 Export Wide Orders Table (CSV)",
@@ -505,7 +502,6 @@ with tab2:
         st.markdown("---")
         st.subheader("🔍 Select an Order to View, Edit, or Delete")
 
-        # Differentiate unique orders by Name, Phone, Date, AND Email
         order_list = []
         unique_orders = df_raw[['Daily Order #', 'first_name', 'last_name', 'phone', 'email', 'pickup_date', 'pickup_time']].drop_duplicates()
         unique_orders = unique_orders.sort_values(by=['pickup_date', 'Daily Order #'])
@@ -534,25 +530,44 @@ with tab2:
                 if not df_order_items.empty:
                     first_row = df_order_items.iloc[0]
 
-                    st.markdown(
-                        f"### 📦 Order Detail View: **{first_row['first_name']} {first_row['last_name']}**"
-                    )
-                    st.info(
-                        f"📞 **Phone:** {first_row['phone']} | ✉️ **Email:** {first_row['email'] or 'N/A'} | 🗓️ **Pickup:** {first_row['pickup_date']} @ {first_row['pickup_time']}"
-                    )
+                    st.markdown(f"### 📦 Order Detail View: **{first_row['first_name']} {first_row['last_name']}**")
 
                     col_edit, col_del = st.columns(2)
 
                     with col_edit:
-                        st.markdown("#### ✏️ Edit Order Items & Pickup Time")
+                        st.markdown("#### ✏️ Edit Customer, Pickup & Order Details")
                         with st.form("edit_full_order_form"):
-                            new_time = st.selectbox(
+                            
+                            st.markdown("##### 👤 Customer Details")
+                            c_fn, c_ln = st.columns(2)
+                            new_fn = c_fn.text_input("First Name", value=str(first_row["first_name"]))
+                            new_ln = c_ln.text_input("Last Name", value=str(first_row["last_name"]))
+                            
+                            c_ph, c_em = st.columns(2)
+                            new_ph = c_ph.text_input("Phone Number", value=str(first_row["phone"]))
+                            new_em = c_em.text_input("Email", value=str(first_row["email"]))
+
+                            st.markdown("##### 🗓️ Pickup Details")
+                            c_pd, c_pt = st.columns(2)
+                            
+                            # Parse existing date string safely for the date input default
+                            old_date_str = str(first_row["pickup_date"]).split(" ")[0]
+                            try:
+                                default_date = pd.to_datetime(old_date_str).date()
+                            except Exception:
+                                default_date = pd.Timestamp.now().date()
+                                
+                            new_date = c_pd.date_input("Pickup Date", value=default_date)
+                            
+                            new_time = c_pt.selectbox(
                                 "Pickup Time Slot:",
                                 TIME_SLOTS,
                                 index=TIME_SLOTS.index(first_row["pickup_time"])
                                 if first_row["pickup_time"] in TIME_SLOTS
                                 else 0,
                             )
+                            
+                            st.markdown("##### 📝 Order Notes")
                             new_notes = st.text_area(
                                 "General Order Notes / Instructions:", value=str(first_row["notes"])
                             )
@@ -561,7 +576,7 @@ with tab2:
                                 value=bool(first_row["custom_flag"]),
                             )
 
-                            st.markdown("##### Item Quantities & Specific Notes:")
+                            st.markdown("##### 🥩 Item Quantities & Specific Notes:")
                             updated_quantities = {}
                             updated_item_notes = {}
                             
@@ -603,23 +618,41 @@ with tab2:
                                 )
 
                             if st.form_submit_button("💾 Save All Order Changes"):
-                                df_master = load_orders()
-                                for item_id, q_val in updated_quantities.items():
-                                    if q_val <= 0:
-                                        df_master = df_master[df_master["id"] != item_id]
-                                    else:
-                                        mask = df_master["id"] == item_id
-                                        df_master.loc[mask, "quantity"] = round(q_val, 2)
-                                        df_master.loc[mask, "item_note"] = updated_item_notes[item_id]
-                                        df_master.loc[mask, "pickup_time"] = new_time
-                                        df_master.loc[mask, "notes"] = new_notes
-                                        df_master.loc[mask, "custom_flag"] = 1 if new_flag else 0
+                                formatted_phone, phone_error = clean_and_format_phone(new_ph)
+                                is_saturday = new_date.weekday() == 5
+                                
+                                if is_saturday:
+                                    st.error("Cannot save order: We are closed on the selected pickup date (Saturday).")
+                                elif not new_ln or not new_date:
+                                    st.error("Please enter at least Last Name and Pickup Date.")
+                                elif phone_error:
+                                    st.error(f"Invalid Phone Number: {phone_error}")
+                                else:
+                                    new_date_formatted = f"{new_date} ({new_date.strftime('%a')})"
+                                    
+                                    df_master = load_orders()
+                                    for item_id, q_val in updated_quantities.items():
+                                        if q_val <= 0:
+                                            df_master = df_master[df_master["id"] != item_id]
+                                        else:
+                                            mask = df_master["id"] == item_id
+                                            df_master.loc[mask, "first_name"] = new_fn
+                                            df_master.loc[mask, "last_name"] = new_ln
+                                            df_master.loc[mask, "phone"] = formatted_phone
+                                            df_master.loc[mask, "email"] = new_em
+                                            df_master.loc[mask, "pickup_date"] = new_date_formatted
+                                            
+                                            df_master.loc[mask, "quantity"] = round(q_val, 2)
+                                            df_master.loc[mask, "item_note"] = updated_item_notes[item_id]
+                                            df_master.loc[mask, "pickup_time"] = new_time
+                                            df_master.loc[mask, "notes"] = new_notes
+                                            df_master.loc[mask, "custom_flag"] = 1 if new_flag else 0
 
-                                save_orders_to_github(df_master, f"Edit order for {first_row['first_name']} {first_row['last_name']}")
-                                st.success(
-                                    f"Order for {first_row['first_name']} {first_row['last_name']} updated permanently!"
-                                )
-                                st.rerun()
+                                    save_orders_to_github(df_master, f"Edit order for {new_fn} {new_ln}")
+                                    st.success(
+                                        f"Order for {new_fn} {new_ln} updated permanently!"
+                                    )
+                                    st.rerun()
 
                     with col_del:
                         st.markdown("#### 🗑️ Delete Entire Order")
