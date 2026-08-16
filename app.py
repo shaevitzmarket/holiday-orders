@@ -95,7 +95,7 @@ def save_orders_to_github(df, commit_message="Update customer orders"):
 
         csv_buffer = io.StringIO()
         df.to_csv(csv_buffer, index=False)
-        raw_csv = buffer = csv_buffer.getvalue()
+        raw_csv = csv_buffer.getvalue()
 
         res = requests.get(API_URL, headers=HEADERS)
         sha = res.json()["sha"] if res.status_code == 200 else None
@@ -465,7 +465,7 @@ with tab2:
             ]
 
     if not df_raw.empty:
-        df_raw['Flag'] = df_raw.groupby(['pickup_date', 'last_name', 'first_name', 'phone'])['custom_flag'].transform('max')
+        df_raw['Flag'] = df_raw.groupby(['pickup_date', 'last_name', 'first_name', 'phone', 'email'])['custom_flag'].transform('max')
         df_raw['Flag'] = df_raw['Flag'].apply(lambda x: "🚨 CUSTOM" if str(x) == "1" else "OK")
 
         def make_pivot_val(row):
@@ -550,7 +550,6 @@ with tab2:
                             st.markdown("##### 🗓️ Pickup Details")
                             c_pd, c_pt = st.columns(2)
                             
-                            # Parse existing date string safely for the date input default
                             old_date_str = str(first_row["pickup_date"]).split(" ")[0]
                             try:
                                 default_date = pd.to_datetime(old_date_str).date()
@@ -576,7 +575,7 @@ with tab2:
                                 value=bool(first_row["custom_flag"]),
                             )
 
-                            st.markdown("##### 🥩 Item Quantities & Specific Notes:")
+                            st.markdown("##### 🥩 Edit Currently Ordered Items:")
                             updated_quantities = {}
                             updated_item_notes = {}
                             
@@ -617,6 +616,41 @@ with tab2:
                                     label_visibility="collapsed"
                                 )
 
+                            st.markdown("<br>", unsafe_allow_html=True)
+                            st.markdown("##### ➕ Add Additional Items to Order:")
+                            st.caption("Expand a category below to add new items to this customer's order.")
+                            
+                            new_items_to_add = {}
+                            for category, items in catalog.items():
+                                with st.expander(f"📁 Add {category}"):
+                                    for item_name, item_info in items.items():
+                                        # Skip items they already have to avoid duplicate interface
+                                        if item_name in df_order_items["item_name"].values:
+                                            continue
+                                        
+                                        col_name, col_qty, col_note = st.columns([2, 1, 2])
+                                        col_name.markdown(f"<div style='margin-top: 8px;'>{item_name}</div>", unsafe_allow_html=True)
+                                        
+                                        if item_info["is_weight"]:
+                                            n_qty = col_qty.number_input(
+                                                "Qty", min_value=0.0, step=0.25, format="%.2f", 
+                                                key=f"add_{item_name}_{first_row['id']}", label_visibility="collapsed"
+                                            )
+                                        else:
+                                            n_qty = float(col_qty.number_input(
+                                                "Qty", min_value=0, step=1, 
+                                                key=f"add_{item_name}_{first_row['id']}", label_visibility="collapsed"
+                                            ))
+                                            
+                                        n_note = col_note.text_input(
+                                            "Note", placeholder="Item note...", 
+                                            key=f"add_n_{item_name}_{first_row['id']}", label_visibility="collapsed"
+                                        )
+                                        
+                                        if n_qty > 0:
+                                            new_items_to_add[item_name] = {"qty": n_qty, "note": n_note, "unit": item_info["unit"]}
+
+                            st.markdown("<br>", unsafe_allow_html=True)
                             if st.form_submit_button("💾 Save All Order Changes"):
                                 formatted_phone, phone_error = clean_and_format_phone(new_ph)
                                 is_saturday = new_date.weekday() == 5
@@ -631,6 +665,9 @@ with tab2:
                                     new_date_formatted = f"{new_date} ({new_date.strftime('%a')})"
                                     
                                     df_master = load_orders()
+                                    next_id = int(df_master["id"].max() + 1) if not df_master.empty and "id" in df_master.columns and pd.notna(df_master["id"].max()) else 1
+                                    
+                                    # 1. Update Existing Items
                                     for item_id, q_val in updated_quantities.items():
                                         if q_val <= 0:
                                             df_master = df_master[df_master["id"] != item_id]
@@ -648,10 +685,32 @@ with tab2:
                                             df_master.loc[mask, "notes"] = new_notes
                                             df_master.loc[mask, "custom_flag"] = 1 if new_flag else 0
 
+                                    # 2. Append Newly Added Items
+                                    new_rows = []
+                                    for item_name, item_data in new_items_to_add.items():
+                                        new_rows.append({
+                                            "id": next_id,
+                                            "holiday": selected_holiday,
+                                            "first_name": new_fn,
+                                            "last_name": new_ln,
+                                            "phone": formatted_phone,
+                                            "email": new_em,
+                                            "pickup_date": new_date_formatted,
+                                            "pickup_time": new_time,
+                                            "item_name": item_name,
+                                            "unit": item_data["unit"],
+                                            "quantity": round(item_data["qty"], 2),
+                                            "item_note": item_data["note"],
+                                            "notes": new_notes,
+                                            "custom_flag": 1 if new_flag else 0,
+                                        })
+                                        next_id += 1
+                                        
+                                    if new_rows:
+                                        df_master = pd.concat([df_master, pd.DataFrame(new_rows)], ignore_index=True)
+
                                     save_orders_to_github(df_master, f"Edit order for {new_fn} {new_ln}")
-                                    st.success(
-                                        f"Order for {new_fn} {new_ln} updated permanently!"
-                                    )
+                                    st.success(f"Order for {new_fn} {new_ln} updated permanently!")
                                     st.rerun()
 
                     with col_del:
