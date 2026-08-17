@@ -360,12 +360,16 @@ with tab1:
     for category, items in catalog.items():
         with st.expander(f"📁 {category} ({len(items)} items)"):
             
-            for item_name, item_info in items.items():
+            for idx, (item_name, item_info) in enumerate(items.items()):
                 has_multi_units = "units" in item_info
                 safe_key = clean_key(item_name)
                 
-                # HYPER COMPACT ROW: 4 Columns mapped directly next to each other
-                c_name, c_qty, c_unit, c_note = st.columns([3, 1, 1, 3])
+                # Zebra Striping Background
+                bg_color = "#f9f9f9" if idx % 2 == 0 else "transparent"
+                st.markdown(f"<div style='background-color: {bg_color}; padding: 5px 10px; border-radius: 5px;'>", unsafe_allow_html=True)
+                
+                # TIGHTER COLUMNS: Name is smaller, Unit/Qty are tight, Note gets the rest of the space
+                c_name, c_qty, c_unit, c_note = st.columns([2.5, 0.8, 1.2, 4])
                 
                 with c_name:
                     st.markdown(f"<div style='margin-top: 8px;'><b>{item_name}</b></div>", unsafe_allow_html=True)
@@ -400,7 +404,6 @@ with tab1:
                         ))
 
                 with c_note:
-                    # Only show the note input if they've ordered the item to keep the right side clean
                     item_note = ""
                     if qty > 0:
                         item_note = st.text_input(
@@ -410,8 +413,8 @@ with tab1:
                             label_visibility="collapsed"
                         )
                         order_items.append((item_name, unit_str_to_save, qty, item_note))
-
-                st.markdown("<hr style='margin-top: 5px; margin-bottom: 5px;'>", unsafe_allow_html=True)
+                
+                st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("---")
     st.subheader("📝 Special Notes & Off-Menu Requests")
@@ -596,8 +599,12 @@ with tab2:
                                 
                                 has_multi_units = "units" in item_catalog_data
                                 
-                                # Compact Row
-                                c_name, c_qty, c_unit, c_note = st.columns([3, 1, 1, 3])
+                                # Zebra stripe edit box
+                                bg_color = "#f9f9f9" if idx % 2 == 0 else "transparent"
+                                st.markdown(f"<div style='background-color: {bg_color}; padding: 5px 10px; border-radius: 5px;'>", unsafe_allow_html=True)
+                                
+                                # TIGHTER COLUMNS
+                                c_name, c_qty, c_unit, c_note = st.columns([2.5, 0.8, 1.2, 4])
                                 
                                 with c_name:
                                     st.markdown(f"<div style='margin-top: 8px;'><b>{item_name}</b></div>", unsafe_allow_html=True)
@@ -634,7 +641,7 @@ with tab2:
                                             "Qty", min_value=0, value=int(float(item_row["quantity"])), step=1,
                                             key=f"edit_qty_{item_id}_{safe_key}", label_visibility="collapsed"
                                         ))
-                                
+                                        
                                 with c_note:
                                     updated_item_notes[item_id] = st.text_input(
                                         "Note",
@@ -643,8 +650,7 @@ with tab2:
                                         key=f"edit_inote_{item_id}_{safe_key}",
                                         label_visibility="collapsed"
                                     )
-
-                                st.markdown("<hr style='margin-top: 5px; margin-bottom: 5px;'>", unsafe_allow_html=True)
+                                st.markdown("</div>", unsafe_allow_html=True)
 
                             st.markdown("<br>", unsafe_allow_html=True)
                             st.markdown("##### ➕ Add Additional Items to Order:")
@@ -658,9 +664,13 @@ with tab2:
                                             continue
                                         
                                         safe_key = clean_key(item_name)
+                                        bg_color = "#f9f9f9" if idx_add % 2 == 0 else "transparent"
+                                        st.markdown(f"<div style='background-color: {bg_color}; padding: 5px 10px; border-radius: 5px;'>", unsafe_allow_html=True)
+                                        
                                         has_multi_units = "units" in item_info
                                         
-                                        c_name, c_qty, c_unit, c_note = st.columns([3, 1, 1, 3])
+                                        # TIGHTER COLUMNS
+                                        c_name, c_qty, c_unit, c_note = st.columns([2.5, 0.8, 1.2, 4])
                                         
                                         with c_name:
                                             st.markdown(f"<div style='margin-top: 8px;'><b>{item_name}</b></div>", unsafe_allow_html=True)
@@ -689,15 +699,13 @@ with tab2:
                                                 ))
                                                 
                                         with c_note:
-                                            n_note = ""
                                             if n_qty > 0:
                                                 n_note = st.text_input(
                                                     "Note", placeholder="📝 Specific item note...", 
                                                     key=f"add_n_{safe_key}_{first_row['id']}", label_visibility="collapsed"
                                                 )
                                                 new_items_to_add[item_name] = {"qty": n_qty, "note": n_note, "unit": s_unit}
-                                        
-                                        st.markdown("<hr style='margin-top: 5px; margin-bottom: 5px;'>", unsafe_allow_html=True)
+                                        st.markdown("</div>", unsafe_allow_html=True)
 
                             st.markdown("<br>", unsafe_allow_html=True)
                             if st.form_submit_button("💾 Save All Order Changes"):
