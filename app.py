@@ -300,6 +300,9 @@ def get_item_is_weight(item_name, catalog):
 def clean_key(name):
     return re.sub(r"[^a-zA-Z0-9_]", "", name)
 
+# Custom Ultra-Thin Horizontal Line to save vertical space
+THIN_HR = "<hr style='margin: 4px 0; border: none; border-bottom: 1px solid #ddd;'/>"
+
 
 # 3. SIDEBAR NAVIGATION
 st.sidebar.title("🏪 Store Operations")
@@ -360,49 +363,54 @@ with tab1:
                 has_multi_units = "units" in item_info
                 safe_key = clean_key(item_name)
                 
-                # TIGHT RATIO to close the gap: Name(3) | Qty(1.5) | Unit(2) | Note(5.5)
-                c_name, c_qty, c_unit, c_note = st.columns([3, 1.5, 2, 5.5])
+                # TIGHT RATIO: Name is narrower, Qty & Unit pull left, giving Note a massive box
+                c_name, c_qty, c_unit, c_note = st.columns([2.5, 1.2, 1.5, 6])
                 
                 with c_name:
-                    st.markdown(f"<div style='margin-top: 30px;'><b>{item_name}</b></div>", unsafe_allow_html=True)
+                    st.markdown(f"<div style='margin-top: 5px;'><b>{item_name}</b></div>", unsafe_allow_html=True)
                     
                 with c_unit:
                     if has_multi_units:
                         selected_unit = st.selectbox(
-                            " ", item_info["units"], 
-                            key=f"u_{selected_holiday}_{safe_key}_{st.session_state.form_key}"
+                            "Unit", item_info["units"], 
+                            key=f"u_{selected_holiday}_{safe_key}_{st.session_state.form_key}",
+                            label_visibility="collapsed"
                         )
                         is_weight = (selected_unit == "lbs")
                         unit_str_to_save = selected_unit
                     else:
                         unit_str = item_info.get("unit", "")
                         is_weight = item_info.get("is_weight", False)
-                        st.markdown(f"<div style='margin-top: 30px; color: gray;'>{unit_str or 'Tray / Dinner'}</div>", unsafe_allow_html=True)
+                        st.markdown(f"<div style='margin-top: 5px; color: gray;'>{unit_str or 'Tray / Dinner'}</div>", unsafe_allow_html=True)
                         unit_str_to_save = unit_str
 
                 with c_qty:
                     if is_weight:
                         qty = st.number_input(
-                            " ", min_value=0.0, step=0.25, format="%.2f",
-                            key=f"qty_{selected_holiday}_{safe_key}_{st.session_state.form_key}"
+                            "Qty", min_value=0.0, step=0.25, format="%.2f",
+                            key=f"qty_{selected_holiday}_{safe_key}_{st.session_state.form_key}",
+                            label_visibility="collapsed"
                         )
                     else:
                         qty = float(st.number_input(
-                            " ", min_value=0, step=1,
-                            key=f"qty_{selected_holiday}_{safe_key}_{st.session_state.form_key}"
+                            "Qty", min_value=0, step=1,
+                            key=f"qty_{selected_holiday}_{safe_key}_{st.session_state.form_key}",
+                            label_visibility="collapsed"
                         ))
 
                 with c_note:
                     item_note = ""
                     if qty > 0:
                         item_note = st.text_input(
-                            " ",
-                            placeholder=f"📝 Note for {item_name}...",
-                            key=f"inote_{selected_holiday}_{safe_key}_{st.session_state.form_key}"
+                            "Note",
+                            placeholder=f"📝 Specific note for {item_name}...",
+                            key=f"inote_{selected_holiday}_{safe_key}_{st.session_state.form_key}",
+                            label_visibility="collapsed"
                         )
                         order_items.append((item_name, unit_str_to_save, qty, item_note))
 
-                st.markdown("---")
+                # Ultra thin custom divider line to save massive vertical space
+                st.markdown(THIN_HR, unsafe_allow_html=True)
 
     st.subheader("📝 Special Notes & Off-Menu Requests")
     custom_flag = st.checkbox(
@@ -523,257 +531,257 @@ with tab2:
 
                     st.markdown(f"### 📦 Order Detail View: **{first_row['first_name']} {first_row['last_name']}**")
 
-                    col_edit, col_del = st.columns(2)
+                    # Edit form now takes the full screen width so buttons don't disappear!
+                    with st.form("edit_full_order_form"):
+                        
+                        st.markdown("##### 👤 Customer Details")
+                        c_fn, c_ln = st.columns(2)
+                        new_fn = c_fn.text_input("First Name", value=str(first_row["first_name"]))
+                        new_ln = c_ln.text_input("Last Name", value=str(first_row["last_name"]))
+                        
+                        c_ph, c_em = st.columns(2)
+                        new_ph = c_ph.text_input("Phone Number", value=str(first_row["phone"]))
+                        new_em = c_em.text_input("Email", value=str(first_row["email"]))
 
-                    with col_edit:
-                        st.markdown("#### ✏️ Edit Customer, Pickup & Order Details")
-                        with st.form("edit_full_order_form"):
+                        st.markdown("##### 🗓️ Pickup Details")
+                        c_pd, c_pt = st.columns(2)
+                        
+                        old_date_str = str(first_row["pickup_date"]).split(" ")[0]
+                        try:
+                            default_date = pd.to_datetime(old_date_str).date()
+                        except Exception:
+                            default_date = pd.Timestamp.now().date()
                             
-                            st.markdown("##### 👤 Customer Details")
-                            c_fn, c_ln = st.columns(2)
-                            new_fn = c_fn.text_input("First Name", value=str(first_row["first_name"]))
-                            new_ln = c_ln.text_input("Last Name", value=str(first_row["last_name"]))
-                            
-                            c_ph, c_em = st.columns(2)
-                            new_ph = c_ph.text_input("Phone Number", value=str(first_row["phone"]))
-                            new_em = c_em.text_input("Email", value=str(first_row["email"]))
-
-                            st.markdown("##### 🗓️ Pickup Details")
-                            c_pd, c_pt = st.columns(2)
-                            
-                            old_date_str = str(first_row["pickup_date"]).split(" ")[0]
-                            try:
-                                default_date = pd.to_datetime(old_date_str).date()
-                            except Exception:
-                                default_date = pd.Timestamp.now().date()
-                                
-                            new_date = c_pd.date_input("Pickup Date", value=default_date)
-                            
-                            new_time = c_pt.selectbox(
-                                "Pickup Time Slot:",
-                                TIME_SLOTS,
-                                index=TIME_SLOTS.index(first_row["pickup_time"])
-                                if first_row["pickup_time"] in TIME_SLOTS
-                                else 0,
-                            )
-                            
-                            st.markdown("##### 📝 Order Notes")
-                            new_notes = st.text_area(
-                                "General Order Notes / Instructions:", value=str(first_row["notes"])
-                            )
-                            new_flag = st.checkbox(
-                                "🚨 Flag as High Maintenance / Custom Request",
-                                value=bool(first_row["custom_flag"]),
-                            )
-
-                            st.markdown("##### 🥩 Edit Currently Ordered Items:")
-                            updated_quantities = {}
-                            updated_item_units = {}
-                            updated_item_notes = {}
-                            
-                            catalog = HOLIDAY_CATALOGS[selected_holiday]
-                            
-                            for idx, item_row in df_order_items.iterrows():
-                                item_id = item_row["id"]
-                                item_name = item_row["item_name"]
-                                safe_key = clean_key(item_name)
-                                
-                                item_catalog_data = {}
-                                for cat_name, items in catalog.items():
-                                    if item_name in items:
-                                        item_catalog_data = items[item_name]
-                                        break
-                                
-                                has_multi_units = "units" in item_catalog_data
-                                
-                                # TIGHT RATIO
-                                c_name, c_qty, c_unit, c_note = st.columns([3, 1.5, 2, 5.5])
-                                
-                                with c_name:
-                                    st.markdown(f"<div style='margin-top: 30px;'><b>{item_name}</b></div>", unsafe_allow_html=True)
-                                    
-                                with c_unit:
-                                    if has_multi_units:
-                                        current_unit = str(item_row["unit"]) if pd.notna(item_row["unit"]) else item_catalog_data["units"][0]
-                                        if current_unit not in item_catalog_data["units"]:
-                                            current_unit = item_catalog_data["units"][0]
-                                            
-                                        selected_unit = st.selectbox(
-                                            " ", 
-                                            item_catalog_data["units"], 
-                                            index=item_catalog_data["units"].index(current_unit),
-                                            key=f"e_u_{item_id}_{safe_key}"
-                                        )
-                                        is_weight = (selected_unit == "lbs")
-                                        updated_item_units[item_id] = selected_unit
-                                    else:
-                                        is_weight = item_catalog_data.get("is_weight", False)
-                                        unit_str = item_catalog_data.get("unit", "")
-                                        st.markdown(f"<div style='margin-top: 30px; color: gray;'>{unit_str or 'Tray / Dinner'}</div>", unsafe_allow_html=True)
-                                        updated_item_units[item_id] = unit_str
-                                
-                                with c_qty:
-                                    if is_weight:
-                                        updated_quantities[item_id] = st.number_input(
-                                            " ", min_value=0.0, value=float(item_row["quantity"]), step=0.25, format="%.2f",
-                                            key=f"edit_qty_{item_id}_{safe_key}"
-                                        )
-                                    else:
-                                        updated_quantities[item_id] = float(st.number_input(
-                                            " ", min_value=0, value=int(float(item_row["quantity"])), step=1,
-                                            key=f"edit_qty_{item_id}_{safe_key}"
-                                        ))
-                                        
-                                with c_note:
-                                    updated_item_notes[item_id] = st.text_input(
-                                        " ",
-                                        value=str(item_row.get("item_note", "")),
-                                        placeholder="📝 Specific note...",
-                                        key=f"edit_inote_{item_id}_{safe_key}"
-                                    )
-
-                                st.markdown("---")
-
-                            st.markdown("<br>", unsafe_allow_html=True)
-                            st.markdown("##### ➕ Add Additional Items to Order:")
-                            st.caption("Expand a category below to add new items to this customer's order.")
-                            
-                            new_items_to_add = {}
-                            for category, items in catalog.items():
-                                with st.expander(f"📁 Add {category}"):
-                                    for idx_add, (item_name, item_info) in enumerate(items.items()):
-                                        if item_name in df_order_items["item_name"].values:
-                                            continue
-                                        
-                                        safe_key = clean_key(item_name)
-                                        has_multi_units = "units" in item_info
-                                        
-                                        c_name, c_qty, c_unit, c_note = st.columns([3, 1.5, 2, 5.5])
-                                        
-                                        with c_name:
-                                            st.markdown(f"<div style='margin-top: 30px;'><b>{item_name}</b></div>", unsafe_allow_html=True)
-                                            
-                                        with c_unit:
-                                            if has_multi_units:
-                                                s_unit = st.selectbox(
-                                                    " ", item_info["units"], key=f"a_u_{safe_key}_{first_row['id']}"
-                                                )
-                                                is_w = (s_unit == "lbs")
-                                            else:
-                                                is_w = item_info.get("is_weight", False)
-                                                s_unit = item_info.get("unit", "")
-                                                st.markdown(f"<div style='margin-top: 30px; color: gray;'>{s_unit or 'Tray / Dinner'}</div>", unsafe_allow_html=True)
-                                        
-                                        with c_qty:
-                                            if is_w:
-                                                n_qty = st.number_input(
-                                                    " ", min_value=0.0, step=0.25, format="%.2f", 
-                                                    key=f"add_{safe_key}_{first_row['id']}"
-                                                )
-                                            else:
-                                                n_qty = float(st.number_input(
-                                                    " ", min_value=0, step=1, 
-                                                    key=f"add_{safe_key}_{first_row['id']}"
-                                                ))
-                                                
-                                        with c_note:
-                                            if n_qty > 0:
-                                                n_note = st.text_input(
-                                                    " ", placeholder="📝 Specific note...", 
-                                                    key=f"add_n_{safe_key}_{first_row['id']}"
-                                                )
-                                                new_items_to_add[item_name] = {"qty": n_qty, "note": n_note, "unit": s_unit}
-                                        
-                                        st.markdown("---")
-
-                            st.markdown("<br>", unsafe_allow_html=True)
-                            if st.form_submit_button("💾 Save All Order Changes"):
-                                formatted_phone, phone_error = clean_and_format_phone(new_ph)
-                                is_saturday = new_date.weekday() == 5
-                                
-                                if is_saturday:
-                                    st.error("Cannot save order: We are closed on the selected pickup date (Saturday).")
-                                elif not new_ln or not new_date:
-                                    st.error("Please enter at least Last Name and Pickup Date.")
-                                elif phone_error:
-                                    st.error(f"Invalid Phone Number: {phone_error}")
-                                else:
-                                    new_date_formatted = f"{new_date} ({new_date.strftime('%a')})"
-                                    
-                                    df_master = load_orders()
-                                    next_id = int(df_master["id"].max() + 1) if not df_master.empty and "id" in df_master.columns and pd.notna(df_master["id"].max()) else 1
-                                    
-                                    # 1. Update Existing Items
-                                    for item_id, q_val in updated_quantities.items():
-                                        if q_val <= 0:
-                                            df_master = df_master[df_master["id"] != item_id]
-                                        else:
-                                            mask = df_master["id"] == item_id
-                                            df_master.loc[mask, "first_name"] = new_fn
-                                            df_master.loc[mask, "last_name"] = new_ln
-                                            df_master.loc[mask, "phone"] = formatted_phone
-                                            df_master.loc[mask, "email"] = new_em
-                                            df_master.loc[mask, "pickup_date"] = new_date_formatted
-                                            
-                                            df_master.loc[mask, "quantity"] = round(q_val, 2)
-                                            df_master.loc[mask, "unit"] = updated_item_units[item_id]
-                                            df_master.loc[mask, "item_note"] = updated_item_notes[item_id]
-                                            df_master.loc[mask, "pickup_time"] = new_time
-                                            df_master.loc[mask, "notes"] = new_notes
-                                            df_master.loc[mask, "custom_flag"] = 1 if new_flag else 0
-
-                                    # 2. Append Newly Added Items
-                                    new_rows = []
-                                    for item_name, item_data in new_items_to_add.items():
-                                        new_rows.append({
-                                            "id": next_id,
-                                            "holiday": selected_holiday,
-                                            "first_name": new_fn,
-                                            "last_name": new_ln,
-                                            "phone": formatted_phone,
-                                            "email": new_em,
-                                            "pickup_date": new_date_formatted,
-                                            "pickup_time": new_time,
-                                            "item_name": item_name,
-                                            "unit": item_data["unit"],
-                                            "quantity": round(item_data["qty"], 2),
-                                            "item_note": item_data["note"],
-                                            "notes": new_notes,
-                                            "custom_flag": 1 if new_flag else 0,
-                                        })
-                                        next_id += 1
-                                        
-                                    if new_rows:
-                                        df_master = pd.concat([df_master, pd.DataFrame(new_rows)], ignore_index=True)
-
-                                    save_orders_to_github(df_master, f"Edit order for {new_fn} {new_ln}")
-                                    st.success(f"Order for {new_fn} {new_ln} updated permanently!")
-                                    st.rerun()
-
-                    with col_del:
-                        st.markdown("#### 🗑️ Delete Entire Order")
-                        st.warning(
-                            "Deletions are permanent and will remove all items associated with this specific order entry."
+                        new_date = c_pd.date_input("Pickup Date", value=default_date)
+                        
+                        new_time = c_pt.selectbox(
+                            "Pickup Time Slot:",
+                            TIME_SLOTS,
+                            index=TIME_SLOTS.index(first_row["pickup_time"])
+                            if first_row["pickup_time"] in TIME_SLOTS
+                            else 0,
                         )
-                        cust_name = f"{first_row['first_name']} {first_row['last_name']}"
-                        if st.button(
-                            f"💥 Delete ALL Items for {cust_name} ({first_row['email']}) on {first_row['pickup_date']}",
-                            type="primary",
-                        ):
-                            df_master = load_orders()
-                            df_master = df_master[
-                                ~(
-                                    (df_master["holiday"] == selected_holiday)
-                                    & (df_master["phone"] == first_row["phone"])
-                                    & (df_master["pickup_date"] == first_row["pickup_date"])
-                                    & (df_master["email"] == first_row["email"])
+                        
+                        st.markdown("##### 📝 Order Notes")
+                        new_notes = st.text_area(
+                            "General Order Notes / Instructions:", value=str(first_row["notes"])
+                        )
+                        new_flag = st.checkbox(
+                            "🚨 Flag as High Maintenance / Custom Request",
+                            value=bool(first_row["custom_flag"]),
+                        )
+
+                        st.markdown("##### 🥩 Edit Currently Ordered Items:")
+                        updated_quantities = {}
+                        updated_item_units = {}
+                        updated_item_notes = {}
+                        
+                        catalog = HOLIDAY_CATALOGS[selected_holiday]
+                        
+                        for idx, item_row in df_order_items.iterrows():
+                            item_id = item_row["id"]
+                            item_name = item_row["item_name"]
+                            safe_key = clean_key(item_name)
+                            
+                            item_catalog_data = {}
+                            for cat_name, items in catalog.items():
+                                if item_name in items:
+                                    item_catalog_data = items[item_name]
+                                    break
+                            
+                            has_multi_units = "units" in item_catalog_data
+                            
+                            # TIGHT COMPACT ROW FOR EDIT TAB
+                            c_name, c_qty, c_unit, c_note = st.columns([2.5, 1.2, 1.5, 6])
+                            
+                            with c_name:
+                                st.markdown(f"<div style='margin-top: 5px;'><b>{item_name}</b></div>", unsafe_allow_html=True)
+                                
+                            with c_unit:
+                                if has_multi_units:
+                                    current_unit = str(item_row["unit"]) if pd.notna(item_row["unit"]) else item_catalog_data["units"][0]
+                                    if current_unit not in item_catalog_data["units"]:
+                                        current_unit = item_catalog_data["units"][0]
+                                        
+                                    selected_unit = st.selectbox(
+                                        "Unit", 
+                                        item_catalog_data["units"], 
+                                        index=item_catalog_data["units"].index(current_unit),
+                                        key=f"e_u_{item_id}_{safe_key}", 
+                                        label_visibility="collapsed"
+                                    )
+                                    is_weight = (selected_unit == "lbs")
+                                    updated_item_units[item_id] = selected_unit
+                                else:
+                                    is_weight = item_catalog_data.get("is_weight", False)
+                                    unit_str = item_catalog_data.get("unit", "")
+                                    st.markdown(f"<div style='margin-top: 5px; color: gray;'>{unit_str or 'Tray / Dinner'}</div>", unsafe_allow_html=True)
+                                    updated_item_units[item_id] = unit_str
+                            
+                            with c_qty:
+                                if is_weight:
+                                    updated_quantities[item_id] = st.number_input(
+                                        "Qty", min_value=0.0, value=float(item_row["quantity"]), step=0.25, format="%.2f",
+                                        key=f"edit_qty_{item_id}_{safe_key}", label_visibility="collapsed"
+                                    )
+                                else:
+                                    updated_quantities[item_id] = float(st.number_input(
+                                        "Qty", min_value=0, value=int(float(item_row["quantity"])), step=1,
+                                        key=f"edit_qty_{item_id}_{safe_key}", label_visibility="collapsed"
+                                    ))
+                                    
+                            with c_note:
+                                updated_item_notes[item_id] = st.text_input(
+                                    "Note",
+                                    value=str(item_row.get("item_note", "")),
+                                    placeholder="📝 Specific note...",
+                                    key=f"edit_inote_{item_id}_{safe_key}",
+                                    label_visibility="collapsed"
                                 )
-                            ]
-                            save_orders_to_github(df_master, f"Delete order for {cust_name} ({first_row['email']})")
-                            st.success(
-                                f"All items for {cust_name} ({first_row['email']}) deleted from GitHub!"
+
+                            st.markdown(THIN_HR, unsafe_allow_html=True)
+
+                        st.markdown("<br>", unsafe_allow_html=True)
+                        st.markdown("##### ➕ Add Additional Items to Order:")
+                        st.caption("Expand a category below to add new items to this customer's order.")
+                        
+                        new_items_to_add = {}
+                        for category, items in catalog.items():
+                            with st.expander(f"📁 Add {category}"):
+                                for idx_add, (item_name, item_info) in enumerate(items.items()):
+                                    if item_name in df_order_items["item_name"].values:
+                                        continue
+                                    
+                                    safe_key = clean_key(item_name)
+                                    has_multi_units = "units" in item_info
+                                    
+                                    c_name, c_qty, c_unit, c_note = st.columns([2.5, 1.2, 1.5, 6])
+                                    
+                                    with c_name:
+                                        st.markdown(f"<div style='margin-top: 5px;'><b>{item_name}</b></div>", unsafe_allow_html=True)
+                                        
+                                    with c_unit:
+                                        if has_multi_units:
+                                            s_unit = st.selectbox(
+                                                "Unit", item_info["units"], key=f"a_u_{safe_key}_{first_row['id']}", label_visibility="collapsed"
+                                            )
+                                            is_w = (s_unit == "lbs")
+                                        else:
+                                            is_w = item_info.get("is_weight", False)
+                                            s_unit = item_info.get("unit", "")
+                                            st.markdown(f"<div style='margin-top: 5px; color: gray;'>{s_unit or 'Tray / Dinner'}</div>", unsafe_allow_html=True)
+                                    
+                                    with c_qty:
+                                        if is_w:
+                                            n_qty = st.number_input(
+                                                "Qty", min_value=0.0, step=0.25, format="%.2f", 
+                                                key=f"add_{safe_key}_{first_row['id']}", label_visibility="collapsed"
+                                            )
+                                        else:
+                                            n_qty = float(st.number_input(
+                                                "Qty", min_value=0, step=1, 
+                                                key=f"add_{safe_key}_{first_row['id']}", label_visibility="collapsed"
+                                            ))
+                                            
+                                    with c_note:
+                                        if n_qty > 0:
+                                            n_note = st.text_input(
+                                                "Note", placeholder="📝 Specific note...", 
+                                                key=f"add_n_{safe_key}_{first_row['id']}", label_visibility="collapsed"
+                                            )
+                                            new_items_to_add[item_name] = {"qty": n_qty, "note": n_note, "unit": s_unit}
+                                    
+                                    st.markdown(THIN_HR, unsafe_allow_html=True)
+
+                        st.markdown("<br>", unsafe_allow_html=True)
+                        if st.form_submit_button("💾 Save All Order Changes"):
+                            formatted_phone, phone_error = clean_and_format_phone(new_ph)
+                            is_saturday = new_date.weekday() == 5
+                            
+                            if is_saturday:
+                                st.error("Cannot save order: We are closed on the selected pickup date (Saturday).")
+                            elif not new_ln or not new_date:
+                                st.error("Please enter at least Last Name and Pickup Date.")
+                            elif phone_error:
+                                st.error(f"Invalid Phone Number: {phone_error}")
+                            else:
+                                new_date_formatted = f"{new_date} ({new_date.strftime('%a')})"
+                                
+                                df_master = load_orders()
+                                next_id = int(df_master["id"].max() + 1) if not df_master.empty and "id" in df_master.columns and pd.notna(df_master["id"].max()) else 1
+                                
+                                # 1. Update Existing Items
+                                for item_id, q_val in updated_quantities.items():
+                                    if q_val <= 0:
+                                        df_master = df_master[df_master["id"] != item_id]
+                                    else:
+                                        mask = df_master["id"] == item_id
+                                        df_master.loc[mask, "first_name"] = new_fn
+                                        df_master.loc[mask, "last_name"] = new_ln
+                                        df_master.loc[mask, "phone"] = formatted_phone
+                                        df_master.loc[mask, "email"] = new_em
+                                        df_master.loc[mask, "pickup_date"] = new_date_formatted
+                                        
+                                        df_master.loc[mask, "quantity"] = round(q_val, 2)
+                                        df_master.loc[mask, "unit"] = updated_item_units[item_id]
+                                        df_master.loc[mask, "item_note"] = updated_item_notes[item_id]
+                                        df_master.loc[mask, "pickup_time"] = new_time
+                                        df_master.loc[mask, "notes"] = new_notes
+                                        df_master.loc[mask, "custom_flag"] = 1 if new_flag else 0
+
+                                # 2. Append Newly Added Items
+                                new_rows = []
+                                for item_name, item_data in new_items_to_add.items():
+                                    new_rows.append({
+                                        "id": next_id,
+                                        "holiday": selected_holiday,
+                                        "first_name": new_fn,
+                                        "last_name": new_ln,
+                                        "phone": formatted_phone,
+                                        "email": new_em,
+                                        "pickup_date": new_date_formatted,
+                                        "pickup_time": new_time,
+                                        "item_name": item_name,
+                                        "unit": item_data["unit"],
+                                        "quantity": round(item_data["qty"], 2),
+                                        "item_note": item_data["note"],
+                                        "notes": new_notes,
+                                        "custom_flag": 1 if new_flag else 0,
+                                    })
+                                    next_id += 1
+                                    
+                                if new_rows:
+                                    df_master = pd.concat([df_master, pd.DataFrame(new_rows)], ignore_index=True)
+
+                                save_orders_to_github(df_master, f"Edit order for {new_fn} {new_ln}")
+                                st.success(f"Order for {new_fn} {new_ln} updated permanently!")
+                                st.rerun()
+
+                    # DELETE ORDER MOVED OUTSIDE AND BELOW THE FORM
+                    st.markdown("---")
+                    st.markdown("#### 🗑️ Danger Zone: Delete Entire Order")
+                    st.warning(
+                        "Deletions are permanent and will remove all items associated with this specific order entry."
+                    )
+                    cust_name = f"{first_row['first_name']} {first_row['last_name']}"
+                    if st.button(
+                        f"💥 Delete ALL Items for {cust_name} ({first_row['email']}) on {first_row['pickup_date']}",
+                        type="primary",
+                    ):
+                        df_master = load_orders()
+                        df_master = df_master[
+                            ~(
+                                (df_master["holiday"] == selected_holiday)
+                                & (df_master["phone"] == first_row["phone"])
+                                & (df_master["pickup_date"] == first_row["pickup_date"])
+                                & (df_master["email"] == first_row["email"])
                             )
-                            st.rerun()
+                        ]
+                        save_orders_to_github(df_master, f"Delete order for {cust_name} ({first_row['email']})")
+                        st.success(
+                            f"All items for {cust_name} ({first_row['email']}) deleted from GitHub!"
+                        )
+                        st.rerun()
 
     else:
         st.info("No matching orders found.")
