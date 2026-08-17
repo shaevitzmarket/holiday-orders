@@ -355,71 +355,54 @@ with tab1:
 
     for category, items in catalog.items():
         with st.expander(f"📁 {category} ({len(items)} items)"):
-            cols = st.columns(3)
-            for idx, (item_name, item_info) in enumerate(items.items()):
-                col = cols[idx % 3]
-                
+            # Removed the cols grid entirely so each item gets a clean, full-width row!
+            for item_name, item_info in items.items():
                 has_multi_units = "units" in item_info
                 
-                with col.container():
-                    st.markdown(f"**{item_name}**")
+                with st.container(border=True):
+                    c_name, c_qty, c_unit = st.columns([5, 2, 2])
                     
-                    if has_multi_units:
-                        q_col, u_col = st.columns([1, 1])
+                    with c_name:
+                        st.markdown(f"<div style='margin-top: 8px;'><b>{item_name}</b></div>", unsafe_allow_html=True)
                         
-                        selected_unit = u_col.selectbox(
-                            "Unit", 
-                            item_info["units"], 
-                            key=f"u_{selected_holiday}_{item_name}_{st.session_state.form_key}",
-                            label_visibility="collapsed"
-                        )
-                        
-                        is_weight = (selected_unit == "lbs")
-                        if is_weight:
-                            qty = q_col.number_input(
-                                "Qty", min_value=0.0, step=0.25, format="%.2f",
-                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}", label_visibility="collapsed"
+                    with c_unit:
+                        if has_multi_units:
+                            selected_unit = st.selectbox(
+                                "Unit", item_info["units"], 
+                                key=f"u_{selected_holiday}_{item_name}_{st.session_state.form_key}",
+                                label_visibility="collapsed"
                             )
+                            is_weight = (selected_unit == "lbs")
+                            unit_str_to_save = selected_unit
                         else:
-                            qty = float(q_col.number_input(
-                                "Qty", min_value=0, step=1,
-                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}", label_visibility="collapsed"
-                            ))
-                            
-                        unit_str_to_save = selected_unit
-                    else:
-                        unit_str = item_info.get("unit", "")
-                        is_weight = item_info.get("is_weight", False)
-                        
-                        if unit_str:
-                            st.caption(unit_str)
-                        else:
-                            st.caption("(Tray/Dinner)")
-                            
+                            unit_str = item_info.get("unit", "")
+                            is_weight = item_info.get("is_weight", False)
+                            st.markdown(f"<div style='margin-top: 8px; color: gray;'>{unit_str or 'Tray / Dinner'}</div>", unsafe_allow_html=True)
+                            unit_str_to_save = unit_str
+
+                    with c_qty:
                         if is_weight:
                             qty = st.number_input(
                                 "Quantity", min_value=0.0, step=0.25, format="%.2f",
-                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}", label_visibility="collapsed"
+                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}",
+                                label_visibility="collapsed"
                             )
                         else:
                             qty = float(st.number_input(
                                 "Quantity", min_value=0, step=1,
-                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}", label_visibility="collapsed"
+                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}",
+                                label_visibility="collapsed"
                             ))
-                            
-                        unit_str_to_save = unit_str
 
                     item_note = ""
                     if qty > 0:
-                        st.info("📝 **Specific Note for this Item:**")
-                        item_note = st.text_input(
-                            f"Note for {item_name}",
-                            placeholder="e.g. 2 - 10lb pieces...",
+                        st.text_input(
+                            f"📝 Specific note for {item_name}:",
+                            placeholder=f"e.g. 2 - 10lb pieces...",
                             key=f"inote_{selected_holiday}_{item_name}_{st.session_state.form_key}",
-                            label_visibility="collapsed"
                         )
+                        item_note = st.session_state[f"inote_{selected_holiday}_{item_name}_{st.session_state.form_key}"]
                         order_items.append((item_name, unit_str_to_save, qty, item_note))
-                    st.markdown("<br>", unsafe_allow_html=True)
 
     st.markdown("---")
     st.subheader("📝 Special Notes & Off-Menu Requests")
@@ -493,8 +476,7 @@ with tab1:
 # TAB 2: EDIT & DELETE ORDERS
 # -------------------------------------------------------------------------
 with tab2:
-    st.subheader("✏️ Search & Manage Customer Orders")
-    search_term = st.text_input("Search by Last Name or Phone Number:", key="edit_search")
+    st.subheader("✏️ Edit / Delete Existing Orders")
 
     df_all = load_orders()
     df_raw = (
@@ -512,16 +494,6 @@ with tab2:
         df_raw["item_note"] = df_raw["item_note"].fillna("")
         df_raw["unit"] = df_raw["unit"].fillna("")
 
-        if search_term:
-            df_raw = df_raw[
-                (df_raw["last_name"].astype(str).str.contains(search_term, case=False, na=False))
-                | (df_raw["phone"].astype(str).str.contains(search_term, case=False, na=False))
-            ]
-
-    if not df_raw.empty:
-        st.markdown("---")
-        st.subheader("🔍 Select an Order to View, Edit, or Delete")
-
         order_list = []
         unique_orders = df_raw[['Daily Order #', 'first_name', 'last_name', 'phone', 'email', 'pickup_date', 'pickup_time']].drop_duplicates()
         unique_orders = unique_orders.sort_values(by=['pickup_date', 'Daily Order #'])
@@ -533,7 +505,7 @@ with tab2:
 
         if order_list:
             selected_order = st.selectbox(
-                "Select Customer Order:",
+                "Select Customer Order (Search by Last Name or Phone Number):",
                 options=order_list,
                 format_func=lambda x: x[0] if x is not None else "",
             )
