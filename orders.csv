@@ -15,7 +15,7 @@ id,holiday,first_name,last_name,phone,email,pickup_date,pickup_time,item_name,un
  ADD BBQ SAUCE ON SIDE FOR CHICKEN.",1,9 - 1/2# containers
 37,Rosh Hashanah 2026,CINDY,MARDER,(847) 275 - 8373,CBM92348@AOL.COM,2026-09-10 (Thu),4:00 PM - 5:00 PM,Complete Dinner,,2.0,"NO NOODLES, PLAIN BROTH
  ADD BBQ SAUCE ON SIDE FOR CHICKEN.",1,"BBQ Brisket, PLAIN BROTH, NO NOODLES"
-43,Rosh Hashanah 2026,BETTY,WEISS,(847) 945 - 0590,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Complete Dinner,Each,1.0,ONLINE. Paid.,0,
+43,Rosh Hashanah 2026,BETTY,WEISS,(847) 945 - 0590,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Complete Dinner,,1.0,ONLINE order. Paid.,0,
 44,Rosh Hashanah 2026,DEBBI,ROSENBERG,(847) 507 - 5632,DEBBILROSNBERG@GMAIL.COM,2026-09-08 (Tue),9:00 AM - 10:00 AM,Whole Brisket 12-14 lb,pieces,1.0,,0,
 45,Rosh Hashanah 2026,DEBBI,ROSENBERG,(847) 507 - 5632,DEBBILROSENBERG@GMAIL.COM,2026-09-11 (Fri),9:00 AM - 10:00 AM,Fryer Cut in 1/8,pieces,3.0,,0,
 46,Rosh Hashanah 2026,DEBBI,ROSENBERG,(847) 507 - 5632,DEBBILROSENBERG@GMAIL.COM,2026-09-11 (Fri),9:00 AM - 10:00 AM,Chopped Liver,lbs,1.0,,0,
