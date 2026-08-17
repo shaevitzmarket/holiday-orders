@@ -360,13 +360,9 @@ with tab1:
     for category, items in catalog.items():
         with st.expander(f"📁 {category} ({len(items)} items)"):
             
-            for idx, (item_name, item_info) in enumerate(items.items()):
+            for item_name, item_info in items.items():
                 has_multi_units = "units" in item_info
                 safe_key = clean_key(item_name)
-                
-                # Zebra Striping Background
-                bg_color = "#f9f9f9" if idx % 2 == 0 else "transparent"
-                st.markdown(f"<div style='background-color: {bg_color}; padding: 5px 10px; border-radius: 5px;'>", unsafe_allow_html=True)
                 
                 c_name, c_qty, c_unit = st.columns([5, 2, 2])
                 
@@ -412,7 +408,7 @@ with tab1:
                     item_note = st.session_state[f"inote_{selected_holiday}_{safe_key}_{st.session_state.form_key}"]
                     order_items.append((item_name, unit_str_to_save, qty, item_note))
                 
-                st.markdown("</div>", unsafe_allow_html=True)
+                st.markdown("---") # Clean divider between items
 
     st.markdown("---")
     st.subheader("📝 Special Notes & Off-Menu Requests")
@@ -597,10 +593,6 @@ with tab2:
                                 
                                 has_multi_units = "units" in item_catalog_data
                                 
-                                # Zebra stripe edit box
-                                bg_color = "#f9f9f9" if idx % 2 == 0 else "transparent"
-                                st.markdown(f"<div style='background-color: {bg_color}; padding: 5px 10px; border-radius: 5px;'>", unsafe_allow_html=True)
-                                
                                 c_name, c_qty, c_unit = st.columns([5, 2, 2])
                                 
                                 with c_name:
@@ -645,7 +637,7 @@ with tab2:
                                     placeholder="Specific note for this item...",
                                     key=f"edit_inote_{item_id}_{safe_key}"
                                 )
-                                st.markdown("</div>", unsafe_allow_html=True)
+                                st.markdown("---")
 
                             st.markdown("<br>", unsafe_allow_html=True)
                             st.markdown("##### ➕ Add Additional Items to Order:")
@@ -654,13 +646,11 @@ with tab2:
                             new_items_to_add = {}
                             for category, items in catalog.items():
                                 with st.expander(f"📁 Add {category}"):
-                                    for idx_add, (item_name, item_info) in enumerate(items.items()):
+                                    for item_name, item_info in items.items():
                                         if item_name in df_order_items["item_name"].values:
                                             continue
                                         
                                         safe_key = clean_key(item_name)
-                                        bg_color = "#f9f9f9" if idx_add % 2 == 0 else "transparent"
-                                        st.markdown(f"<div style='background-color: {bg_color}; padding: 5px 10px; border-radius: 5px;'>", unsafe_allow_html=True)
                                         
                                         has_multi_units = "units" in item_info
                                         c_name, c_qty, c_unit = st.columns([5, 2, 2])
@@ -697,7 +687,8 @@ with tab2:
                                                 key=f"add_n_{safe_key}_{first_row['id']}"
                                             )
                                             new_items_to_add[item_name] = {"qty": n_qty, "note": n_note, "unit": s_unit}
-                                        st.markdown("</div>", unsafe_allow_html=True)
+                                        
+                                        st.markdown("---")
 
                             st.markdown("<br>", unsafe_allow_html=True)
                             if st.form_submit_button("💾 Save All Order Changes"):
