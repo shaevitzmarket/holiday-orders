@@ -142,7 +142,8 @@ ROSH_CATALOG = {
         "B/S breast Thin Cut": {"unit": "# packs", "is_weight": False},
         "Thighs": {"unit": "# packs", "is_weight": False},
         "B/S Thighs": {"unit": "lb", "is_weight": True},
-        "Drumsticls": {"unit": "# of pc", "is_weight": False},
+        "Drumstick": {"unit": "# of pc", "is_weight": False},
+        "Legs": {"unit": "# of pc", "is_weight": False},
         "Wings": {"unit": "pack", "is_weight": False},
         "Chicken Bones": {"unit": "pack", "is_weight": False},
         "Necks": {"unit": "pack", "is_weight": False},
@@ -345,7 +346,7 @@ with tab1:
 
                 with col.container(border=True):
                     st.markdown(f"**{item_name}**")
-                    st.caption(f"Sold {unit_str}")
+                    st.caption(unit_str)
                     
                     if is_weight:
                         qty = st.number_input(
