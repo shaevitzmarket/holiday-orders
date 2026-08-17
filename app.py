@@ -46,6 +46,13 @@ EMPTY_COLUMNS = [
     "custom_flag",
 ]
 
+PREP_STATIONS = {
+    "🥩 Meat & Butcher": ["Beef", "Briskets", "Lamb & Veal"],
+    "🍗 Poultry": ["Chicken", "Turkey"],
+    "🍲 Deli & Soups": ["Soup, Deli, and Pre-Cooked"],
+    "👨‍🍳 Catering": ["Catering Trays"]
+}
+
 
 def load_orders():
     """Fetches real-time orders directly from orders.csv in your GitHub repository."""
@@ -281,6 +288,11 @@ def get_item_category(item_name, catalog):
             return cat_name
     return "Special / Custom Requests"
 
+def get_prep_station(category_name):
+    for station_name, cats in PREP_STATIONS.items():
+        if category_name in cats:
+            return station_name
+    return "Other / Custom"
 
 def get_item_is_weight(item_name, catalog):
     for cat_name, items in catalog.items():
@@ -297,15 +309,18 @@ selected_holiday = st.sidebar.selectbox(
 
 st.title(f"📦 Holiday Orders: {selected_holiday}")
 
-tab1, tab2, tab3 = st.tabs(
+tab1, tab2, tab3, tab4 = st.tabs(
     [
         "📝 Take New Order",
-        "🔍 Search / Edit / Delete Orders",
-        "📊 Kitchen Prep Dashboard",
+        "🔍 Search / Edit Orders",
+        "📊 Season Inventory",
+        "🔪 Daily Station Prep"
     ]
 )
 
+# -------------------------------------------------------------------------
 # TAB 1: ORDER ENTRY
+# -------------------------------------------------------------------------
 with tab1:
     if st.session_state.success_msg:
         st.success(st.session_state.success_msg)
@@ -339,56 +354,71 @@ with tab1:
 
     for category, items in catalog.items():
         with st.expander(f"📁 {category} ({len(items)} items)"):
-            
-            # Using a clean list format instead of masonry grids
+            cols = st.columns(3)
             for idx, (item_name, item_info) in enumerate(items.items()):
+                col = cols[idx % 3]
+                
                 has_multi_units = "units" in item_info
                 
-                with st.container(border=True):
-                    # Wide column for Name, narrow columns for Qty & Unit
-                    c_name, c_qty, c_unit = st.columns([5, 2, 2])
+                with col.container():
+                    st.markdown(f"**{item_name}**")
                     
-                    with c_name:
-                        st.markdown(f"<div style='margin-top: 8px;'><b>{item_name}</b></div>", unsafe_allow_html=True)
+                    if has_multi_units:
+                        q_col, u_col = st.columns([1, 1])
                         
-                    with c_unit:
-                        if has_multi_units:
-                            selected_unit = st.selectbox(
-                                "Unit", item_info["units"], 
-                                key=f"u_{selected_holiday}_{item_name}_{st.session_state.form_key}",
-                                label_visibility="collapsed"
+                        selected_unit = u_col.selectbox(
+                            "Unit", 
+                            item_info["units"], 
+                            key=f"u_{selected_holiday}_{item_name}_{st.session_state.form_key}",
+                            label_visibility="collapsed"
+                        )
+                        
+                        is_weight = (selected_unit == "lbs")
+                        if is_weight:
+                            qty = q_col.number_input(
+                                "Qty", min_value=0.0, step=0.25, format="%.2f",
+                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}", label_visibility="collapsed"
                             )
-                            is_weight = (selected_unit == "lbs")
-                            unit_str_to_save = selected_unit
                         else:
-                            unit_str = item_info.get("unit", "")
-                            is_weight = item_info.get("is_weight", False)
-                            st.markdown(f"<div style='margin-top: 8px; color: gray;'>{unit_str or 'Tray / Dinner'}</div>", unsafe_allow_html=True)
-                            unit_str_to_save = unit_str
-
-                    with c_qty:
+                            qty = float(q_col.number_input(
+                                "Qty", min_value=0, step=1,
+                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}", label_visibility="collapsed"
+                            ))
+                            
+                        unit_str_to_save = selected_unit
+                    else:
+                        unit_str = item_info.get("unit", "")
+                        is_weight = item_info.get("is_weight", False)
+                        
+                        if unit_str:
+                            st.caption(unit_str)
+                        else:
+                            st.caption("(Tray/Dinner)")
+                            
                         if is_weight:
                             qty = st.number_input(
                                 "Quantity", min_value=0.0, step=0.25, format="%.2f",
-                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}",
-                                label_visibility="collapsed"
+                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}", label_visibility="collapsed"
                             )
                         else:
                             qty = float(st.number_input(
                                 "Quantity", min_value=0, step=1,
-                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}",
-                                label_visibility="collapsed"
+                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}", label_visibility="collapsed"
                             ))
+                            
+                        unit_str_to_save = unit_str
 
                     item_note = ""
                     if qty > 0:
-                        st.text_input(
-                            f"📝 Specific note for {item_name}:",
-                            placeholder=f"e.g. 2 - 10lb pieces...",
+                        st.info("📝 **Specific Note for this Item:**")
+                        item_note = st.text_input(
+                            f"Note for {item_name}",
+                            placeholder="e.g. 2 - 10lb pieces...",
                             key=f"inote_{selected_holiday}_{item_name}_{st.session_state.form_key}",
+                            label_visibility="collapsed"
                         )
-                        item_note = st.session_state[f"inote_{selected_holiday}_{item_name}_{st.session_state.form_key}"]
                         order_items.append((item_name, unit_str_to_save, qty, item_note))
+                    st.markdown("<br>", unsafe_allow_html=True)
 
     st.markdown("---")
     st.subheader("📝 Special Notes & Off-Menu Requests")
@@ -458,7 +488,9 @@ with tab1:
                 st.error("Failed to save to GitHub. Check your GitHub Token in Secrets.")
 
 
+# -------------------------------------------------------------------------
 # TAB 2: SEARCH, EDIT & DELETE
+# -------------------------------------------------------------------------
 with tab2:
     st.subheader("Search & Manage Customer Orders")
     search_term = st.text_input("Search by Last Name or Phone Number:")
@@ -806,9 +838,12 @@ with tab2:
         st.info("No matching orders found.")
 
 
-# TAB 3: DYNAMIC KITCHEN PREP DASHBOARD
+# -------------------------------------------------------------------------
+# TAB 3: SEASON INVENTORY & GRAND TOTALS
+# -------------------------------------------------------------------------
 with tab3:
-    st.subheader("📊 Dynamic Kitchen Production & Prep Dashboard")
+    st.subheader("📊 Season Inventory & Grand Totals")
+    st.caption("High-level aggregates for the entire holiday season. Use this tab for ordering from suppliers.")
 
     df_all = load_orders()
     df_raw = (
@@ -831,11 +866,14 @@ with tab3:
             lambda x: get_item_category(x, catalog)
         )
 
-        st.markdown("### 🏆 Grand Totals (All Dates)")
+        m1, m2 = st.columns(2)
+        m1.metric("📦 Total Customer Orders (Season)", len(df_raw.groupby(["phone", "pickup_date", "email"])))
+        m2.metric("🥩 Total Line Items (Season)", len(df_raw))
+
+        st.markdown("### 🏆 Grand Totals List")
         
-        # GRAND TOTALS FILTER
         gt_cats = ["All Categories"] + sorted(df_raw["category"].unique().tolist())
-        selected_gt_cat = st.selectbox("🥩 Filter Grand Totals by Category:", gt_cats, key="gt_cat_filter")
+        selected_gt_cat = st.selectbox("Filter Grand Totals by Category:", gt_cats, key="gt_cat_filter")
         
         df_grand_totals = df_raw.copy()
         if selected_gt_cat != "All Categories":
@@ -857,85 +895,21 @@ with tab3:
         
         st.dataframe(df_gt_sum, use_container_width=True)
 
-        st.markdown("---")
-        st.markdown("### 📅 Daily Production Summary Sheet")
-
-        f_col1, f_col2 = st.columns(2)
-
-        with f_col1:
-            available_dates = ["All Dates"] + sorted(
-                df_raw["pickup_date"].unique().tolist()
-            )
-            selected_date = st.selectbox(
-                "🗓️ Filter by Pickup Date:", available_dates
-            )
-
-        with f_col2:
-            available_cats = ["All Categories"] + sorted(
-                df_raw["category"].unique().tolist()
-            )
-            selected_cat = st.selectbox(
-                "🥩 Filter by Item Category:", available_cats
-            )
-
-        filtered_df = df_raw.copy()
-        if selected_date != "All Dates":
-            filtered_df = filtered_df[filtered_df["pickup_date"] == selected_date]
-        if selected_cat != "All Categories":
-            filtered_df = filtered_df[filtered_df["category"] == selected_cat]
-
-        m1, m2, m3 = st.columns(3)
-        unique_orders_count = len(
-            filtered_df.groupby(["phone", "pickup_date", "email"])
-        )
-        total_items_count = len(filtered_df)
-
-        high_alert_df = filtered_df[filtered_df["custom_flag"].astype(str) == "1"]
-        high_alert_count = len(high_alert_df.groupby(["phone", "pickup_date", "email"])) if not high_alert_df.empty else 0
-
-        m1.metric("📦 Filtered Customer Orders", unique_orders_count)
-        m2.metric("🥩 Filtered Line Items", total_items_count)
-        m3.metric("🚨 Special / High-Priority Alerts", high_alert_count)
-
-        df_raw_sum = filtered_df.copy()
-        df_raw_sum["quantity"] = pd.to_numeric(df_raw_sum["quantity"], errors="coerce")
-        df_totals = (
-            df_raw_sum.groupby(["pickup_date", "category", "item_name", "unit"])[
-                "quantity"
-            ]
-            .sum()
-            .reset_index()
-        )
-        df_totals.columns = [
-            "Pickup Date",
-            "Category",
-            "Item Name",
-            "Unit of Measure",
-            "Total Quantity Needed",
-        ]
-        df_totals["Total Quantity Needed"] = df_totals[
-            "Total Quantity Needed"
-        ].apply(format_qty)
-
-        st.dataframe(df_totals, use_container_width=True)
-
-        csv_data = df_totals.to_csv(index=False).encode("utf-8")
+        csv_data_gt = df_gt_sum.to_csv(index=False).encode("utf-8")
         st.download_button(
-            label="📥 Export Daily Prep Sheet as CSV / Excel",
-            data=csv_data,
-            file_name=f"Daily_Prep_Sheet_{selected_date}.csv",
+            label="📥 Export Season Grand Totals (CSV)",
+            data=csv_data_gt,
+            file_name=f"{selected_holiday}_Season_Inventory.csv",
             mime="text/csv",
         )
 
         st.markdown("---")
-        
-        # 🔍 ITEM DRILL-DOWN FEATURE
-        st.markdown("### 🔍 Item Drill-Down")
-        item_choices = ["(Select an item)"] + sorted(filtered_df["item_name"].unique().tolist())
-        selected_drilldown = st.selectbox("Select an item to see exactly who ordered it (based on current date filter):", item_choices)
+        st.markdown("### 🔍 Master Item Drill-Down")
+        item_choices = ["(Select an item)"] + sorted(df_raw["item_name"].unique().tolist())
+        selected_drilldown = st.selectbox("Select an item to see exactly who ordered it across all dates:", item_choices)
         
         if selected_drilldown != "(Select an item)":
-            drill_df = filtered_df[filtered_df["item_name"] == selected_drilldown].copy()
+            drill_df = df_raw[df_raw["item_name"] == selected_drilldown].copy()
             drill_df["Customer Name"] = drill_df["first_name"] + " " + drill_df["last_name"]
             
             display_cols = ["Daily Order #", "Customer Name", "phone", "email", "pickup_date", "pickup_time", "quantity", "unit", "item_note"]
@@ -944,53 +918,96 @@ with tab3:
             
             st.dataframe(drill_display, use_container_width=True)
 
-        st.markdown("---")
+    else:
+        st.info("No active orders found for this holiday.")
 
-        c_left, c_right = st.columns(2)
 
-        with c_left:
-            st.markdown("### ⏰ Hourly Store Pickup Load Schedule")
-            schedule_df = (
-                filtered_df.groupby(["pickup_time", "phone", "email", "first_name", "last_name"])
-                .size()
+# -------------------------------------------------------------------------
+# TAB 4: DAILY STATION PREP
+# -------------------------------------------------------------------------
+with tab4:
+    st.subheader("🔪 Daily Station Prep Sheets")
+    st.caption("Organized specifically for your morning butcher and kitchen routines. Select a date and a station to generate a clean prep list.")
+
+    df_all = load_orders()
+    df_raw = (
+        df_all[df_all["holiday"] == selected_holiday].copy()
+        if not df_all.empty and "holiday" in df_all.columns
+        else pd.DataFrame()
+    )
+
+    if not df_raw.empty:
+        df_raw["first_name"] = df_raw["first_name"].fillna("")
+        df_raw["last_name"] = df_raw["last_name"].fillna("")
+        df_raw["phone"] = df_raw["phone"].fillna("")
+        df_raw["email"] = df_raw["email"].fillna("")
+        df_raw["notes"] = df_raw["notes"].fillna("")
+        df_raw["item_note"] = df_raw["item_note"].fillna("")
+        df_raw["unit"] = df_raw["unit"].fillna("")
+
+        catalog = HOLIDAY_CATALOGS[selected_holiday]
+        df_raw["category"] = df_raw["item_name"].apply(
+            lambda x: get_item_category(x, catalog)
+        )
+        # Assign Prep Station based on category
+        df_raw["prep_station"] = df_raw["category"].apply(get_prep_station)
+
+        f_col1, f_col2 = st.columns(2)
+
+        with f_col1:
+            available_dates = sorted(df_raw["pickup_date"].unique().tolist())
+            selected_date = st.selectbox("🗓️ 1. Select Pickup Date:", available_dates)
+
+        with f_col2:
+            available_stations = ["All Stations"] + list(PREP_STATIONS.keys()) + ["Other / Custom"]
+            selected_station = st.selectbox("🔪 2. Select Prep Station:", available_stations)
+
+        # Filter logic
+        filtered_df = df_raw[df_raw["pickup_date"] == selected_date].copy()
+        if selected_station != "All Stations":
+            filtered_df = filtered_df[filtered_df["prep_station"] == selected_station]
+
+        if not filtered_df.empty:
+            st.markdown(f"### Preparing: **{selected_station}** on **{selected_date}**")
+
+            # 1. BULK PULL LIST
+            st.markdown("#### 🛒 1. Bulk Station Pull List")
+            filtered_df["quantity"] = pd.to_numeric(filtered_df["quantity"], errors="coerce")
+            df_totals = (
+                filtered_df.groupby(["item_name", "unit"])["quantity"]
+                .sum()
                 .reset_index()
-                .groupby("pickup_time")
-                .size()
-                .reset_index(name="Scheduled Pickups")
             )
-            st.dataframe(schedule_df, use_container_width=True)
+            df_totals.columns = ["Item Name", "Unit of Measure", "Total Quantity Needed"]
+            df_totals["Total Quantity Needed"] = df_totals["Total Quantity Needed"].apply(format_qty)
+            st.dataframe(df_totals, use_container_width=True)
 
-        with c_right:
-            st.markdown("### ⚠️ General Order Requests & Notes")
-            df_notes_raw = filtered_df[
-                (filtered_df["notes"].astype(str).str.strip() != "") |
-                (filtered_df["custom_flag"].astype(str) == "1")
-            ]
-            if not df_notes_raw.empty:
-                df_notes = df_notes_raw.groupby(
-                    ["Daily Order #", "pickup_date", "pickup_time", "first_name", "last_name", "phone", "email", "notes", "custom_flag"],
-                    as_index=False,
-                    dropna=False
-                ).agg({"id": "count"}).reset_index()
+            # 2. PACKING & CUTS BREAKDOWN
+            st.markdown("#### 🔪 2. Packing & Cuts Breakdown")
+            st.caption("Line-by-line orders for this station so butchers know exactly what to cut and who it goes to.")
+            
+            filtered_df["Customer Name"] = filtered_df["first_name"] + " " + filtered_df["last_name"]
+            display_cols = ["Daily Order #", "Customer Name", "item_name", "quantity", "unit", "item_note"]
+            
+            drill_display = filtered_df[display_cols].sort_values(by=["Daily Order #", "item_name"])
+            drill_display["quantity"] = drill_display["quantity"].apply(format_qty)
+            
+            st.dataframe(drill_display, use_container_width=True)
 
-                df_notes["Flag"] = df_notes["custom_flag"].apply(
-                    lambda x: "🚨 HIGH PRIORITY" if str(x) == "1" else "Note"
-                )
-                st.dataframe(
-                    df_notes[
-                        [
-                            "Daily Order #",
-                            "Flag",
-                            "pickup_date",
-                            "pickup_time",
-                            "first_name",
-                            "last_name",
-                            "notes",
-                        ]
-                    ],
-                    use_container_width=True,
-                )
-            else:
-                st.success("No general custom request notes for this filter!")
+            # EXPORT BUTTON FOR THIS SPECIFIC STATION
+            safe_station_name = selected_station.replace(" & ", "_").replace(" ", "_")
+            safe_date_name = selected_date.split()[0]
+            csv_data = drill_display.to_csv(index=False).encode("utf-8")
+            
+            st.download_button(
+                label=f"📥 Export {selected_station} Prep Sheet (CSV)",
+                data=csv_data,
+                file_name=f"Prep_{safe_station_name}_{safe_date_name}.csv",
+                mime="text/csv",
+            )
+            
+        else:
+            st.success(f"No orders to prep for {selected_station} on {selected_date}.")
+
     else:
         st.info("No active orders found for this holiday.")
