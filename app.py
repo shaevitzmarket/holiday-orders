@@ -364,7 +364,8 @@ with tab1:
                 has_multi_units = "units" in item_info
                 safe_key = clean_key(item_name)
                 
-                c_name, c_qty, c_unit = st.columns([5, 2, 2])
+                # HYPER COMPACT ROW: 4 Columns mapped directly next to each other
+                c_name, c_qty, c_unit, c_note = st.columns([3, 1, 1, 3])
                 
                 with c_name:
                     st.markdown(f"<div style='margin-top: 8px;'><b>{item_name}</b></div>", unsafe_allow_html=True)
@@ -398,17 +399,19 @@ with tab1:
                             label_visibility="collapsed"
                         ))
 
-                item_note = ""
-                if qty > 0:
-                    st.text_input(
-                        f"📝 Specific note for {item_name}:",
-                        placeholder=f"e.g. 2 - 10lb pieces...",
-                        key=f"inote_{selected_holiday}_{safe_key}_{st.session_state.form_key}",
-                    )
-                    item_note = st.session_state[f"inote_{selected_holiday}_{safe_key}_{st.session_state.form_key}"]
-                    order_items.append((item_name, unit_str_to_save, qty, item_note))
-                
-                st.markdown("---") # Clean divider between items
+                with c_note:
+                    # Only show the note input if they've ordered the item to keep the right side clean
+                    item_note = ""
+                    if qty > 0:
+                        item_note = st.text_input(
+                            "Note",
+                            placeholder=f"📝 Specific note for {item_name}...",
+                            key=f"inote_{selected_holiday}_{safe_key}_{st.session_state.form_key}",
+                            label_visibility="collapsed"
+                        )
+                        order_items.append((item_name, unit_str_to_save, qty, item_note))
+
+                st.markdown("<hr style='margin-top: 5px; margin-bottom: 5px;'>", unsafe_allow_html=True)
 
     st.markdown("---")
     st.subheader("📝 Special Notes & Off-Menu Requests")
@@ -593,7 +596,8 @@ with tab2:
                                 
                                 has_multi_units = "units" in item_catalog_data
                                 
-                                c_name, c_qty, c_unit = st.columns([5, 2, 2])
+                                # Compact Row
+                                c_name, c_qty, c_unit, c_note = st.columns([3, 1, 1, 3])
                                 
                                 with c_name:
                                     st.markdown(f"<div style='margin-top: 8px;'><b>{item_name}</b></div>", unsafe_allow_html=True)
@@ -630,14 +634,17 @@ with tab2:
                                             "Qty", min_value=0, value=int(float(item_row["quantity"])), step=1,
                                             key=f"edit_qty_{item_id}_{safe_key}", label_visibility="collapsed"
                                         ))
-                                        
-                                updated_item_notes[item_id] = st.text_input(
-                                    f"📝 Specific note for {item_name}:",
-                                    value=str(item_row.get("item_note", "")),
-                                    placeholder="Specific note for this item...",
-                                    key=f"edit_inote_{item_id}_{safe_key}"
-                                )
-                                st.markdown("---")
+                                
+                                with c_note:
+                                    updated_item_notes[item_id] = st.text_input(
+                                        "Note",
+                                        value=str(item_row.get("item_note", "")),
+                                        placeholder="📝 Specific item note...",
+                                        key=f"edit_inote_{item_id}_{safe_key}",
+                                        label_visibility="collapsed"
+                                    )
+
+                                st.markdown("<hr style='margin-top: 5px; margin-bottom: 5px;'>", unsafe_allow_html=True)
 
                             st.markdown("<br>", unsafe_allow_html=True)
                             st.markdown("##### ➕ Add Additional Items to Order:")
@@ -646,14 +653,14 @@ with tab2:
                             new_items_to_add = {}
                             for category, items in catalog.items():
                                 with st.expander(f"📁 Add {category}"):
-                                    for item_name, item_info in items.items():
+                                    for idx_add, (item_name, item_info) in enumerate(items.items()):
                                         if item_name in df_order_items["item_name"].values:
                                             continue
                                         
                                         safe_key = clean_key(item_name)
-                                        
                                         has_multi_units = "units" in item_info
-                                        c_name, c_qty, c_unit = st.columns([5, 2, 2])
+                                        
+                                        c_name, c_qty, c_unit, c_note = st.columns([3, 1, 1, 3])
                                         
                                         with c_name:
                                             st.markdown(f"<div style='margin-top: 8px;'><b>{item_name}</b></div>", unsafe_allow_html=True)
@@ -681,14 +688,16 @@ with tab2:
                                                     key=f"add_{safe_key}_{first_row['id']}", label_visibility="collapsed"
                                                 ))
                                                 
-                                        if n_qty > 0:
-                                            n_note = st.text_input(
-                                                f"📝 Specific note for {item_name}:", placeholder="Specific item note...", 
-                                                key=f"add_n_{safe_key}_{first_row['id']}"
-                                            )
-                                            new_items_to_add[item_name] = {"qty": n_qty, "note": n_note, "unit": s_unit}
+                                        with c_note:
+                                            n_note = ""
+                                            if n_qty > 0:
+                                                n_note = st.text_input(
+                                                    "Note", placeholder="📝 Specific item note...", 
+                                                    key=f"add_n_{safe_key}_{first_row['id']}", label_visibility="collapsed"
+                                                )
+                                                new_items_to_add[item_name] = {"qty": n_qty, "note": n_note, "unit": s_unit}
                                         
-                                        st.markdown("---")
+                                        st.markdown("<hr style='margin-top: 5px; margin-bottom: 5px;'>", unsafe_allow_html=True)
 
                             st.markdown("<br>", unsafe_allow_html=True)
                             if st.form_submit_button("💾 Save All Order Changes"):
