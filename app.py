@@ -360,16 +360,13 @@ with tab1:
     for category, items in catalog.items():
         with st.expander(f"📁 {category} ({len(items)} items)"):
             
-            for idx, (item_name, item_info) in enumerate(items.items()):
+            for item_name, item_info in items.items():
                 has_multi_units = "units" in item_info
                 safe_key = clean_key(item_name)
                 
-                # Zebra Striping Background
-                bg_color = "#f9f9f9" if idx % 2 == 0 else "transparent"
-                st.markdown(f"<div style='background-color: {bg_color}; padding: 5px 10px; border-radius: 5px;'>", unsafe_allow_html=True)
-                
-                # TIGHTER COLUMNS: Name is smaller, Unit/Qty are tight, Note gets the rest of the space
-                c_name, c_qty, c_unit, c_note = st.columns([2.5, 0.8, 1.2, 4])
+                # HYPER COMPACT TIGHT COLUMNS
+                # Name (2.5) | Qty (0.8) | Unit (1.2) | Note (4.5)
+                c_name, c_qty, c_unit, c_note = st.columns([2.5, 0.8, 1.2, 4.5])
                 
                 with c_name:
                     st.markdown(f"<div style='margin-top: 8px;'><b>{item_name}</b></div>", unsafe_allow_html=True)
@@ -404,6 +401,7 @@ with tab1:
                         ))
 
                 with c_note:
+                    # Note box right aligned
                     item_note = ""
                     if qty > 0:
                         item_note = st.text_input(
@@ -413,10 +411,10 @@ with tab1:
                             label_visibility="collapsed"
                         )
                         order_items.append((item_name, unit_str_to_save, qty, item_note))
-                
-                st.markdown("</div>", unsafe_allow_html=True)
 
-    st.markdown("---")
+                # Clean Horizontal Line underneath every item
+                st.markdown("---")
+
     st.subheader("📝 Special Notes & Off-Menu Requests")
     custom_flag = st.checkbox(
         "🚨 Flag as High Maintenance / Custom Request (Needs Kitchen Attention)", key=f"flag_{st.session_state.form_key}"
@@ -586,7 +584,7 @@ with tab2:
                             
                             catalog = HOLIDAY_CATALOGS[selected_holiday]
                             
-                            for idx, item_row in df_order_items.iterrows():
+                            for _, item_row in df_order_items.iterrows():
                                 item_id = item_row["id"]
                                 item_name = item_row["item_name"]
                                 safe_key = clean_key(item_name)
@@ -599,12 +597,8 @@ with tab2:
                                 
                                 has_multi_units = "units" in item_catalog_data
                                 
-                                # Zebra stripe edit box
-                                bg_color = "#f9f9f9" if idx % 2 == 0 else "transparent"
-                                st.markdown(f"<div style='background-color: {bg_color}; padding: 5px 10px; border-radius: 5px;'>", unsafe_allow_html=True)
-                                
-                                # TIGHTER COLUMNS
-                                c_name, c_qty, c_unit, c_note = st.columns([2.5, 0.8, 1.2, 4])
+                                # TIGHT COMPACT ROW
+                                c_name, c_qty, c_unit, c_note = st.columns([2.5, 0.8, 1.2, 4.5])
                                 
                                 with c_name:
                                     st.markdown(f"<div style='margin-top: 8px;'><b>{item_name}</b></div>", unsafe_allow_html=True)
@@ -650,7 +644,8 @@ with tab2:
                                         key=f"edit_inote_{item_id}_{safe_key}",
                                         label_visibility="collapsed"
                                     )
-                                st.markdown("</div>", unsafe_allow_html=True)
+
+                                st.markdown("---")
 
                             st.markdown("<br>", unsafe_allow_html=True)
                             st.markdown("##### ➕ Add Additional Items to Order:")
@@ -659,18 +654,14 @@ with tab2:
                             new_items_to_add = {}
                             for category, items in catalog.items():
                                 with st.expander(f"📁 Add {category}"):
-                                    for idx_add, (item_name, item_info) in enumerate(items.items()):
+                                    for item_name, item_info in items.items():
                                         if item_name in df_order_items["item_name"].values:
                                             continue
                                         
                                         safe_key = clean_key(item_name)
-                                        bg_color = "#f9f9f9" if idx_add % 2 == 0 else "transparent"
-                                        st.markdown(f"<div style='background-color: {bg_color}; padding: 5px 10px; border-radius: 5px;'>", unsafe_allow_html=True)
-                                        
                                         has_multi_units = "units" in item_info
                                         
-                                        # TIGHTER COLUMNS
-                                        c_name, c_qty, c_unit, c_note = st.columns([2.5, 0.8, 1.2, 4])
+                                        c_name, c_qty, c_unit, c_note = st.columns([2.5, 0.8, 1.2, 4.5])
                                         
                                         with c_name:
                                             st.markdown(f"<div style='margin-top: 8px;'><b>{item_name}</b></div>", unsafe_allow_html=True)
@@ -705,7 +696,8 @@ with tab2:
                                                     key=f"add_n_{safe_key}_{first_row['id']}", label_visibility="collapsed"
                                                 )
                                                 new_items_to_add[item_name] = {"qty": n_qty, "note": n_note, "unit": s_unit}
-                                        st.markdown("</div>", unsafe_allow_html=True)
+                                        
+                                        st.markdown("---")
 
                             st.markdown("<br>", unsafe_allow_html=True)
                             if st.form_submit_button("💾 Save All Order Changes"):
