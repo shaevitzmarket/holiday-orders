@@ -117,7 +117,6 @@ def save_orders_to_github(df, commit_message="Update customer orders"):
 
 
 # 2. CATALOG LOADED FROM SPREADSHEET
-# Updated to support "units" array for dropdowns, or "unit" string for fixed.
 ROSH_CATALOG = {
     "Briskets": {
         "Whole Brisket 8-10 lb": {"unit": "pieces", "is_weight": False},
@@ -283,6 +282,13 @@ def get_item_category(item_name, catalog):
     return "Special / Custom Requests"
 
 
+def get_item_is_weight(item_name, catalog):
+    for cat_name, items in catalog.items():
+        if item_name in items:
+            return items[item_name].get("is_weight", False)
+    return False
+
+
 # 3. SIDEBAR NAVIGATION
 st.sidebar.title("🏪 Store Operations")
 selected_holiday = st.sidebar.selectbox(
@@ -333,74 +339,56 @@ with tab1:
 
     for category, items in catalog.items():
         with st.expander(f"📁 {category} ({len(items)} items)"):
-            cols = st.columns(3)
+            
+            # Using a clean list format instead of masonry grids
             for idx, (item_name, item_info) in enumerate(items.items()):
-                col = cols[idx % 3]
-                
-                # Check if item has dynamic multi-units or a fixed single unit
                 has_multi_units = "units" in item_info
                 
-                with col.container():
-                    st.markdown(f"**{item_name}**")
+                with st.container(border=True):
+                    # Wide column for Name, narrow columns for Qty & Unit
+                    c_name, c_qty, c_unit = st.columns([5, 2, 2])
                     
-                    if has_multi_units:
-                        # Split row so user can input qty and select unit side-by-side
-                        q_col, u_col = st.columns([1, 1])
+                    with c_name:
+                        st.markdown(f"<div style='margin-top: 8px;'><b>{item_name}</b></div>", unsafe_allow_html=True)
                         
-                        selected_unit = u_col.selectbox(
-                            "Unit", 
-                            item_info["units"], 
-                            key=f"u_{selected_holiday}_{item_name}_{st.session_state.form_key}",
-                            label_visibility="collapsed"
-                        )
-                        
-                        # Dynamically adjust step based on unit chosen
-                        is_weight = (selected_unit == "lbs")
-                        if is_weight:
-                            qty = q_col.number_input(
-                                "Qty", min_value=0.0, step=0.25, format="%.2f",
-                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}", label_visibility="collapsed"
+                    with c_unit:
+                        if has_multi_units:
+                            selected_unit = st.selectbox(
+                                "Unit", item_info["units"], 
+                                key=f"u_{selected_holiday}_{item_name}_{st.session_state.form_key}",
+                                label_visibility="collapsed"
                             )
+                            is_weight = (selected_unit == "lbs")
+                            unit_str_to_save = selected_unit
                         else:
-                            qty = float(q_col.number_input(
-                                "Qty", min_value=0, step=1,
-                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}", label_visibility="collapsed"
-                            ))
-                            
-                        unit_str_to_save = selected_unit
-                    else:
-                        unit_str = item_info.get("unit", "")
-                        is_weight = item_info.get("is_weight", False)
-                        
-                        if unit_str:
-                            st.caption(unit_str)
-                        else:
-                            st.caption("(Tray/Dinner)")
-                            
+                            unit_str = item_info.get("unit", "")
+                            is_weight = item_info.get("is_weight", False)
+                            st.markdown(f"<div style='margin-top: 8px; color: gray;'>{unit_str or 'Tray / Dinner'}</div>", unsafe_allow_html=True)
+                            unit_str_to_save = unit_str
+
+                    with c_qty:
                         if is_weight:
                             qty = st.number_input(
                                 "Quantity", min_value=0.0, step=0.25, format="%.2f",
-                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}", label_visibility="collapsed"
+                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}",
+                                label_visibility="collapsed"
                             )
                         else:
                             qty = float(st.number_input(
                                 "Quantity", min_value=0, step=1,
-                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}", label_visibility="collapsed"
+                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}",
+                                label_visibility="collapsed"
                             ))
-                            
-                        unit_str_to_save = unit_str
 
                     item_note = ""
                     if qty > 0:
-                        st.info("📝 **Specific Note for this Item:**")
-                        item_note = st.text_input(
-                            f"Note for {item_name}",
-                            placeholder="e.g. 2 - 10lb pieces...",
+                        st.text_input(
+                            f"📝 Specific note for {item_name}:",
+                            placeholder=f"e.g. 2 - 10lb pieces...",
                             key=f"inote_{selected_holiday}_{item_name}_{st.session_state.form_key}",
-                            label_visibility="collapsed"
                         )
+                        item_note = st.session_state[f"inote_{selected_holiday}_{item_name}_{st.session_state.form_key}"]
                         order_items.append((item_name, unit_str_to_save, qty, item_note))
-                    st.markdown("<br>", unsafe_allow_html=True)
 
     st.markdown("---")
     st.subheader("📝 Special Notes & Off-Menu Requests")
@@ -504,7 +492,6 @@ with tab2:
         def make_pivot_val(row):
             val = format_qty(row['quantity'])
             unit_val = str(row.get('unit', '')).strip()
-            # If item has a dynamic unit saved, append it to the quantity in the wide table!
             if unit_val and unit_val.lower() != 'nan' and unit_val not in ["pieces", "each", ""]:
                 val = f"{val} {unit_val}"
                 
@@ -624,7 +611,6 @@ with tab2:
                                 item_id = item_row["id"]
                                 item_name = item_row["item_name"]
                                 
-                                # Retrieve catalog logic to see if this item supports multi-units
                                 item_catalog_data = {}
                                 for cat_name, items in catalog.items():
                                     if item_name in items:
@@ -633,46 +619,51 @@ with tab2:
                                 
                                 has_multi_units = "units" in item_catalog_data
                                 
-                                st.markdown(f"**{item_name}**")
-                                c_qty, c_unit = st.columns([1, 1])
-                                
-                                if has_multi_units:
-                                    current_unit = str(item_row["unit"]) if pd.notna(item_row["unit"]) else item_catalog_data["units"][0]
-                                    if current_unit not in item_catalog_data["units"]:
-                                        current_unit = item_catalog_data["units"][0]
-                                        
-                                    selected_unit = c_unit.selectbox(
-                                        "Unit", 
-                                        item_catalog_data["units"], 
-                                        index=item_catalog_data["units"].index(current_unit),
-                                        key=f"e_u_{item_id}", 
-                                        label_visibility="collapsed"
-                                    )
-                                    is_weight = (selected_unit == "lbs")
-                                    updated_item_units[item_id] = selected_unit
-                                else:
-                                    is_weight = item_catalog_data.get("is_weight", False)
-                                    unit_str = item_catalog_data.get("unit", "")
-                                    if unit_str:
-                                        c_unit.caption(unit_str)
-                                    updated_item_units[item_id] = unit_str
-                                
-                                if is_weight:
-                                    updated_quantities[item_id] = c_qty.number_input(
-                                        "Qty", min_value=0.0, value=float(item_row["quantity"]), step=0.25, format="%.2f",
-                                        key=f"edit_qty_{item_id}", label_visibility="collapsed"
-                                    )
-                                else:
-                                    updated_quantities[item_id] = float(c_qty.number_input(
-                                        "Qty", min_value=0, value=int(float(item_row["quantity"])), step=1,
-                                        key=f"edit_qty_{item_id}", label_visibility="collapsed"
-                                    ))
+                                with st.container(border=True):
+                                    c_name, c_qty, c_unit = st.columns([5, 2, 2])
                                     
-                                updated_item_notes[item_id] = st.text_input(
-                                    "Item Note", value=str(item_row.get("item_note", "")), placeholder="Specific note for this item...",
-                                    key=f"edit_inote_{item_id}"
-                                )
-                                st.markdown("<hr style='margin-top: 10px; margin-bottom: 10px;'>", unsafe_allow_html=True)
+                                    with c_name:
+                                        st.markdown(f"<div style='margin-top: 8px;'><b>{item_name}</b></div>", unsafe_allow_html=True)
+                                        
+                                    with c_unit:
+                                        if has_multi_units:
+                                            current_unit = str(item_row["unit"]) if pd.notna(item_row["unit"]) else item_catalog_data["units"][0]
+                                            if current_unit not in item_catalog_data["units"]:
+                                                current_unit = item_catalog_data["units"][0]
+                                                
+                                            selected_unit = st.selectbox(
+                                                "Unit", 
+                                                item_catalog_data["units"], 
+                                                index=item_catalog_data["units"].index(current_unit),
+                                                key=f"e_u_{item_id}", 
+                                                label_visibility="collapsed"
+                                            )
+                                            is_weight = (selected_unit == "lbs")
+                                            updated_item_units[item_id] = selected_unit
+                                        else:
+                                            is_weight = item_catalog_data.get("is_weight", False)
+                                            unit_str = item_catalog_data.get("unit", "")
+                                            st.markdown(f"<div style='margin-top: 8px; color: gray;'>{unit_str or 'Tray / Dinner'}</div>", unsafe_allow_html=True)
+                                            updated_item_units[item_id] = unit_str
+                                    
+                                    with c_qty:
+                                        if is_weight:
+                                            updated_quantities[item_id] = st.number_input(
+                                                "Qty", min_value=0.0, value=float(item_row["quantity"]), step=0.25, format="%.2f",
+                                                key=f"edit_qty_{item_id}", label_visibility="collapsed"
+                                            )
+                                        else:
+                                            updated_quantities[item_id] = float(st.number_input(
+                                                "Qty", min_value=0, value=int(float(item_row["quantity"])), step=1,
+                                                key=f"edit_qty_{item_id}", label_visibility="collapsed"
+                                            ))
+                                            
+                                    updated_item_notes[item_id] = st.text_input(
+                                        f"📝 Specific note for {item_name}:",
+                                        value=str(item_row.get("item_note", "")),
+                                        placeholder="Specific note for this item...",
+                                        key=f"edit_inote_{item_id}"
+                                    )
 
                             st.markdown("<br>", unsafe_allow_html=True)
                             st.markdown("##### ➕ Add Additional Items to Order:")
@@ -685,41 +676,42 @@ with tab2:
                                         if item_name in df_order_items["item_name"].values:
                                             continue
                                         
-                                        st.markdown(f"**{item_name}**")
-                                        has_multi_units = "units" in item_info
-                                        
-                                        c_qty, c_unit = st.columns([1, 1])
-                                        
-                                        if has_multi_units:
-                                            s_unit = c_unit.selectbox(
-                                                "Unit", item_info["units"], key=f"a_u_{item_name}_{first_row['id']}", label_visibility="collapsed"
-                                            )
-                                            is_w = (s_unit == "lbs")
-                                        else:
-                                            is_w = item_info.get("is_weight", False)
-                                            s_unit = item_info.get("unit", "")
-                                            if s_unit: c_unit.caption(s_unit)
-                                        
-                                        if is_w:
-                                            n_qty = c_qty.number_input(
-                                                "Qty", min_value=0.0, step=0.25, format="%.2f", 
-                                                key=f"add_{item_name}_{first_row['id']}", label_visibility="collapsed"
-                                            )
-                                        else:
-                                            n_qty = float(c_qty.number_input(
-                                                "Qty", min_value=0, step=1, 
-                                                key=f"add_{item_name}_{first_row['id']}", label_visibility="collapsed"
-                                            ))
+                                        with st.container(border=True):
+                                            has_multi_units = "units" in item_info
+                                            c_name, c_qty, c_unit = st.columns([5, 2, 2])
                                             
-                                        n_note = st.text_input(
-                                            "Note", placeholder="Specific item note...", 
-                                            key=f"add_n_{item_name}_{first_row['id']}"
-                                        )
-                                        
-                                        st.markdown("<hr style='margin-top: 10px; margin-bottom: 10px;'>", unsafe_allow_html=True)
-                                        
-                                        if n_qty > 0:
-                                            new_items_to_add[item_name] = {"qty": n_qty, "note": n_note, "unit": s_unit}
+                                            with c_name:
+                                                st.markdown(f"<div style='margin-top: 8px;'><b>{item_name}</b></div>", unsafe_allow_html=True)
+                                                
+                                            with c_unit:
+                                                if has_multi_units:
+                                                    s_unit = st.selectbox(
+                                                        "Unit", item_info["units"], key=f"a_u_{item_name}_{first_row['id']}", label_visibility="collapsed"
+                                                    )
+                                                    is_w = (s_unit == "lbs")
+                                                else:
+                                                    is_w = item_info.get("is_weight", False)
+                                                    s_unit = item_info.get("unit", "")
+                                                    st.markdown(f"<div style='margin-top: 8px; color: gray;'>{s_unit or 'Tray / Dinner'}</div>", unsafe_allow_html=True)
+                                            
+                                            with c_qty:
+                                                if is_w:
+                                                    n_qty = st.number_input(
+                                                        "Qty", min_value=0.0, step=0.25, format="%.2f", 
+                                                        key=f"add_{item_name}_{first_row['id']}", label_visibility="collapsed"
+                                                    )
+                                                else:
+                                                    n_qty = float(st.number_input(
+                                                        "Qty", min_value=0, step=1, 
+                                                        key=f"add_{item_name}_{first_row['id']}", label_visibility="collapsed"
+                                                    ))
+                                                    
+                                            if n_qty > 0:
+                                                n_note = st.text_input(
+                                                    f"📝 Specific note for {item_name}:", placeholder="Specific item note...", 
+                                                    key=f"add_n_{item_name}_{first_row['id']}"
+                                                )
+                                                new_items_to_add[item_name] = {"qty": n_qty, "note": n_note, "unit": s_unit}
 
                             st.markdown("<br>", unsafe_allow_html=True)
                             if st.form_submit_button("💾 Save All Order Changes"):
