@@ -73,6 +73,7 @@ def load_orders():
                 df["phone"] = df["phone"].fillna("")
                 df["email"] = df["email"].fillna("")
                 df["item_note"] = df["item_note"].fillna("")
+                df["unit"] = df["unit"].fillna("")
                 
                 orders = df[['pickup_date', 'last_name', 'first_name', 'phone', 'email']].drop_duplicates()
                 orders = orders.sort_values(by=['pickup_date', 'last_name', 'first_name', 'phone', 'email'])
@@ -116,6 +117,7 @@ def save_orders_to_github(df, commit_message="Update customer orders"):
 
 
 # 2. CATALOG LOADED FROM SPREADSHEET
+# Updated to support "units" array for dropdowns, or "unit" string for fixed.
 ROSH_CATALOG = {
     "Briskets": {
         "Whole Brisket 8-10 lb": {"unit": "pieces", "is_weight": False},
@@ -131,27 +133,27 @@ ROSH_CATALOG = {
         "Brisket Point": {"unit": "pieces", "is_weight": False},
     },
     "Chicken": {
-        "Whole Capon": {"unit": "pieces", "is_weight": False},
-        "Capon Cut in 1/8": {"unit": "pieces", "is_weight": False},
-        "Capon Cut in 1/4": {"unit": "pieces", "is_weight": False},
-        "Fryer Whole": {"unit": "pieces", "is_weight": False},
-        "Fryer Cut in 1/8": {"unit": "pieces", "is_weight": False},
-        "Fryer Cut in 1/4": {"unit": "pieces", "is_weight": False},
-        "Breasts Bone-In": {"unit": "pieces", "is_weight": False},
-        "B/S Breast": {"unit": "lbs", "is_weight": True},
-        "B/S breast Thin Cut": {"unit": "packs", "is_weight": False},
-        "Thighs": {"unit": "packs", "is_weight": False},
-        "B/S Thighs": {"unit": "lbs", "is_weight": True},
-        "Drumstick": {"unit": "pieces", "is_weight": False},
-        "Legs": {"unit": "pieces", "is_weight": False},
-        "Wings": {"unit": "packs", "is_weight": False},
-        "Chicken Bones": {"unit": "packs", "is_weight": False},
-        "Necks": {"unit": "packs", "is_weight": False},
-        "Ground Breast": {"unit": "lbs", "is_weight": True},
-        "Ground Thigh": {"unit": "lbs", "is_weight": True},
-        "Chicken Liver": {"unit": "packs", "is_weight": False},
-        "Chx Fat": {"unit": "each", "is_weight": False},
-        "cornish hen": {"unit": "each", "is_weight": False},
+        "Whole Capon": {"units": ["pieces", "lbs", "packs"]},
+        "Capon Cut in 1/8": {"units": ["pieces", "lbs", "packs"]},
+        "Capon Cut in 1/4": {"units": ["pieces", "lbs", "packs"]},
+        "Fryer Whole": {"units": ["pieces", "lbs", "packs"]},
+        "Fryer Cut in 1/8": {"units": ["pieces", "lbs", "packs"]},
+        "Fryer Cut in 1/4": {"units": ["pieces", "lbs", "packs"]},
+        "Breasts Bone-In": {"units": ["pieces", "lbs", "packs"]},
+        "B/S Breast": {"units": ["lbs", "pieces", "packs"]},
+        "B/S breast Thin Cut": {"units": ["packs", "lbs", "pieces"]},
+        "Thighs": {"units": ["packs", "lbs", "pieces"]},
+        "B/S Thighs": {"units": ["lbs", "pieces", "packs"]},
+        "Drumstick": {"units": ["pieces", "lbs", "packs"]},
+        "Legs": {"units": ["pieces", "lbs", "packs"]},
+        "Wings": {"units": ["packs", "lbs", "pieces"]},
+        "Chicken Bones": {"units": ["packs", "lbs", "pieces"]},
+        "Necks": {"units": ["packs", "lbs", "pieces"]},
+        "Ground Breast": {"units": ["lbs", "pieces", "packs"]},
+        "Ground Thigh": {"units": ["lbs", "pieces", "packs"]},
+        "Chicken Liver": {"units": ["packs", "lbs", "pieces"]},
+        "Chx Fat": {"units": ["pieces", "lbs", "packs"]},
+        "cornish hen": {"units": ["pieces", "lbs", "packs"]},
     },
     "Turkey": {
         "Turkey Breast": {"unit": "pieces", "is_weight": False},
@@ -201,18 +203,18 @@ ROSH_CATALOG = {
         "Squash Souffle": {"unit": "each", "is_weight": False},
     },
     "Catering Trays": {
-        "Complete Dinner": {"unit": "each", "is_weight": False},
-        "Deli Platter": {"unit": "each", "is_weight": False},
-        "Braised Brisket": {"unit": "each", "is_weight": False},
-        "Smoked Brisket": {"unit": "each", "is_weight": False},
-        "Braised Short Rib": {"unit": "each", "is_weight": False},
-        "Schnitzel": {"unit": "each", "is_weight": False},
-        "Herb Chicken Tray": {"unit": "each", "is_weight": False},
-        "Meatsballs Tray": {"unit": "each", "is_weight": False},
-        "Squash Souffle Tray": {"unit": "each", "is_weight": False},
-        "Roasted Potato": {"unit": "each", "is_weight": False},
-        "Maple Carrots": {"unit": "each", "is_weight": False},
-        "Roast Sweet Potatoes": {"unit": "each", "is_weight": False},
+        "Complete Dinner": {"unit": "", "is_weight": False},
+        "Deli Platter": {"unit": "", "is_weight": False},
+        "Braised Brisket": {"unit": "", "is_weight": False},
+        "Smoked Brisket": {"unit": "", "is_weight": False},
+        "Braised Short Rib": {"unit": "", "is_weight": False},
+        "Schnitzel": {"unit": "", "is_weight": False},
+        "Herb Chicken Tray": {"unit": "", "is_weight": False},
+        "Meatsballs Tray": {"unit": "", "is_weight": False},
+        "Squash Souffle Tray": {"unit": "", "is_weight": False},
+        "Roasted Potato": {"unit": "", "is_weight": False},
+        "Maple Carrots": {"unit": "", "is_weight": False},
+        "Roast Sweet Potatoes": {"unit": "", "is_weight": False},
     },
 }
 
@@ -220,8 +222,8 @@ HOLIDAY_CATALOGS = {
     "Rosh Hashanah 2026": ROSH_CATALOG,
     "Passover 2027": {
         "Poultry": {
-            "Whole Capon": {"unit": "pieces", "is_weight": False},
-            "Fryer Whole": {"unit": "pieces", "is_weight": False},
+            "Whole Capon": {"units": ["pieces", "lbs", "packs"]},
+            "Fryer Whole": {"units": ["pieces", "lbs", "packs"]},
         },
         "Sides": {
             "Matzah Balls": {"unit": "each", "is_weight": False},
@@ -281,13 +283,6 @@ def get_item_category(item_name, catalog):
     return "Special / Custom Requests"
 
 
-def get_item_is_weight(item_name, catalog):
-    for cat_name, items in catalog.items():
-        if item_name in items:
-            return items[item_name].get("is_weight", False)
-    return False
-
-
 # 3. SIDEBAR NAVIGATION
 st.sidebar.title("🏪 Store Operations")
 selected_holiday = st.sidebar.selectbox(
@@ -341,32 +336,59 @@ with tab1:
             cols = st.columns(3)
             for idx, (item_name, item_info) in enumerate(items.items()):
                 col = cols[idx % 3]
-                unit_str = item_info["unit"]
-                is_weight = item_info["is_weight"]
-
-                with col:
+                
+                # Check if item has dynamic multi-units or a fixed single unit
+                has_multi_units = "units" in item_info
+                
+                with col.container():
                     st.markdown(f"**{item_name}**")
-                    st.caption(unit_str)
                     
-                    if is_weight:
-                        qty = st.number_input(
-                            "Quantity",
-                            min_value=0.0,
-                            step=0.25,
-                            format="%.2f",
-                            key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}",
+                    if has_multi_units:
+                        # Split row so user can input qty and select unit side-by-side
+                        q_col, u_col = st.columns([1, 1])
+                        
+                        selected_unit = u_col.selectbox(
+                            "Unit", 
+                            item_info["units"], 
+                            key=f"u_{selected_holiday}_{item_name}_{st.session_state.form_key}",
                             label_visibility="collapsed"
                         )
-                    else:
-                        qty = float(
-                            st.number_input(
-                                "Quantity",
-                                min_value=0,
-                                step=1,
-                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}",
-                                label_visibility="collapsed"
+                        
+                        # Dynamically adjust step based on unit chosen
+                        is_weight = (selected_unit == "lbs")
+                        if is_weight:
+                            qty = q_col.number_input(
+                                "Qty", min_value=0.0, step=0.25, format="%.2f",
+                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}", label_visibility="collapsed"
                             )
-                        )
+                        else:
+                            qty = float(q_col.number_input(
+                                "Qty", min_value=0, step=1,
+                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}", label_visibility="collapsed"
+                            ))
+                            
+                        unit_str_to_save = selected_unit
+                    else:
+                        unit_str = item_info.get("unit", "")
+                        is_weight = item_info.get("is_weight", False)
+                        
+                        if unit_str:
+                            st.caption(unit_str)
+                        else:
+                            st.caption("(Tray/Dinner)")
+                            
+                        if is_weight:
+                            qty = st.number_input(
+                                "Quantity", min_value=0.0, step=0.25, format="%.2f",
+                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}", label_visibility="collapsed"
+                            )
+                        else:
+                            qty = float(st.number_input(
+                                "Quantity", min_value=0, step=1,
+                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}", label_visibility="collapsed"
+                            ))
+                            
+                        unit_str_to_save = unit_str
 
                     item_note = ""
                     if qty > 0:
@@ -377,7 +399,7 @@ with tab1:
                             key=f"inote_{selected_holiday}_{item_name}_{st.session_state.form_key}",
                             label_visibility="collapsed"
                         )
-                        order_items.append((item_name, unit_str, qty, item_note))
+                        order_items.append((item_name, unit_str_to_save, qty, item_note))
                     st.markdown("<br>", unsafe_allow_html=True)
 
     st.markdown("---")
@@ -467,6 +489,7 @@ with tab2:
         df_raw["email"] = df_raw["email"].fillna("")
         df_raw["notes"] = df_raw["notes"].fillna("")
         df_raw["item_note"] = df_raw["item_note"].fillna("")
+        df_raw["unit"] = df_raw["unit"].fillna("")
 
         if search_term:
             df_raw = df_raw[
@@ -480,6 +503,11 @@ with tab2:
 
         def make_pivot_val(row):
             val = format_qty(row['quantity'])
+            unit_val = str(row.get('unit', '')).strip()
+            # If item has a dynamic unit saved, append it to the quantity in the wide table!
+            if unit_val and unit_val.lower() != 'nan' and unit_val not in ["pieces", "each", ""]:
+                val = f"{val} {unit_val}"
+                
             note = str(row.get('item_note', '')).strip()
             if note and note.lower() != 'nan':
                 return f"{val} 💬"
@@ -587,43 +615,62 @@ with tab2:
 
                             st.markdown("##### 🥩 Edit Currently Ordered Items:")
                             updated_quantities = {}
+                            updated_item_units = {}
                             updated_item_notes = {}
                             
                             catalog = HOLIDAY_CATALOGS[selected_holiday]
                             
                             for _, item_row in df_order_items.iterrows():
                                 item_id = item_row["id"]
-                                is_item_weight = get_item_is_weight(item_row["item_name"], catalog)
+                                item_name = item_row["item_name"]
                                 
-                                st.markdown(f"**{item_row['item_name']} ({item_row['unit']})**")
-                                c_qty, c_note = st.columns([1, 2])
+                                # Retrieve catalog logic to see if this item supports multi-units
+                                item_catalog_data = {}
+                                for cat_name, items in catalog.items():
+                                    if item_name in items:
+                                        item_catalog_data = items[item_name]
+                                        break
                                 
-                                if is_item_weight:
-                                    updated_quantities[item_id] = c_qty.number_input(
-                                        "Qty",
-                                        min_value=0.0,
-                                        value=float(item_row["quantity"]),
-                                        step=0.25,
-                                        format="%.2f",
-                                        key=f"edit_qty_{item_id}",
+                                has_multi_units = "units" in item_catalog_data
+                                
+                                st.markdown(f"**{item_name}**")
+                                c_qty, c_unit = st.columns([1, 1])
+                                
+                                if has_multi_units:
+                                    current_unit = str(item_row["unit"]) if pd.notna(item_row["unit"]) else item_catalog_data["units"][0]
+                                    if current_unit not in item_catalog_data["units"]:
+                                        current_unit = item_catalog_data["units"][0]
+                                        
+                                    selected_unit = c_unit.selectbox(
+                                        "Unit", 
+                                        item_catalog_data["units"], 
+                                        index=item_catalog_data["units"].index(current_unit),
+                                        key=f"e_u_{item_id}", 
                                         label_visibility="collapsed"
+                                    )
+                                    is_weight = (selected_unit == "lbs")
+                                    updated_item_units[item_id] = selected_unit
+                                else:
+                                    is_weight = item_catalog_data.get("is_weight", False)
+                                    unit_str = item_catalog_data.get("unit", "")
+                                    if unit_str:
+                                        c_unit.caption(unit_str)
+                                    updated_item_units[item_id] = unit_str
+                                
+                                if is_weight:
+                                    updated_quantities[item_id] = c_qty.number_input(
+                                        "Qty", min_value=0.0, value=float(item_row["quantity"]), step=0.25, format="%.2f",
+                                        key=f"edit_qty_{item_id}", label_visibility="collapsed"
                                     )
                                 else:
                                     updated_quantities[item_id] = float(c_qty.number_input(
-                                        "Qty",
-                                        min_value=0,
-                                        value=int(float(item_row["quantity"])),
-                                        step=1,
-                                        key=f"edit_qty_{item_id}",
-                                        label_visibility="collapsed"
+                                        "Qty", min_value=0, value=int(float(item_row["quantity"])), step=1,
+                                        key=f"edit_qty_{item_id}", label_visibility="collapsed"
                                     ))
                                     
-                                updated_item_notes[item_id] = c_note.text_input(
-                                    "Item Note",
-                                    value=str(item_row.get("item_note", "")),
-                                    placeholder="Specific note for this item...",
-                                    key=f"edit_inote_{item_id}",
-                                    label_visibility="collapsed"
+                                updated_item_notes[item_id] = st.text_input(
+                                    "Item Note", value=str(item_row.get("item_note", "")), placeholder="Specific note for this item...",
+                                    key=f"edit_inote_{item_id}"
                                 )
                                 st.markdown("<hr style='margin-top: 10px; margin-bottom: 10px;'>", unsafe_allow_html=True)
 
@@ -638,15 +685,28 @@ with tab2:
                                         if item_name in df_order_items["item_name"].values:
                                             continue
                                         
-                                        st.markdown(f"**{item_name} ({item_info['unit']})**")
+                                        st.markdown(f"**{item_name}**")
+                                        has_multi_units = "units" in item_info
                                         
-                                        if item_info["is_weight"]:
-                                            n_qty = st.number_input(
+                                        c_qty, c_unit = st.columns([1, 1])
+                                        
+                                        if has_multi_units:
+                                            s_unit = c_unit.selectbox(
+                                                "Unit", item_info["units"], key=f"a_u_{item_name}_{first_row['id']}", label_visibility="collapsed"
+                                            )
+                                            is_w = (s_unit == "lbs")
+                                        else:
+                                            is_w = item_info.get("is_weight", False)
+                                            s_unit = item_info.get("unit", "")
+                                            if s_unit: c_unit.caption(s_unit)
+                                        
+                                        if is_w:
+                                            n_qty = c_qty.number_input(
                                                 "Qty", min_value=0.0, step=0.25, format="%.2f", 
                                                 key=f"add_{item_name}_{first_row['id']}", label_visibility="collapsed"
                                             )
                                         else:
-                                            n_qty = float(st.number_input(
+                                            n_qty = float(c_qty.number_input(
                                                 "Qty", min_value=0, step=1, 
                                                 key=f"add_{item_name}_{first_row['id']}", label_visibility="collapsed"
                                             ))
@@ -659,7 +719,7 @@ with tab2:
                                         st.markdown("<hr style='margin-top: 10px; margin-bottom: 10px;'>", unsafe_allow_html=True)
                                         
                                         if n_qty > 0:
-                                            new_items_to_add[item_name] = {"qty": n_qty, "note": n_note, "unit": item_info["unit"]}
+                                            new_items_to_add[item_name] = {"qty": n_qty, "note": n_note, "unit": s_unit}
 
                             st.markdown("<br>", unsafe_allow_html=True)
                             if st.form_submit_button("💾 Save All Order Changes"):
@@ -691,6 +751,7 @@ with tab2:
                                             df_master.loc[mask, "pickup_date"] = new_date_formatted
                                             
                                             df_master.loc[mask, "quantity"] = round(q_val, 2)
+                                            df_master.loc[mask, "unit"] = updated_item_units[item_id]
                                             df_master.loc[mask, "item_note"] = updated_item_notes[item_id]
                                             df_master.loc[mask, "pickup_time"] = new_time
                                             df_master.loc[mask, "notes"] = new_notes
@@ -771,6 +832,7 @@ with tab3:
         df_raw["email"] = df_raw["email"].fillna("")
         df_raw["notes"] = df_raw["notes"].fillna("")
         df_raw["item_note"] = df_raw["item_note"].fillna("")
+        df_raw["unit"] = df_raw["unit"].fillna("")
 
         catalog = HOLIDAY_CATALOGS[selected_holiday]
         df_raw["category"] = df_raw["item_name"].apply(
@@ -884,7 +946,7 @@ with tab3:
             drill_df = filtered_df[filtered_df["item_name"] == selected_drilldown].copy()
             drill_df["Customer Name"] = drill_df["first_name"] + " " + drill_df["last_name"]
             
-            display_cols = ["Daily Order #", "Customer Name", "phone", "email", "pickup_date", "pickup_time", "quantity", "item_note"]
+            display_cols = ["Daily Order #", "Customer Name", "phone", "email", "pickup_date", "pickup_time", "quantity", "unit", "item_note"]
             drill_display = drill_df[display_cols].sort_values(by=["pickup_date", "Daily Order #"])
             drill_display["quantity"] = drill_display["quantity"].apply(format_qty)
             
