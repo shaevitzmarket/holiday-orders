@@ -66,7 +66,7 @@ def load_orders():
             if "item_note" not in df.columns:
                 df["item_note"] = ""
             
-            # Dynamically Generate Alphabetical Daily Order Numbers (Differentiating by Email as well)
+            # Dynamically Generate Alphabetical Daily Order Numbers
             if not df.empty and "pickup_date" in df.columns:
                 df["first_name"] = df["first_name"].fillna("")
                 df["last_name"] = df["last_name"].fillna("")
@@ -343,32 +343,40 @@ with tab1:
                 unit_str = item_info["unit"]
                 is_weight = item_info["is_weight"]
 
-                if is_weight:
-                    qty = col.number_input(
-                        f"{item_name} ({unit_str})",
-                        min_value=0.0,
-                        step=0.25,
-                        format="%.2f",
-                        key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}",
-                    )
-                else:
-                    qty = float(
-                        col.number_input(
-                            f"{item_name} ({unit_str})",
-                            min_value=0,
-                            step=1,
+                with col.container(border=True):
+                    st.markdown(f"**{item_name}**")
+                    st.caption(f"Sold {unit_str}")
+                    
+                    if is_weight:
+                        qty = st.number_input(
+                            "Quantity",
+                            min_value=0.0,
+                            step=0.25,
+                            format="%.2f",
                             key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}",
+                            label_visibility="collapsed"
                         )
-                    )
+                    else:
+                        qty = float(
+                            st.number_input(
+                                "Quantity",
+                                min_value=0,
+                                step=1,
+                                key=f"qty_{selected_holiday}_{item_name}_{st.session_state.form_key}",
+                                label_visibility="collapsed"
+                            )
+                        )
 
-                item_note = ""
-                if qty > 0:
-                    item_note = col.text_input(
-                        f"📝 Note for {item_name}:",
-                        placeholder="e.g. 2 - 10lb pieces",
-                        key=f"inote_{selected_holiday}_{item_name}_{st.session_state.form_key}"
-                    )
-                    order_items.append((item_name, unit_str, qty, item_note))
+                    item_note = ""
+                    if qty > 0:
+                        st.info("📝 **Specific Note for this Item:**")
+                        item_note = st.text_input(
+                            f"Note for {item_name}",
+                            placeholder="e.g. 2 - 10lb pieces...",
+                            key=f"inote_{selected_holiday}_{item_name}_{st.session_state.form_key}",
+                            label_visibility="collapsed"
+                        )
+                        order_items.append((item_name, unit_str, qty, item_note))
 
     st.markdown("---")
     st.subheader("📝 Special Notes & Off-Menu Requests")
@@ -508,7 +516,6 @@ with tab2:
         
         for idx, row in unique_orders.iterrows():
             email_part = f" | {row['email']}" if row['email'] else ""
-            # Removed the #{row['Daily Order #']} -  from the label
             label = f"{row['first_name']} {row['last_name']} | {row['phone']}{email_part} | {row['pickup_date']} @ {row['pickup_time']}"
             order_list.append((label, row["phone"], row["pickup_date"], row["email"]))
 
@@ -616,6 +623,7 @@ with tab2:
                                     key=f"edit_inote_{item_id}",
                                     label_visibility="collapsed"
                                 )
+                                st.markdown("<hr style='margin-top: 10px; margin-bottom: 10px;'>", unsafe_allow_html=True)
 
                             st.markdown("<br>", unsafe_allow_html=True)
                             st.markdown("##### ➕ Add Additional Items to Order:")
@@ -628,24 +636,25 @@ with tab2:
                                         if item_name in df_order_items["item_name"].values:
                                             continue
                                         
-                                        col_name, col_qty, col_note = st.columns([2, 1, 2])
-                                        col_name.markdown(f"<div style='margin-top: 8px;'>{item_name}</div>", unsafe_allow_html=True)
+                                        st.markdown(f"**{item_name} ({item_info['unit']})**")
                                         
                                         if item_info["is_weight"]:
-                                            n_qty = col_qty.number_input(
+                                            n_qty = st.number_input(
                                                 "Qty", min_value=0.0, step=0.25, format="%.2f", 
                                                 key=f"add_{item_name}_{first_row['id']}", label_visibility="collapsed"
                                             )
                                         else:
-                                            n_qty = float(col_qty.number_input(
+                                            n_qty = float(st.number_input(
                                                 "Qty", min_value=0, step=1, 
                                                 key=f"add_{item_name}_{first_row['id']}", label_visibility="collapsed"
                                             ))
                                             
-                                        n_note = col_note.text_input(
-                                            "Note", placeholder="Item note...", 
-                                            key=f"add_n_{item_name}_{first_row['id']}", label_visibility="collapsed"
+                                        n_note = st.text_input(
+                                            "Note", placeholder="Specific item note...", 
+                                            key=f"add_n_{item_name}_{first_row['id']}"
                                         )
+                                        
+                                        st.markdown("<hr style='margin-top: 10px; margin-bottom: 10px;'>", unsafe_allow_html=True)
                                         
                                         if n_qty > 0:
                                             new_items_to_add[item_name] = {"qty": n_qty, "note": n_note, "unit": item_info["unit"]}
