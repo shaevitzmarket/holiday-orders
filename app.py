@@ -508,7 +508,8 @@ with tab2:
         
         for idx, row in unique_orders.iterrows():
             email_part = f" | {row['email']}" if row['email'] else ""
-            label = f"#{row['Daily Order #']} - {row['first_name']} {row['last_name']} | {row['phone']}{email_part} | {row['pickup_date']} @ {row['pickup_time']}"
+            # Removed the #{row['Daily Order #']} -  from the label
+            label = f"{row['first_name']} {row['last_name']} | {row['phone']}{email_part} | {row['pickup_date']} @ {row['pickup_time']}"
             order_list.append((label, row["phone"], row["pickup_date"], row["email"]))
 
         if order_list:
@@ -624,7 +625,6 @@ with tab2:
                             for category, items in catalog.items():
                                 with st.expander(f"📁 Add {category}"):
                                     for item_name, item_info in items.items():
-                                        # Skip items they already have to avoid duplicate interface
                                         if item_name in df_order_items["item_name"].values:
                                             continue
                                         
