@@ -309,12 +309,13 @@ selected_holiday = st.sidebar.selectbox(
 
 st.title(f"📦 Holiday Orders: {selected_holiday}")
 
-tab1, tab2, tab3, tab4 = st.tabs(
+tab1, tab2, tab3, tab4, tab5 = st.tabs(
     [
         "📝 Take New Order",
-        "🔍 Search / Edit Orders",
+        "✏️ Edit / Delete Orders",
         "📊 Season Inventory",
-        "🔪 Daily Station Prep"
+        "🔪 Daily Station Prep",
+        "📋 Wide Orders Overview"
     ]
 )
 
@@ -489,11 +490,11 @@ with tab1:
 
 
 # -------------------------------------------------------------------------
-# TAB 2: SEARCH, EDIT & DELETE
+# TAB 2: EDIT & DELETE ORDERS
 # -------------------------------------------------------------------------
 with tab2:
-    st.subheader("Search & Manage Customer Orders")
-    search_term = st.text_input("Search by Last Name or Phone Number:")
+    st.subheader("✏️ Search & Manage Customer Orders")
+    search_term = st.text_input("Search by Last Name or Phone Number:", key="edit_search")
 
     df_all = load_orders()
     df_raw = (
@@ -518,44 +519,6 @@ with tab2:
             ]
 
     if not df_raw.empty:
-        df_raw['Flag'] = df_raw.groupby(['pickup_date', 'last_name', 'first_name', 'phone', 'email'])['custom_flag'].transform('max')
-        df_raw['Flag'] = df_raw['Flag'].apply(lambda x: "🚨 CUSTOM" if str(x) == "1" else "OK")
-
-        def make_pivot_val(row):
-            val = format_qty(row['quantity'])
-            unit_val = str(row.get('unit', '')).strip()
-            if unit_val and unit_val.lower() != 'nan' and unit_val not in ["pieces", "each", ""]:
-                val = f"{val} {unit_val}"
-                
-            note = str(row.get('item_note', '')).strip()
-            if note and note.lower() != 'nan':
-                return f"{val} 💬"
-            return val
-            
-        df_raw['pivot_val'] = df_raw.apply(make_pivot_val, axis=1)
-
-        pivot_df = df_raw.pivot_table(
-            index=['Daily Order #', 'Flag', 'first_name', 'last_name', 'phone', 'email', 'pickup_date', 'pickup_time', 'notes'],
-            columns='item_name',
-            values='pivot_val',
-            aggfunc=lambda x: ' + '.join(str(v) for v in x)
-        ).reset_index()
-
-        pivot_df.fillna("", inplace=True)
-        pivot_df.columns.name = None
-        pivot_df = pivot_df.sort_values(by=['pickup_date', 'Daily Order #'])
-
-        st.markdown("### 📋 Wide Customer Orders Overview (💬 = Item Note)")
-        st.dataframe(pivot_df, use_container_width=True)
-        
-        csv_orders = pivot_df.to_csv(index=False).encode("utf-8")
-        st.download_button(
-            label="📥 Export Wide Orders Table (CSV)",
-            data=csv_orders,
-            file_name="Customer_Orders_Wide_Format.csv",
-            mime="text/csv",
-        )
-
         st.markdown("---")
         st.subheader("🔍 Select an Order to View, Edit, or Delete")
 
@@ -1011,3 +974,75 @@ with tab4:
 
     else:
         st.info("No active orders found for this holiday.")
+
+
+# -------------------------------------------------------------------------
+# TAB 5: WIDE ORDERS OVERVIEW
+# -------------------------------------------------------------------------
+with tab5:
+    st.subheader("📋 Wide Customer Orders Overview")
+    st.caption("A full horizontal spreadsheet view of every customer order. (💬 = Item Note)")
+    
+    search_term_wide = st.text_input("Optional: Search by Last Name or Phone Number:", key="wide_search")
+
+    df_all = load_orders()
+    df_raw = (
+        df_all[df_all["holiday"] == selected_holiday].copy()
+        if not df_all.empty and "holiday" in df_all.columns
+        else pd.DataFrame()
+    )
+
+    if not df_raw.empty:
+        df_raw["first_name"] = df_raw["first_name"].fillna("")
+        df_raw["last_name"] = df_raw["last_name"].fillna("")
+        df_raw["phone"] = df_raw["phone"].fillna("")
+        df_raw["email"] = df_raw["email"].fillna("")
+        df_raw["notes"] = df_raw["notes"].fillna("")
+        df_raw["item_note"] = df_raw["item_note"].fillna("")
+        df_raw["unit"] = df_raw["unit"].fillna("")
+
+        if search_term_wide:
+            df_raw = df_raw[
+                (df_raw["last_name"].astype(str).str.contains(search_term_wide, case=False, na=False))
+                | (df_raw["phone"].astype(str).str.contains(search_term_wide, case=False, na=False))
+            ]
+
+    if not df_raw.empty:
+        df_raw['Flag'] = df_raw.groupby(['pickup_date', 'last_name', 'first_name', 'phone', 'email'])['custom_flag'].transform('max')
+        df_raw['Flag'] = df_raw['Flag'].apply(lambda x: "🚨 CUSTOM" if str(x) == "1" else "OK")
+
+        def make_pivot_val(row):
+            val = format_qty(row['quantity'])
+            unit_val = str(row.get('unit', '')).strip()
+            if unit_val and unit_val.lower() != 'nan' and unit_val not in ["pieces", "each", ""]:
+                val = f"{val} {unit_val}"
+                
+            note = str(row.get('item_note', '')).strip()
+            if note and note.lower() != 'nan':
+                return f"{val} 💬"
+            return val
+            
+        df_raw['pivot_val'] = df_raw.apply(make_pivot_val, axis=1)
+
+        pivot_df = df_raw.pivot_table(
+            index=['Daily Order #', 'Flag', 'first_name', 'last_name', 'phone', 'email', 'pickup_date', 'pickup_time', 'notes'],
+            columns='item_name',
+            values='pivot_val',
+            aggfunc=lambda x: ' + '.join(str(v) for v in x)
+        ).reset_index()
+
+        pivot_df.fillna("", inplace=True)
+        pivot_df.columns.name = None
+        pivot_df = pivot_df.sort_values(by=['pickup_date', 'Daily Order #'])
+
+        st.dataframe(pivot_df, use_container_width=True)
+        
+        csv_orders = pivot_df.to_csv(index=False).encode("utf-8")
+        st.download_button(
+            label="📥 Export Wide Orders Table (CSV)",
+            data=csv_orders,
+            file_name="Customer_Orders_Wide_Format.csv",
+            mime="text/csv",
+        )
+    else:
+        st.info("No active orders match your criteria.")
