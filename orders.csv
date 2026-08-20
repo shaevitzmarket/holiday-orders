@@ -25,16 +25,11 @@ id,holiday,first_name,last_name,phone,email,pickup_date,pickup_time,item_name,un
 50,Rosh Hashanah 2026,Barb,LOEB,(847) 370 - 5296,,2026-09-04 (Fri),9:00 AM - 10:00 AM,Turkey Breast,pieces,2.0,,0,
 51,Rosh Hashanah 2026,ELLEN,GREENWALD,(847) 212 - 1043,ELLEN@SWCGINC.COM,2026-09-10 (Thu),9:00 AM - 10:00 AM,Whole Brisket 16 lb or More,pieces,1.0,,0,Do NOT trim
 52,Rosh Hashanah 2026,ELLEN,GREENWALD,(847) 212 - 1043,ELLEN@SWCGINC.COM,2026-09-10 (Thu),9:00 AM - 10:00 AM,Kishke,each,1.0,,0,
-54,Rosh Hashanah 2026,CAROL,DERMAN,(847) 477 - 8737,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Fryer Cut in 1/8,pieces,6.0,"FAMILY STEAK = LONDON BROIL (not really, but sometimes)
-ADD 4 QTS OF NOODLES",0,FRYERS OVER 3.75#
-55,Rosh Hashanah 2026,CAROL,DERMAN,(847) 477 - 8737,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Boneless Ribeye Roast,lbs,36.0,"FAMILY STEAK = LONDON BROIL (not really, but sometimes)
-ADD 4 QTS OF NOODLES",0,
-56,Rosh Hashanah 2026,CAROL,DERMAN,(847) 477 - 8737,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Family Steak,pieces,2.0,"FAMILY STEAK = LONDON BROIL (not really, but sometimes)
-ADD 4 QTS OF NOODLES",0,4 ROASTS AT 8-9# EACH
-57,Rosh Hashanah 2026,CAROL,DERMAN,(847) 477 - 8737,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Matzah Balls,each,48.0,"FAMILY STEAK = LONDON BROIL (not really, but sometimes)
-ADD 4 QTS OF NOODLES",0,
-58,Rosh Hashanah 2026,CAROL,DERMAN,(847) 477 - 8737,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Chicken Broth Qt,each,10.0,"FAMILY STEAK = LONDON BROIL (not really, but sometimes)
-ADD 4 QTS OF NOODLES",0,
+54,Rosh Hashanah 2026,CAROL,DERMAN,(847) 477 - 8737,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Fryer Cut in 1/8,pieces,6.0,ADD 4 QTS OF NOODLES,0,FRYERS OVER 3.75#
+55,Rosh Hashanah 2026,CAROL,DERMAN,(847) 477 - 8737,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Boneless Ribeye Roast,lbs,36.0,ADD 4 QTS OF NOODLES,0,
+56,Rosh Hashanah 2026,CAROL,DERMAN,(847) 477 - 8737,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Family Steak,pieces,2.0,ADD 4 QTS OF NOODLES,0,4 ROASTS AT 8-9# EACH
+57,Rosh Hashanah 2026,CAROL,DERMAN,(847) 477 - 8737,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Matzah Balls,each,48.0,ADD 4 QTS OF NOODLES,0,
+58,Rosh Hashanah 2026,CAROL,DERMAN,(847) 477 - 8737,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Chicken Broth Qt,each,10.0,ADD 4 QTS OF NOODLES,0,
 59,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,1st Cut 6-7 #,pieces,2.0,,0,
 60,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Breasts Bone-In,pieces,4.0,,0,
 61,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Thighs,packs,1.0,,0,
