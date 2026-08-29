@@ -135,7 +135,7 @@ id,holiday,first_name,last_name,phone,email,pickup_date,pickup_time,item_name,un
 12/30
 375
 60015",0,,Pending
-181,Rosh Hashanah 2026,BONNIE,ROTHENBERG,(847) 254 - 2453,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Rib Steak,pieces,2.0,,0,LEAN,Pending
+181,Rosh Hashanah 2026,BONNIE,ROTHENBERG,(847) 254 - 2453,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Rib Steak,pieces,2.0,,0,,Pending
 182,Rosh Hashanah 2026,LORI,JACOBSON,(847) 751 - 2277,,2026-09-08 (Tue),9:00 AM - 10:00 AM,1st Cut 3-4 #,pieces,1.0,,0,WANTS 3.75#,Pending
 183,Rosh Hashanah 2026,VANESSA,EHRLICH,(847) 571 - 2095,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Thighs,packs,2.0,,0,,Pending
 184,Rosh Hashanah 2026,VANESSA,EHRLICH,(847) 571 - 2095,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Wings,packs,1.0,,0,,Pending
