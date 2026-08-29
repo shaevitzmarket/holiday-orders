@@ -44,6 +44,7 @@ EMPTY_COLUMNS = [
     "item_note",
     "notes",
     "custom_flag",
+    "status",
 ]
 
 PREP_STATIONS = {
@@ -55,6 +56,7 @@ PREP_STATIONS = {
 
 
 def load_orders():
+    """Fetches real-time orders directly from orders.csv in your GitHub repository."""
     if not GITHUB_TOKEN or not GITHUB_REPO:
         st.warning("⚠️ GitHub Token or Repo name missing in Secrets.")
         return pd.DataFrame(columns=EMPTY_COLUMNS)
@@ -71,7 +73,12 @@ def load_orders():
             
             if "item_note" not in df.columns:
                 df["item_note"] = ""
+            if "status" not in df.columns:
+                df["status"] = "Pending"
             
+            df["status"] = df["status"].fillna("Pending")
+            
+            # Dynamically Generate Alphabetical Daily Order Numbers
             if not df.empty and "pickup_date" in df.columns:
                 df["first_name"] = df["first_name"].fillna("")
                 df["last_name"] = df["last_name"].fillna("")
@@ -94,6 +101,7 @@ def load_orders():
 
 
 def save_orders_to_github(df, commit_message="Update customer orders"):
+    """Saves updated dataframe back to orders.csv in your GitHub repository."""
     try:
         if "Daily Order #" in df.columns:
             df = df.drop(columns=["Daily Order #"])
@@ -300,7 +308,6 @@ def get_item_is_weight(item_name, catalog):
 def clean_key(name):
     return re.sub(r"[^a-zA-Z0-9_]", "", name)
 
-# Custom Ultra-Thin Horizontal Line to save vertical space
 THIN_HR = "<hr style='margin: 4px 0; border: none; border-bottom: 1px solid #ddd;'/>"
 
 
@@ -363,7 +370,6 @@ with tab1:
                 has_multi_units = "units" in item_info
                 safe_key = clean_key(item_name)
                 
-                # TIGHT RATIO: Name is narrower, Qty & Unit pull left, giving Note a massive box
                 c_name, c_qty, c_unit, c_note = st.columns([2.5, 1.2, 1.5, 6])
                 
                 with c_name:
@@ -409,7 +415,6 @@ with tab1:
                         )
                         order_items.append((item_name, unit_str_to_save, qty, item_note))
 
-                # Ultra thin custom divider line to save massive vertical space
                 st.markdown(THIN_HR, unsafe_allow_html=True)
 
     st.subheader("📝 Special Notes & Off-Menu Requests")
@@ -460,6 +465,7 @@ with tab1:
                         "item_note": i_note,
                         "notes": order_notes,
                         "custom_flag": flag_val,
+                        "status": "Pending",
                     }
                 )
                 next_id += 1
@@ -500,14 +506,16 @@ with tab2:
         df_raw["notes"] = df_raw["notes"].fillna("")
         df_raw["item_note"] = df_raw["item_note"].fillna("")
         df_raw["unit"] = df_raw["unit"].fillna("")
+        df_raw["status"] = df_raw["status"].fillna("Pending")
 
         order_list = []
-        unique_orders = df_raw[['Daily Order #', 'first_name', 'last_name', 'phone', 'email', 'pickup_date', 'pickup_time']].drop_duplicates()
+        unique_orders = df_raw[['Daily Order #', 'first_name', 'last_name', 'phone', 'email', 'pickup_date', 'pickup_time', 'status']].drop_duplicates()
         unique_orders = unique_orders.sort_values(by=['pickup_date', 'Daily Order #'])
         
         for idx, row in unique_orders.iterrows():
+            status_icon = "✅" if row['status'] == "Completed" else "⏳"
             email_part = f" | {row['email']}" if row['email'] else ""
-            label = f"{row['first_name']} {row['last_name']} | {row['phone']}{email_part} | {row['pickup_date']} @ {row['pickup_time']}"
+            label = f"{status_icon} {row['first_name']} {row['last_name']} | {row['phone']}{email_part} | {row['pickup_date']} @ {row['pickup_time']}"
             order_list.append((label, row["phone"], row["pickup_date"], row["email"]))
 
         if order_list:
@@ -528,16 +536,18 @@ with tab2:
 
                 if not df_order_items.empty:
                     first_row = df_order_items.iloc[0]
+                    curr_status = str(first_row.get("status", "Pending"))
+                    status_badge = "✅ COMPLETED" if curr_status == "Completed" else "⏳ PENDING"
 
-                    st.markdown(f"### 📦 Order Detail View: **{first_row['first_name']} {first_row['last_name']}**")
+                    st.markdown(f"### 📦 Order Detail View: **{first_row['first_name']} {first_row['last_name']}** (`{status_badge}`)")
 
-                    # Edit form now takes the full screen width so buttons don't disappear!
                     with st.form("edit_full_order_form"):
                         
-                        st.markdown("##### 👤 Customer Details")
-                        c_fn, c_ln = st.columns(2)
+                        st.markdown("##### 👤 Customer & Order Status")
+                        c_fn, c_ln, c_st = st.columns([2, 2, 2])
                         new_fn = c_fn.text_input("First Name", value=str(first_row["first_name"]))
                         new_ln = c_ln.text_input("Last Name", value=str(first_row["last_name"]))
+                        new_completed = c_st.checkbox("✅ Mark Order as Completed / Picked Up", value=(curr_status == "Completed"))
                         
                         c_ph, c_em = st.columns(2)
                         new_ph = c_ph.text_input("Phone Number", value=str(first_row["phone"]))
@@ -591,7 +601,6 @@ with tab2:
                             
                             has_multi_units = "units" in item_catalog_data
                             
-                            # TIGHT COMPACT ROW FOR EDIT TAB
                             c_name, c_qty, c_unit, c_note = st.columns([2.5, 1.2, 1.5, 6])
                             
                             with c_name:
@@ -706,6 +715,7 @@ with tab2:
                                 st.error(f"Invalid Phone Number: {phone_error}")
                             else:
                                 new_date_formatted = f"{new_date} ({new_date.strftime('%a')})"
+                                status_str = "Completed" if new_completed else "Pending"
                                 
                                 df_master = load_orders()
                                 next_id = int(df_master["id"].max() + 1) if not df_master.empty and "id" in df_master.columns and pd.notna(df_master["id"].max()) else 1
@@ -728,6 +738,7 @@ with tab2:
                                         df_master.loc[mask, "pickup_time"] = new_time
                                         df_master.loc[mask, "notes"] = new_notes
                                         df_master.loc[mask, "custom_flag"] = 1 if new_flag else 0
+                                        df_master.loc[mask, "status"] = status_str
 
                                 # 2. Append Newly Added Items
                                 new_rows = []
@@ -747,6 +758,7 @@ with tab2:
                                         "item_note": item_data["note"],
                                         "notes": new_notes,
                                         "custom_flag": 1 if new_flag else 0,
+                                        "status": status_str,
                                     })
                                     next_id += 1
                                     
@@ -757,7 +769,6 @@ with tab2:
                                 st.success(f"Order for {new_fn} {new_ln} updated permanently!")
                                 st.rerun()
 
-                    # DELETE ORDER MOVED OUTSIDE AND BELOW THE FORM
                     st.markdown("---")
                     st.markdown("#### 🗑️ Danger Zone: Delete Entire Order")
                     st.warning(
@@ -809,6 +820,7 @@ with tab3:
         df_raw["notes"] = df_raw["notes"].fillna("")
         df_raw["item_note"] = df_raw["item_note"].fillna("")
         df_raw["unit"] = df_raw["unit"].fillna("")
+        df_raw["status"] = df_raw["status"].fillna("Pending")
 
         catalog = HOLIDAY_CATALOGS[selected_holiday]
         df_raw["category"] = df_raw["item_name"].apply(
@@ -861,7 +873,7 @@ with tab3:
             drill_df = df_raw[df_raw["item_name"] == selected_drilldown].copy()
             drill_df["Customer Name"] = drill_df["first_name"] + " " + drill_df["last_name"]
             
-            display_cols = ["Daily Order #", "Customer Name", "phone", "email", "pickup_date", "pickup_time", "quantity", "unit", "item_note"]
+            display_cols = ["Daily Order #", "Customer Name", "status", "phone", "email", "pickup_date", "pickup_time", "quantity", "unit", "item_note"]
             drill_display = drill_df[display_cols].sort_values(by=["pickup_date", "Daily Order #"])
             drill_display["quantity"] = drill_display["quantity"].apply(format_qty)
             
@@ -893,15 +905,15 @@ with tab4:
         df_raw["notes"] = df_raw["notes"].fillna("")
         df_raw["item_note"] = df_raw["item_note"].fillna("")
         df_raw["unit"] = df_raw["unit"].fillna("")
+        df_raw["status"] = df_raw["status"].fillna("Pending")
 
         catalog = HOLIDAY_CATALOGS[selected_holiday]
         df_raw["category"] = df_raw["item_name"].apply(
             lambda x: get_item_category(x, catalog)
         )
-        # Assign Prep Station based on category
         df_raw["prep_station"] = df_raw["category"].apply(get_prep_station)
 
-        f_col1, f_col2 = st.columns(2)
+        f_col1, f_col2, f_col3 = st.columns([2, 2, 2])
 
         with f_col1:
             available_dates = sorted(df_raw["pickup_date"].unique().tolist())
@@ -911,10 +923,17 @@ with tab4:
             available_stations = ["All Stations"] + list(PREP_STATIONS.keys()) + ["Other / Custom"]
             selected_station = st.selectbox("🔪 2. Select Prep Station:", available_stations)
 
+        with f_col3:
+            st.markdown("<div style='margin-top: 28px;'></div>", unsafe_allow_html=True)
+            hide_completed = st.checkbox("🙈 Hide Completed Orders", value=False)
+
         # Filter logic
         filtered_df = df_raw[df_raw["pickup_date"] == selected_date].copy()
         if selected_station != "All Stations":
             filtered_df = filtered_df[filtered_df["prep_station"] == selected_station]
+            
+        if hide_completed:
+            filtered_df = filtered_df[filtered_df["status"] != "Completed"]
 
         if not filtered_df.empty:
             st.markdown(f"### Preparing: **{selected_station}** on **{selected_date}**")
@@ -936,7 +955,7 @@ with tab4:
             st.caption("Line-by-line orders for this station so butchers know exactly what to cut and who it goes to.")
             
             filtered_df["Customer Name"] = filtered_df["first_name"] + " " + filtered_df["last_name"]
-            display_cols = ["Daily Order #", "Customer Name", "item_name", "quantity", "unit", "item_note"]
+            display_cols = ["Daily Order #", "Customer Name", "status", "item_name", "quantity", "unit", "item_note"]
             
             drill_display = filtered_df[display_cols].sort_values(by=["Daily Order #", "item_name"])
             drill_display["quantity"] = drill_display["quantity"].apply(format_qty)
@@ -986,6 +1005,7 @@ with tab5:
         df_raw["notes"] = df_raw["notes"].fillna("")
         df_raw["item_note"] = df_raw["item_note"].fillna("")
         df_raw["unit"] = df_raw["unit"].fillna("")
+        df_raw["status"] = df_raw["status"].fillna("Pending")
 
         if search_term_wide:
             df_raw = df_raw[
@@ -1011,7 +1031,7 @@ with tab5:
         df_raw['pivot_val'] = df_raw.apply(make_pivot_val, axis=1)
 
         pivot_df = df_raw.pivot_table(
-            index=['Daily Order #', 'Flag', 'first_name', 'last_name', 'phone', 'email', 'pickup_date', 'pickup_time', 'notes'],
+            index=['Daily Order #', 'status', 'Flag', 'first_name', 'last_name', 'phone', 'email', 'pickup_date', 'pickup_time', 'notes'],
             columns='item_name',
             values='pivot_val',
             aggfunc=lambda x: ' + '.join(str(v) for v in x)
