@@ -151,22 +151,17 @@ id,holiday,first_name,last_name,phone,email,pickup_date,pickup_time,item_name,un
 1# NATURAL TURKEY
 1# ROAST BEEF
 2# CHICKEN SALAD
-2 TUBS ITALIAN BEEF",0,4#,Pending
-193,Rosh Hashanah 2026,MICHELLE,REINSTEIN,(312) 848 - 1452,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Breasts Bone-In,packs,4.0,"*****ALSO HAS DELI MEAT*****
-1# NATURAL TURKEY
-1# ROAST BEEF
-2# CHICKEN SALAD
-2 TUBS ITALIAN BEEF",0,4 PACKS,Pending
+2 Qt ITALIAN BEEF",0,,Pending
 194,Rosh Hashanah 2026,MICHELLE,REINSTEIN,(312) 848 - 1452,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Family Steak,pieces,1.0,"*****ALSO HAS DELI MEAT*****
 1# NATURAL TURKEY
 1# ROAST BEEF
 2# CHICKEN SALAD
-2 TUBS ITALIAN BEEF",0,,Pending
+2 Qt ITALIAN BEEF",0,,Pending
 195,Rosh Hashanah 2026,MICHELLE,REINSTEIN,(312) 848 - 1452,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Herb Roasted Chicken,each,1.0,"*****ALSO HAS DELI MEAT*****
 1# NATURAL TURKEY
 1# ROAST BEEF
 2# CHICKEN SALAD
-2 TUBS ITALIAN BEEF",0,CUT IN 8,Pending
+2 Qt ITALIAN BEEF",0,,Pending
 196,Rosh Hashanah 2026,AMY,BARRISH,(773) 454 - 1704,,2026-09-09 (Wed),9:00 AM - 10:00 AM,1st Cut 5-6 #,pieces,1.0,,0,,Pending
 197,Rosh Hashanah 2026,SHEILA,BARRON,(847) 722 - 4445,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Capon Cut in 1/8,pieces,2.0,,0,,Pending
 198,Rosh Hashanah 2026,SHEILA,BARRON,(847) 722 - 4445,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Family Steak,pieces,4.0,,0,4 POUNDS EACH SQUARE SHAPED,Pending
@@ -358,3 +353,8 @@ ALL PAID",1,,Pending
 335,Rosh Hashanah 2026,PAULA,DOMSKY,(847) 226 - 7400,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Whole Brisket 12-14 lb,pieces,1.0,,0,,Pending
 336,Rosh Hashanah 2026,KATHY,PADDOR,(847) 727 - 3636,,2026-08-30 (Sun),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,1.0,,0,4-5 POUNDS,Pending
 337,Rosh Hashanah 2026,KATHY,PADDOR,(847) 727 - 3636,,2026-08-30 (Sun),9:00 AM - 10:00 AM,Short Rib,lbs,2.5,,0,ENGLISH CUT,Pending
+338,Rosh Hashanah 2026,MICHELLE,REINSTEIN,(312) 848 - 1452,,2026-09-09 (Wed),9:00 AM - 10:00 AM,B/S Breast,packs,4.0,"*****ALSO HAS DELI MEAT*****
+1# NATURAL TURKEY
+1# ROAST BEEF
+2# CHICKEN SALAD
+2 Qt ITALIAN BEEF",0,,Pending
