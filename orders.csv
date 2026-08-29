@@ -30,12 +30,12 @@ id,holiday,first_name,last_name,phone,email,pickup_date,pickup_time,item_name,un
 56,Rosh Hashanah 2026,CAROL,DERMAN,(847) 477 - 8737,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Family Steak,pieces,2.0,ADD 4 QTS OF NOODLES,0,,Pending
 57,Rosh Hashanah 2026,CAROL,DERMAN,(847) 477 - 8737,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Matzah Balls,each,48.0,ADD 4 QTS OF NOODLES,0,,Pending
 58,Rosh Hashanah 2026,CAROL,DERMAN,(847) 477 - 8737,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Chicken Broth Qt,each,10.0,ADD 4 QTS OF NOODLES,0,,Pending
-59,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,1st Cut 6-7 #,pieces,2.0,,0,,Pending
-60,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Breasts Bone-In,pieces,4.0,,0,,Pending
-61,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Thighs,pieces,4.0,,0,,Pending
-62,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Chicken Broth Qt,each,1.0,,0,,Pending
-63,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Kishke,each,2.0,,0,,Pending
-64,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Chopped Liver,lbs,2.0,,0,,Pending
+59,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,1st Cut 6-7 #,pieces,2.0,,0,,Completed
+60,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Breasts Bone-In,pieces,4.0,,0,,Completed
+61,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Thighs,pieces,4.0,,0,,Completed
+62,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Chicken Broth Qt,each,1.0,,0,,Completed
+63,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Kishke,each,2.0,,0,,Completed
+64,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Chopped Liver,lbs,2.0,,0,,Completed
 66,Rosh Hashanah 2026,KAREN,KOPIN,(847) 420 - 0791,,2026-09-03 (Thu),10:00 AM - 11:00 AM,Capon Cut in 1/8,pieces,2.0,,0,,Pending
 67,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,1st Cut 5-6 #,pieces,2.0,,0,,Pending
 68,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,Whole Capon,pieces,2.0,,0,,Pending
