@@ -76,10 +76,10 @@ id,holiday,first_name,last_name,phone,email,pickup_date,pickup_time,item_name,un
 116,Rosh Hashanah 2026,MICHAEL,DUNN,(847) 828 - 5600,,2026-09-08 (Tue),10:00 AM - 11:00 AM,Roast Turkey Breast,each,3.0,,0,"Dinner Slices, no bones, extra gravy",Pending
 117,Rosh Hashanah 2026,AMY,FELDMAN,(847) 946 - 1400,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Whole Brisket 8-10 lb,pieces,1.0,,0,,Pending
 118,Rosh Hashanah 2026,DEBBIE,COTTON,(847) 989 - 1012,,2026-09-09 (Wed),1:00 PM - 2:00 PM,Brisket Point,pieces,3.0,,0,FOR 12 PEOPLE,Pending
-119,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Turkey Breast,pieces,2.0,IN ADDITION TO ON LINE ORDER FOR THIS DAY,0,"BONELESS AND NETTED, ABOUT 7 POUNDS EACH",Pending
-120,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Kishke,each,3.0,IN ADDITION TO ON LINE ORDER FOR THIS DAY,0,,Pending
-125,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Chopped Liver,lbs,3.0,IN ADDITION TO ON LINE ORDER FOR THIS DAY,0,,Pending
-126,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Schnitzel,,2.0,IN ADDITION TO ON LINE ORDER FOR THIS DAY,0,,Pending
+119,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),12:00 PM - 1:00 PM,Turkey Breast,pieces,2.0,,0,"BONELESS AND NETTED, 7 # EACH",Pending
+120,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),12:00 PM - 1:00 PM,Kishke,each,3.0,,0,,Pending
+125,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),12:00 PM - 1:00 PM,Chopped Liver,lbs,3.0,,0,paid,Pending
+126,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),12:00 PM - 1:00 PM,Schnitzel,,2.0,,0,paid,Pending
 127,Rosh Hashanah 2026,JILL,KALTER,(847) 980 - 0599,,2026-09-11 (Fri),9:00 AM - 10:00 AM,Herb Chicken Tray,,2.0,,0,,Pending
 128,Rosh Hashanah 2026,JILL,KALTER,(847) 980 - 0599,,2026-09-11 (Fri),9:00 AM - 10:00 AM,Meatsballs Tray,,1.0,,0,,Pending
 129,Rosh Hashanah 2026,JILL,KALTER,(847) 980 - 0599,,2026-09-11 (Fri),9:00 AM - 10:00 AM,Squash Souffle Tray,,1.0,,0,,Pending
