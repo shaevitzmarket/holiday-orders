@@ -508,8 +508,17 @@ with tab2:
         df_raw["unit"] = df_raw["unit"].fillna("")
         df_raw["status"] = df_raw["status"].fillna("Pending")
 
+        c_sel, c_chk = st.columns([3, 1])
+        with c_chk:
+            st.markdown("<div style='margin-top: 28px;'></div>", unsafe_allow_html=True)
+            hide_completed_edit = st.checkbox("🙈 Hide Completed Orders", value=False, key="hide_completed_edit")
+
+        df_edit_filtered = df_raw.copy()
+        if hide_completed_edit:
+            df_edit_filtered = df_edit_filtered[df_edit_filtered["status"] != "Completed"]
+
         order_list = []
-        unique_orders = df_raw[['Daily Order #', 'first_name', 'last_name', 'phone', 'email', 'pickup_date', 'pickup_time', 'status']].drop_duplicates()
+        unique_orders = df_edit_filtered[['Daily Order #', 'first_name', 'last_name', 'phone', 'email', 'pickup_date', 'pickup_time', 'status']].drop_duplicates()
         unique_orders = unique_orders.sort_values(by=['pickup_date', 'Daily Order #'])
         
         for idx, row in unique_orders.iterrows():
@@ -519,7 +528,7 @@ with tab2:
             order_list.append((label, row["phone"], row["pickup_date"], row["email"]))
 
         if order_list:
-            selected_order = st.selectbox(
+            selected_order = c_sel.selectbox(
                 "Select Customer Order (Search by typing Last Name or Phone):",
                 options=order_list,
                 format_func=lambda x: x[0] if x is not None else "",
