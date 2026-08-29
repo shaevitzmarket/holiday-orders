@@ -1,365 +1,365 @@
-id,holiday,first_name,last_name,phone,email,pickup_date,pickup_time,item_name,unit,quantity,notes,custom_flag,item_note
-1,Rosh Hashanah 2026,SHERI,GREENBAUM,(248) 302 - 5058,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Bone-in Rib Roast,lbs,20.0,,0,2 - 10LB BONE IN RIB ROASTS
-3,Rosh Hashanah 2026,PAM,SCHWARTZ,(847) 710 - 7194,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Whole Brisket 14-16 lb,pieces,1.0,,0,
-5,Rosh Hashanah 2026,PAM,SCHWARTZ,(847) 710 - 7194,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Kishke,each,2.0,,0,
-10,Rosh Hashanah 2026,LYNNE,GOLDMAN,(847) 421 - 1497,,2026-09-09 (Wed),12:00 PM - 1:00 PM,Turkey Breast,pieces,1.0,ADD TWO TURKEY DRUMSTICKS,1,9 lbs 
-13,Rosh Hashanah 2026,MARYL,DAYAN,(847) 217 - 2105,,2026-09-09 (Wed),2:00 PM - 3:00 PM,Whole Brisket 14-16 lb,pieces,1.0,,0,
-14,Rosh Hashanah 2026,MARYL,DAYAN,(847) 217 - 2105,,2026-09-09 (Wed),2:00 PM - 3:00 PM,Fryer Whole,pieces,2.0,,0,
-17,Rosh Hashanah 2026,MARYL,DAYAN,(847) 217 - 2105,,2026-09-09 (Wed),2:00 PM - 3:00 PM,Ground Lamb,lbs,4.0,,0,
-19,Rosh Hashanah 2026,MYRA,FEINBERG,(847) 477 - 1893,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Brisket Point,pieces,3.0,,0,6-7# TOTAL
+id,holiday,first_name,last_name,phone,email,pickup_date,pickup_time,item_name,unit,quantity,notes,custom_flag,item_note,status
+1,Rosh Hashanah 2026,SHERI,GREENBAUM,(248) 302 - 5058,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Bone-in Rib Roast,lbs,20.0,,0,2 - 10LB BONE IN RIB ROASTS,Pending
+3,Rosh Hashanah 2026,PAM,SCHWARTZ,(847) 710 - 7194,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Whole Brisket 14-16 lb,pieces,1.0,,0,,Pending
+5,Rosh Hashanah 2026,PAM,SCHWARTZ,(847) 710 - 7194,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Kishke,each,2.0,,0,,Pending
+10,Rosh Hashanah 2026,LYNNE,GOLDMAN,(847) 421 - 1497,,2026-09-09 (Wed),12:00 PM - 1:00 PM,Turkey Breast,pieces,1.0,ADD TWO TURKEY DRUMSTICKS,1,9 lbs ,Pending
+13,Rosh Hashanah 2026,MARYL,DAYAN,(847) 217 - 2105,,2026-09-09 (Wed),2:00 PM - 3:00 PM,Whole Brisket 14-16 lb,pieces,1.0,,0,,Pending
+14,Rosh Hashanah 2026,MARYL,DAYAN,(847) 217 - 2105,,2026-09-09 (Wed),2:00 PM - 3:00 PM,Fryer Whole,pieces,2.0,,0,,Pending
+17,Rosh Hashanah 2026,MARYL,DAYAN,(847) 217 - 2105,,2026-09-09 (Wed),2:00 PM - 3:00 PM,Ground Lamb,lbs,4.0,,0,,Pending
+19,Rosh Hashanah 2026,MYRA,FEINBERG,(847) 477 - 1893,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Brisket Point,pieces,3.0,,0,6-7# TOTAL,Pending
 34,Rosh Hashanah 2026,CINDY,MARDER,(847) 275 - 8373,CBM92348@AOL.COM,2026-09-10 (Thu),4:00 PM - 5:00 PM,Matzah Balls,each,4.0,"NO NOODLES, PLAIN BROTH
- ADD BBQ SAUCE ON SIDE FOR CHICKEN.",1,
+ ADD BBQ SAUCE ON SIDE FOR CHICKEN.",1,,Pending
 35,Rosh Hashanah 2026,CINDY,MARDER,(847) 275 - 8373,CBM92348@AOL.COM,2026-09-10 (Thu),4:00 PM - 5:00 PM,Chicken Broth Qt,each,2.0,"NO NOODLES, PLAIN BROTH
- ADD BBQ SAUCE ON SIDE FOR CHICKEN.",1,
+ ADD BBQ SAUCE ON SIDE FOR CHICKEN.",1,,Pending
 36,Rosh Hashanah 2026,CINDY,MARDER,(847) 275 - 8373,CBM92348@AOL.COM,2026-09-10 (Thu),4:00 PM - 5:00 PM,Chopped Liver,lbs,3.0,"NO NOODLES, PLAIN BROTH
- ADD BBQ SAUCE ON SIDE FOR CHICKEN.",1,6 - 1/2# containers
+ ADD BBQ SAUCE ON SIDE FOR CHICKEN.",1,6 - 1/2# containers,Pending
 37,Rosh Hashanah 2026,CINDY,MARDER,(847) 275 - 8373,CBM92348@AOL.COM,2026-09-10 (Thu),4:00 PM - 5:00 PM,Complete Dinner,,2.0,"NO NOODLES, PLAIN BROTH
- ADD BBQ SAUCE ON SIDE FOR CHICKEN.",1,"BBQ Brisket, PLAIN BROTH, NO NOODLES"
-43,Rosh Hashanah 2026,BETTY,WEISS,(847) 945 - 0590,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Complete Dinner,,1.0,ONLINE order. Paid.,0,
-44,Rosh Hashanah 2026,DEBBI,ROSENBERG,(847) 507 - 5632,DEBBILROSNBERG@GMAIL.COM,2026-09-08 (Tue),9:00 AM - 10:00 AM,Whole Brisket 12-14 lb,pieces,1.0,,0,
-45,Rosh Hashanah 2026,DEBBI,ROSENBERG,(847) 507 - 5632,DEBBILROSENBERG@GMAIL.COM,2026-09-11 (Fri),10:00 AM - 11:00 AM,Fryer Cut in 1/8,pieces,3.0,,0,
-46,Rosh Hashanah 2026,DEBBI,ROSENBERG,(847) 507 - 5632,DEBBILROSENBERG@GMAIL.COM,2026-09-11 (Fri),10:00 AM - 11:00 AM,Chopped Liver,lbs,1.0,,0,
-47,Rosh Hashanah 2026,DEBBI,ROSENBERG,(847) 507 - 5632,DEBBILROSENBERG@GMAIL.COM,2026-09-11 (Fri),10:00 AM - 11:00 AM,Squash Souffle Tray,,1.0,,0,
-48,Rosh Hashanah 2026,DEBBI,ROSENBERG,(847) 507 - 5632,DEBBILROSENBERG@GMAIL.COM,2026-09-11 (Fri),10:00 AM - 11:00 AM,Roasted Potato,,1.0,,0,
-49,Rosh Hashanah 2026,DEBBI,ROSENBERG,(847) 507 - 5632,DEBBILROSENBERG@GMAIL.COM,2026-09-11 (Fri),10:00 AM - 11:00 AM,Roast Sweet Potatoes,,1.0,,0,
-50,Rosh Hashanah 2026,Barb,LOEB,(847) 370 - 5296,,2026-09-04 (Fri),9:00 AM - 10:00 AM,Turkey Breast,pieces,2.0,,0,
-51,Rosh Hashanah 2026,ELLEN,GREENWALD,(847) 212 - 1043,ELLEN@SWCGINC.COM,2026-09-10 (Thu),9:00 AM - 10:00 AM,Whole Brisket 16 lb or More,pieces,1.0,,0,Do NOT trim
-52,Rosh Hashanah 2026,ELLEN,GREENWALD,(847) 212 - 1043,ELLEN@SWCGINC.COM,2026-09-10 (Thu),9:00 AM - 10:00 AM,Kishke,each,1.0,,0,
-54,Rosh Hashanah 2026,CAROL,DERMAN,(847) 477 - 8737,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Fryer Cut in 1/8,pieces,6.0,ADD 4 QTS OF NOODLES,0,FRYERS OVER 3.75#
-55,Rosh Hashanah 2026,CAROL,DERMAN,(847) 477 - 8737,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Boneless Ribeye Roast,lbs,36.0,ADD 4 QTS OF NOODLES,0,4 ROASTS AT 8-9# EACH
-56,Rosh Hashanah 2026,CAROL,DERMAN,(847) 477 - 8737,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Family Steak,pieces,2.0,ADD 4 QTS OF NOODLES,0,
-57,Rosh Hashanah 2026,CAROL,DERMAN,(847) 477 - 8737,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Matzah Balls,each,48.0,ADD 4 QTS OF NOODLES,0,
-58,Rosh Hashanah 2026,CAROL,DERMAN,(847) 477 - 8737,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Chicken Broth Qt,each,10.0,ADD 4 QTS OF NOODLES,0,
-59,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,1st Cut 6-7 #,pieces,2.0,,0,
-60,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Breasts Bone-In,pieces,4.0,,0,
-61,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Thighs,pieces,4.0,,0,
-62,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Chicken Broth Qt,each,1.0,,0,
-63,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Kishke,each,2.0,,0,
-64,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Chopped Liver,lbs,2.0,,0,
-66,Rosh Hashanah 2026,KAREN,KOPIN,(847) 420 - 0791,,2026-09-03 (Thu),10:00 AM - 11:00 AM,Capon Cut in 1/8,pieces,2.0,,0,
-67,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,1st Cut 5-6 #,pieces,2.0,,0,
-68,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,Whole Capon,pieces,2.0,,0,
-69,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,Fryer Cut in 1/8,pieces,8.0,,0,
-70,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,Thighs,pieces,15.0,,0,In packs of 5
-71,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,Ground 80/20,lbs,5.0,,0,
-72,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,Ground Beef Lean,lbs,5.0,,0,
-73,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,Veal Chop 1st Cut,pieces,30.0,,0,"24 pc 1"" ; 6 pc 3/4"" "
-74,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,Kishke,each,2.0,,0,
-75,Rosh Hashanah 2026,CHERYL,SHAPIRO,(847) 420 - 9831,,2026-09-08 (Tue),12:00 PM - 1:00 PM,Turkey Breast,pieces,1.0,,0,Big
-76,Rosh Hashanah 2026,CHERYL,SHAPIRO,(847) 420 - 9831,,2026-09-08 (Tue),12:00 PM - 1:00 PM,Short Rib,lbs,6.0,,0,Wants 4 STRIPS (est. 6#)
-77,Rosh Hashanah 2026,CHERYL,SHAPIRO,(847) 420 - 9831,,2026-09-08 (Tue),12:00 PM - 1:00 PM,Matzah Balls,each,10.0,,0,
-78,Rosh Hashanah 2026,CHERYL,SHAPIRO,(847) 420 - 9831,,2026-09-08 (Tue),12:00 PM - 1:00 PM,Chicken Broth Qt,each,8.0,,0,
-79,Rosh Hashanah 2026,CHERYL,SHAPIRO,(847) 420 - 9831,,2026-09-08 (Tue),12:00 PM - 1:00 PM,Kishke,each,1.0,,0,
-80,Rosh Hashanah 2026,MARLA,ZELIKOW,(847) 529 - 8602,MARLAZELIKOW@GMAIL.COM,2026-09-10 (Thu),9:00 AM - 10:00 AM,Whole Brisket 16 lb or More,pieces,1.0,ADD 3 ROUND CHALLAHS,0,
-81,Rosh Hashanah 2026,MARLA,ZELIKOW,(847) 529 - 8602,MARLAZELIKOW@GMAIL.COM,2026-09-10 (Thu),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,1.0,ADD 3 ROUND CHALLAHS,0,
-82,Rosh Hashanah 2026,MARLA,ZELIKOW,(847) 529 - 8602,MARLAZELIKOW@GMAIL.COM,2026-09-10 (Thu),9:00 AM - 10:00 AM,Fryer Cut in 1/8,pieces,2.0,ADD 3 ROUND CHALLAHS,0,NO SKIN
-83,Rosh Hashanah 2026,MARLA,ZELIKOW,(847) 529 - 8602,MARLAZELIKOW@GMAIL.COM,2026-09-10 (Thu),9:00 AM - 10:00 AM,B/S breast Thin Cut,packs,4.0,ADD 3 ROUND CHALLAHS,0,
-90,Rosh Hashanah 2026,MARGIE,JACOBS,(312) 953 - 1189,MARJORIECAREYJACOBS@MSN.COM,2026-09-10 (Thu),12:00 PM - 1:00 PM,1st Cut 7# or more,pieces,1.0,,0,
-91,Rosh Hashanah 2026,MARGIE,JACOBS,(312) 953 - 1189,MARJORIECAREYJACOBS@MSN.COM,2026-09-10 (Thu),12:00 PM - 1:00 PM,Capon Cut in 1/8,pieces,1.0,,0,
-92,Rosh Hashanah 2026,MARGIE,JACOBS,(312) 953 - 1189,MARJORIECAREYJACOBS@MSN.COM,2026-09-10 (Thu),12:00 PM - 1:00 PM,Matzah Balls,each,24.0,,0,
-93,Rosh Hashanah 2026,MARGIE,JACOBS,(312) 953 - 1189,MARJORIECAREYJACOBS@MSN.COM,2026-09-10 (Thu),12:00 PM - 1:00 PM,Chopped Liver,lbs,2.0,,0,
-94,Rosh Hashanah 2026,MARGIE,JACOBS,(312) 953 - 1189,MARJORIECAREYJACOBS@MSN.COM,2026-09-10 (Thu),12:00 PM - 1:00 PM,Turkey Meatballs,each,2.0,,0,
-95,Rosh Hashanah 2026,MARCI,CRANE,(847) 612 - 1430,KENNETHCRANE@SBCGLOBAL.NET,2026-09-11 (Fri),11:00 AM - 12:00 PM,Schnitzel,,1.0,,0,
-98,Rosh Hashanah 2026,Elaine,GREENBERG,(847) 910 - 3051,,2026-09-06 (Sun),12:00 PM - 1:00 PM,Brisket Point,pieces,3.0,,0,6 # TOTAL
-99,Rosh Hashanah 2026,SHARON,FEDDERLY,(414) 520 - 5807,,2026-08-30 (Sun),1:00 PM - 2:00 PM,Whole Brisket 16 lb or More,pieces,1.0,,0,TRIMMED
-100,Rosh Hashanah 2026,SHARON,FEDDERLY,(414) 520 - 5807,,2026-08-30 (Sun),1:00 PM - 2:00 PM,Fryer Cut in 1/8,pieces,5.0,,0,
-103,Rosh Hashanah 2026,SHARON,FEDDERLY,(414) 520 - 5807,,2026-08-30 (Sun),1:00 PM - 2:00 PM,Legs,packs,4.0,,0,
-104,Rosh Hashanah 2026,MARLA,ZELIKOW,(847) 529 - 8602,MARLAZELIKOW@GMAIL.COM,2026-09-10 (Thu),9:00 AM - 10:00 AM,Drumstick,pieces,12.0,ADD 3 ROUND CHALLAHS,0,No Skin
-105,Rosh Hashanah 2026,Maureen,STOLLMAN,(847) 409 - 1227,,2026-08-28 (Fri),9:00 AM - 10:00 AM,1st Cut 5-6 #,pieces,2.0,,0,
-106,Rosh Hashanah 2026,CHERYL,BERGER,(201) 694 - 2289,,2026-08-25 (Tue),9:00 AM - 10:00 AM,1st Cut 5-6 #,pieces,1.0,,0,TRIMMED
-107,Rosh Hashanah 2026,CHERYL,BERGER,(201) 694 - 2289,,2026-08-25 (Tue),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,2.0,,0,"ONLY WANTS 1.5, NOT 2"
-108,Rosh Hashanah 2026,CHERYL,BERGER,(201) 694 - 2289,,2026-08-25 (Tue),9:00 AM - 10:00 AM,Wings,packs,1.0,,0,
-109,Rosh Hashanah 2026,CHERYL,BERGER,(201) 694 - 2289,,2026-08-25 (Tue),9:00 AM - 10:00 AM,Chicken Bones,packs,1.0,,0,
-110,Rosh Hashanah 2026,MICHAEL,DUNN,(847) 828 - 5600,,2026-09-08 (Tue),10:00 AM - 11:00 AM,Capon Cut in 1/8,pieces,1.0,,0,
-114,Rosh Hashanah 2026,MICHAEL,DUNN,(847) 828 - 5600,,2026-09-01 (Tue),10:00 AM - 11:00 AM,1st Cut 6-7 #,pieces,3.0,,0,18 Lbs total
-115,Rosh Hashanah 2026,MICHAEL,DUNN,(847) 828 - 5600,,2026-09-01 (Tue),10:00 AM - 11:00 AM,Ground 80/20,lbs,10.0,,0,"5 PACKS, 2 # EACH"
-116,Rosh Hashanah 2026,MICHAEL,DUNN,(847) 828 - 5600,,2026-09-08 (Tue),10:00 AM - 11:00 AM,Roast Turkey Breast,each,3.0,,0,"Dinner Slices, no bones, extra gravy"
-117,Rosh Hashanah 2026,AMY,FELDMAN,(847) 946 - 1400,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Whole Brisket 8-10 lb,pieces,1.0,,0,
-118,Rosh Hashanah 2026,DEBBIE,COTTON,(847) 989 - 1012,,2026-09-09 (Wed),1:00 PM - 2:00 PM,Brisket Point,pieces,3.0,,0,FOR 12 PEOPLE
-119,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Turkey Breast,pieces,2.0,IN ADDITION TO ON LINE ORDER FOR THIS DAY,0,"BONELESS AND NETTED, ABOUT 7 POUNDS EACH"
-120,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Kishke,each,3.0,IN ADDITION TO ON LINE ORDER FOR THIS DAY,0,
-125,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Chopped Liver,lbs,3.0,IN ADDITION TO ON LINE ORDER FOR THIS DAY,0,
-126,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Schnitzel,,2.0,IN ADDITION TO ON LINE ORDER FOR THIS DAY,0,
-127,Rosh Hashanah 2026,JILL,KALTER,(847) 980 - 0599,,2026-09-11 (Fri),9:00 AM - 10:00 AM,Herb Chicken Tray,,2.0,,0,
-128,Rosh Hashanah 2026,JILL,KALTER,(847) 980 - 0599,,2026-09-11 (Fri),9:00 AM - 10:00 AM,Meatsballs Tray,,1.0,,0,
-129,Rosh Hashanah 2026,JILL,KALTER,(847) 980 - 0599,,2026-09-11 (Fri),9:00 AM - 10:00 AM,Squash Souffle Tray,,1.0,,0,
-130,Rosh Hashanah 2026,JILL,KALTER,(847) 980 - 0599,,2026-09-11 (Fri),9:00 AM - 10:00 AM,Roast Sweet Potatoes,,1.0,,0,
-131,Rosh Hashanah 2026,KAREN,HERBSTMAN,(847) 802 - 2079,,2026-09-07 (Mon),12:00 PM - 1:00 PM,12-16 lb Turkey,pieces,1.0,,0,
-132,Rosh Hashanah 2026,BARBARA,GOMBERG,(847) 910 - 4835,,2026-09-11 (Fri),2:00 PM - 3:00 PM,Complete Dinner,,1.0,,0,
-134,Rosh Hashanah 2026,,Feitelberg,(847) 914 - 0612,,2026-09-03 (Thu),10:00 AM - 11:00 AM,1st Cut 7# or more,pieces,1.0,,0,
-135,Rosh Hashanah 2026,Pearl,Swidler,(847) 408 - 9897,pearls2912@gmail.com,2026-09-11 (Fri),10:00 AM - 11:00 AM,Chopped Liver,lbs,1.0,,0,
-136,Rosh Hashanah 2026,Pearl,Swidler,(847) 408 - 9897,pearls2912@gmail.com,2026-09-11 (Fri),10:00 AM - 11:00 AM,Complete Dinner,,1.0,,0,
-137,Rosh Hashanah 2026,Ruth,Blonder,(847) 322 - 8924,,2026-09-08 (Tue),12:00 PM - 1:00 PM,1st Cut 5-6 #,pieces,2.0,,0,
-138,Rosh Hashanah 2026,Suzy,Hakimian,(847) 997 - 0818,suzy.hakimian@schechter.org,2026-09-08 (Tue),2:00 PM - 3:00 PM,Whole Brisket 10-12 lb,pieces,1.0,,0,
-139,Rosh Hashanah 2026,Suzy,Hakimian,(847) 997 - 0818,suzy.hakimian@schechter.org,2026-09-08 (Tue),2:00 PM - 3:00 PM,Fryer Cut in 1/8,pieces,4.0,,0,
-140,Rosh Hashanah 2026,Suzy,Hakimian,(847) 997 - 0818,suzy.hakimian@schechter.org,2026-09-08 (Tue),2:00 PM - 3:00 PM,Chopped Liver,lbs,1.0,,0,
-141,Rosh Hashanah 2026,Rhonda,Levy,(847) 867 - 6090,,2026-08-28 (Fri),1:00 PM - 2:00 PM,1st Cut 6-7 #,pieces,2.0,,0,
-142,Rosh Hashanah 2026,Rhonda,Levy,(847) 867 - 6090,,2026-08-28 (Fri),1:00 PM - 2:00 PM,Capon Cut in 1/8,pieces,1.0,,0,
-143,Rosh Hashanah 2026,Rhonda,Levy,(847) 867 - 6090,,2026-08-28 (Fri),1:00 PM - 2:00 PM,Turkey Breast,pieces,1.0,,0,"Boneless, Big"
-144,Rosh Hashanah 2026,Nancy,Finkel,(847) 338 - 2026,,2026-09-09 (Wed),12:00 PM - 1:00 PM,1st Cut 7# or more,pieces,1.0,,0,
-145,Rosh Hashanah 2026,Nancy,Finkel,(847) 338 - 2026,,2026-09-09 (Wed),12:00 PM - 1:00 PM,Capon Cut in 1/8,pieces,1.0,,0,
-146,Rosh Hashanah 2026,Nancy,Finkel,(847) 338 - 2026,,2026-09-09 (Wed),12:00 PM - 1:00 PM,Fryer Cut in 1/8,pieces,2.0,,0,
-147,Rosh Hashanah 2026,Nancy,Finkel,(847) 338 - 2026,,2026-09-09 (Wed),12:00 PM - 1:00 PM,Kishke,each,2.0,,0,
-148,Rosh Hashanah 2026,Joan,Banoff,(847) 204 - 5723,,2026-09-08 (Tue),12:00 PM - 1:00 PM,Turkey Breast,pieces,1.0,,0,10# or more
-149,Rosh Hashanah 2026,Brandon,Palmer,(847) 312 - 9808,,2026-09-11 (Fri),10:00 AM - 11:00 AM,1st Cut 7# or more,pieces,1.0,,0,
-150,Rosh Hashanah 2026,Eve,Pinkert,(847) 254 - 2278,,2026-09-11 (Fri),12:00 PM - 1:00 PM,Complete Dinner,,1.0,,0,
-151,Rosh Hashanah 2026,Marlene,Domash,(847) 404 - 6716,,2026-09-02 (Wed),10:00 AM - 11:00 AM,Whole Brisket 10-12 lb,pieces,2.0,,0,
-152,Rosh Hashanah 2026,Marlene,Domash,(847) 404 - 6716,,2026-09-02 (Wed),10:00 AM - 11:00 AM,Chicken Liver,lbs,5.0,,0,
-153,Rosh Hashanah 2026,Laurel,Feldman,(847) 778 - 0929,,2026-09-09 (Wed),10:00 AM - 11:00 AM,1st Cut 5-6 #,pieces,2.0,,0,
-154,Rosh Hashanah 2026,Gail,Joseph,(847) 373 - 3184,,2026-09-10 (Thu),10:00 AM - 11:00 AM,1st Cut 6-7 #,pieces,2.0,,0,
-155,Rosh Hashanah 2026,Gail,Joseph,(847) 373 - 3184,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Chicken Broth 1/2 Gallon,each,2.0,,0,
-156,Rosh Hashanah 2026,Gail,Joseph,(847) 373 - 3184,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Kishke,each,2.0,,0,
-157,Rosh Hashanah 2026,STEPHANIE,KEENE,(847) 722 - 5930,,2026-09-10 (Thu),9:00 AM - 10:00 AM,1st Cut 7# or more,pieces,1.0,,0,8 #
-158,Rosh Hashanah 2026,STEPHANIE,KEENE,(847) 722 - 5930,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Breasts Bone-In,pieces,8.0,,0,
-159,Rosh Hashanah 2026,STEPHANIE,KEENE,(847) 722 - 5930,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Thighs,pieces,10.0,,0,
-160,Rosh Hashanah 2026,STEPHANIE,KEENE,(847) 722 - 5930,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Drumstick,pieces,14.0,,0,
-161,Rosh Hashanah 2026,STEPHANIE,KEENE,(847) 722 - 5930,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Kishke,each,1.0,,0,
-162,Rosh Hashanah 2026,STEPHANIE,KEENE,(847) 722 - 5930,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Meatballs,each,5.0,,0,
-163,Rosh Hashanah 2026,LOUISE,LOCKER,(847) 212 - 5143,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Noodle Soup Qt,each,5.0,***MATZO BALL SOUP. NOT NOODLE,0,MATZO BALL SOUP NOT NOODLE
-164,Rosh Hashanah 2026,LOUISE,LOCKER,(847) 212 - 5143,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Meatballs,each,4.0,***MATZO BALL SOUP. NOT NOODLE,0,
-165,Rosh Hashanah 2026,RONALD,ALPERN,(847) 997 - 4801,,2026-09-03 (Thu),10:00 AM - 11:00 AM,Whole Brisket 10-12 lb,pieces,1.0,,0,10#
-166,Rosh Hashanah 2026,JUDY,KAPLAN,(847) 962 - 4803,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,2.0,,0,
-167,Rosh Hashanah 2026,JUDY,KAPLAN,(847) 962 - 4803,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Thighs,pieces,12.0,,0,
-168,Rosh Hashanah 2026,JUDY,KAPLAN,(847) 962 - 4803,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Drumstick,pieces,12.0,,0,
-169,Rosh Hashanah 2026,JUDY,KAPLAN,(847) 962 - 4803,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,2.0,,0,
-170,Rosh Hashanah 2026,JUDY,KAPLAN,(847) 962 - 4803,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Thighs,pieces,12.0,,0,
-171,Rosh Hashanah 2026,JUDY,KAPLAN,(847) 962 - 4803,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Drumstick,pieces,12.0,,0,
-172,Rosh Hashanah 2026,ANNE,MCDONOUGH,(847) 770 - 5621,,2026-09-09 (Wed),10:00 AM - 11:00 AM,Family Steak,pieces,3.0,,0,"In VACUUM , 11-12# TOTAL"
-173,Rosh Hashanah 2026,BONNIE,ROTHENBERG,(847) 254 - 2453,,2026-09-10 (Thu),11:00 AM - 12:00 PM,1st Cut 6-7 #,pieces,1.0,,0,
-174,Rosh Hashanah 2026,SHELLY,FOXMAN,(224) 715 - 5467,,2026-09-10 (Thu),11:00 AM - 12:00 PM,1st Cut 7# or more,pieces,1.0,,0,7-7.5 POUNDS
-175,Rosh Hashanah 2026,SHELLY,FOXMAN,(224) 715 - 5467,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Capon Cut in 1/8,pieces,1.0,,0,
-176,Rosh Hashanah 2026,SHELLY,FOXMAN,(224) 715 - 5467,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Ground Beef Lean,lbs,2.0,,0,
-177,Rosh Hashanah 2026,SHELLY,FOXMAN,(224) 715 - 5467,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Kishke,each,1.0,,0,
-178,Rosh Hashanah 2026,SHELLY,FOXMAN,(224) 715 - 5467,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Chopped Liver,lbs,0.5,,0,
-179,Rosh Hashanah 2026,SANDRA,LUND,(847) 433 - 2468,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Whole Brisket 12-14 lb,pieces,1.0,,0,
+ ADD BBQ SAUCE ON SIDE FOR CHICKEN.",1,"BBQ Brisket, PLAIN BROTH, NO NOODLES",Pending
+43,Rosh Hashanah 2026,BETTY,WEISS,(847) 945 - 0590,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Complete Dinner,,1.0,ONLINE order. Paid.,0,,Pending
+44,Rosh Hashanah 2026,DEBBI,ROSENBERG,(847) 507 - 5632,DEBBILROSNBERG@GMAIL.COM,2026-09-08 (Tue),9:00 AM - 10:00 AM,Whole Brisket 12-14 lb,pieces,1.0,,0,,Pending
+45,Rosh Hashanah 2026,DEBBI,ROSENBERG,(847) 507 - 5632,DEBBILROSENBERG@GMAIL.COM,2026-09-11 (Fri),10:00 AM - 11:00 AM,Fryer Cut in 1/8,pieces,3.0,,0,,Pending
+46,Rosh Hashanah 2026,DEBBI,ROSENBERG,(847) 507 - 5632,DEBBILROSENBERG@GMAIL.COM,2026-09-11 (Fri),10:00 AM - 11:00 AM,Chopped Liver,lbs,1.0,,0,,Pending
+47,Rosh Hashanah 2026,DEBBI,ROSENBERG,(847) 507 - 5632,DEBBILROSENBERG@GMAIL.COM,2026-09-11 (Fri),10:00 AM - 11:00 AM,Squash Souffle Tray,,1.0,,0,,Pending
+48,Rosh Hashanah 2026,DEBBI,ROSENBERG,(847) 507 - 5632,DEBBILROSENBERG@GMAIL.COM,2026-09-11 (Fri),10:00 AM - 11:00 AM,Roasted Potato,,1.0,,0,,Pending
+49,Rosh Hashanah 2026,DEBBI,ROSENBERG,(847) 507 - 5632,DEBBILROSENBERG@GMAIL.COM,2026-09-11 (Fri),10:00 AM - 11:00 AM,Roast Sweet Potatoes,,1.0,,0,,Pending
+50,Rosh Hashanah 2026,Barb,LOEB,(847) 370 - 5296,,2026-09-04 (Fri),9:00 AM - 10:00 AM,Turkey Breast,pieces,2.0,,0,,Pending
+51,Rosh Hashanah 2026,ELLEN,GREENWALD,(847) 212 - 1043,ELLEN@SWCGINC.COM,2026-09-10 (Thu),9:00 AM - 10:00 AM,Whole Brisket 16 lb or More,pieces,1.0,,0,Do NOT trim,Pending
+52,Rosh Hashanah 2026,ELLEN,GREENWALD,(847) 212 - 1043,ELLEN@SWCGINC.COM,2026-09-10 (Thu),9:00 AM - 10:00 AM,Kishke,each,1.0,,0,,Pending
+54,Rosh Hashanah 2026,CAROL,DERMAN,(847) 477 - 8737,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Fryer Cut in 1/8,pieces,6.0,ADD 4 QTS OF NOODLES,0,FRYERS OVER 3.75#,Pending
+55,Rosh Hashanah 2026,CAROL,DERMAN,(847) 477 - 8737,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Boneless Ribeye Roast,lbs,36.0,ADD 4 QTS OF NOODLES,0,4 ROASTS AT 8-9# EACH,Pending
+56,Rosh Hashanah 2026,CAROL,DERMAN,(847) 477 - 8737,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Family Steak,pieces,2.0,ADD 4 QTS OF NOODLES,0,,Pending
+57,Rosh Hashanah 2026,CAROL,DERMAN,(847) 477 - 8737,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Matzah Balls,each,48.0,ADD 4 QTS OF NOODLES,0,,Pending
+58,Rosh Hashanah 2026,CAROL,DERMAN,(847) 477 - 8737,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Chicken Broth Qt,each,10.0,ADD 4 QTS OF NOODLES,0,,Pending
+59,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,1st Cut 6-7 #,pieces,2.0,,0,,Pending
+60,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Breasts Bone-In,pieces,4.0,,0,,Pending
+61,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Thighs,pieces,4.0,,0,,Pending
+62,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Chicken Broth Qt,each,1.0,,0,,Pending
+63,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Kishke,each,2.0,,0,,Pending
+64,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Chopped Liver,lbs,2.0,,0,,Pending
+66,Rosh Hashanah 2026,KAREN,KOPIN,(847) 420 - 0791,,2026-09-03 (Thu),10:00 AM - 11:00 AM,Capon Cut in 1/8,pieces,2.0,,0,,Pending
+67,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,1st Cut 5-6 #,pieces,2.0,,0,,Pending
+68,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,Whole Capon,pieces,2.0,,0,,Pending
+69,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,Fryer Cut in 1/8,pieces,8.0,,0,,Pending
+70,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,Thighs,pieces,15.0,,0,In packs of 5,Pending
+71,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,Ground 80/20,lbs,5.0,,0,,Pending
+72,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,Ground Beef Lean,lbs,5.0,,0,,Pending
+73,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,Veal Chop 1st Cut,pieces,30.0,,0,"24 pc 1"" ; 6 pc 3/4"" ",Pending
+74,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,Kishke,each,2.0,,0,,Pending
+75,Rosh Hashanah 2026,CHERYL,SHAPIRO,(847) 420 - 9831,,2026-09-08 (Tue),12:00 PM - 1:00 PM,Turkey Breast,pieces,1.0,,0,Big,Pending
+76,Rosh Hashanah 2026,CHERYL,SHAPIRO,(847) 420 - 9831,,2026-09-08 (Tue),12:00 PM - 1:00 PM,Short Rib,lbs,6.0,,0,Wants 4 STRIPS (est. 6#),Pending
+77,Rosh Hashanah 2026,CHERYL,SHAPIRO,(847) 420 - 9831,,2026-09-08 (Tue),12:00 PM - 1:00 PM,Matzah Balls,each,10.0,,0,,Pending
+78,Rosh Hashanah 2026,CHERYL,SHAPIRO,(847) 420 - 9831,,2026-09-08 (Tue),12:00 PM - 1:00 PM,Chicken Broth Qt,each,8.0,,0,,Pending
+79,Rosh Hashanah 2026,CHERYL,SHAPIRO,(847) 420 - 9831,,2026-09-08 (Tue),12:00 PM - 1:00 PM,Kishke,each,1.0,,0,,Pending
+80,Rosh Hashanah 2026,MARLA,ZELIKOW,(847) 529 - 8602,MARLAZELIKOW@GMAIL.COM,2026-09-10 (Thu),9:00 AM - 10:00 AM,Whole Brisket 16 lb or More,pieces,1.0,ADD 3 ROUND CHALLAHS,0,,Pending
+81,Rosh Hashanah 2026,MARLA,ZELIKOW,(847) 529 - 8602,MARLAZELIKOW@GMAIL.COM,2026-09-10 (Thu),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,1.0,ADD 3 ROUND CHALLAHS,0,,Pending
+82,Rosh Hashanah 2026,MARLA,ZELIKOW,(847) 529 - 8602,MARLAZELIKOW@GMAIL.COM,2026-09-10 (Thu),9:00 AM - 10:00 AM,Fryer Cut in 1/8,pieces,2.0,ADD 3 ROUND CHALLAHS,0,NO SKIN,Pending
+83,Rosh Hashanah 2026,MARLA,ZELIKOW,(847) 529 - 8602,MARLAZELIKOW@GMAIL.COM,2026-09-10 (Thu),9:00 AM - 10:00 AM,B/S breast Thin Cut,packs,4.0,ADD 3 ROUND CHALLAHS,0,,Pending
+90,Rosh Hashanah 2026,MARGIE,JACOBS,(312) 953 - 1189,MARJORIECAREYJACOBS@MSN.COM,2026-09-10 (Thu),12:00 PM - 1:00 PM,1st Cut 7# or more,pieces,1.0,,0,,Pending
+91,Rosh Hashanah 2026,MARGIE,JACOBS,(312) 953 - 1189,MARJORIECAREYJACOBS@MSN.COM,2026-09-10 (Thu),12:00 PM - 1:00 PM,Capon Cut in 1/8,pieces,1.0,,0,,Pending
+92,Rosh Hashanah 2026,MARGIE,JACOBS,(312) 953 - 1189,MARJORIECAREYJACOBS@MSN.COM,2026-09-10 (Thu),12:00 PM - 1:00 PM,Matzah Balls,each,24.0,,0,,Pending
+93,Rosh Hashanah 2026,MARGIE,JACOBS,(312) 953 - 1189,MARJORIECAREYJACOBS@MSN.COM,2026-09-10 (Thu),12:00 PM - 1:00 PM,Chopped Liver,lbs,2.0,,0,,Pending
+94,Rosh Hashanah 2026,MARGIE,JACOBS,(312) 953 - 1189,MARJORIECAREYJACOBS@MSN.COM,2026-09-10 (Thu),12:00 PM - 1:00 PM,Turkey Meatballs,each,2.0,,0,,Pending
+95,Rosh Hashanah 2026,MARCI,CRANE,(847) 612 - 1430,KENNETHCRANE@SBCGLOBAL.NET,2026-09-11 (Fri),11:00 AM - 12:00 PM,Schnitzel,,1.0,,0,,Pending
+98,Rosh Hashanah 2026,Elaine,GREENBERG,(847) 910 - 3051,,2026-09-06 (Sun),12:00 PM - 1:00 PM,Brisket Point,pieces,3.0,,0,6 # TOTAL,Pending
+99,Rosh Hashanah 2026,SHARON,FEDDERLY,(414) 520 - 5807,,2026-08-30 (Sun),1:00 PM - 2:00 PM,Whole Brisket 16 lb or More,pieces,1.0,,0,TRIMMED,Pending
+100,Rosh Hashanah 2026,SHARON,FEDDERLY,(414) 520 - 5807,,2026-08-30 (Sun),1:00 PM - 2:00 PM,Fryer Cut in 1/8,pieces,5.0,,0,,Pending
+103,Rosh Hashanah 2026,SHARON,FEDDERLY,(414) 520 - 5807,,2026-08-30 (Sun),1:00 PM - 2:00 PM,Legs,packs,4.0,,0,,Pending
+104,Rosh Hashanah 2026,MARLA,ZELIKOW,(847) 529 - 8602,MARLAZELIKOW@GMAIL.COM,2026-09-10 (Thu),9:00 AM - 10:00 AM,Drumstick,pieces,12.0,ADD 3 ROUND CHALLAHS,0,No Skin,Pending
+105,Rosh Hashanah 2026,Maureen,STOLLMAN,(847) 409 - 1227,,2026-08-28 (Fri),9:00 AM - 10:00 AM,1st Cut 5-6 #,pieces,2.0,,0,,Pending
+106,Rosh Hashanah 2026,CHERYL,BERGER,(201) 694 - 2289,,2026-08-25 (Tue),9:00 AM - 10:00 AM,1st Cut 5-6 #,pieces,1.0,,0,TRIMMED,Completed
+107,Rosh Hashanah 2026,CHERYL,BERGER,(201) 694 - 2289,,2026-08-25 (Tue),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,2.0,,0,"ONLY WANTS 1.5, NOT 2",Completed
+108,Rosh Hashanah 2026,CHERYL,BERGER,(201) 694 - 2289,,2026-08-25 (Tue),9:00 AM - 10:00 AM,Wings,packs,1.0,,0,,Completed
+109,Rosh Hashanah 2026,CHERYL,BERGER,(201) 694 - 2289,,2026-08-25 (Tue),9:00 AM - 10:00 AM,Chicken Bones,packs,1.0,,0,,Completed
+110,Rosh Hashanah 2026,MICHAEL,DUNN,(847) 828 - 5600,,2026-09-08 (Tue),10:00 AM - 11:00 AM,Capon Cut in 1/8,pieces,1.0,,0,,Pending
+114,Rosh Hashanah 2026,MICHAEL,DUNN,(847) 828 - 5600,,2026-09-01 (Tue),10:00 AM - 11:00 AM,1st Cut 6-7 #,pieces,3.0,,0,18 Lbs total,Pending
+115,Rosh Hashanah 2026,MICHAEL,DUNN,(847) 828 - 5600,,2026-09-01 (Tue),10:00 AM - 11:00 AM,Ground 80/20,lbs,10.0,,0,"5 PACKS, 2 # EACH",Pending
+116,Rosh Hashanah 2026,MICHAEL,DUNN,(847) 828 - 5600,,2026-09-08 (Tue),10:00 AM - 11:00 AM,Roast Turkey Breast,each,3.0,,0,"Dinner Slices, no bones, extra gravy",Pending
+117,Rosh Hashanah 2026,AMY,FELDMAN,(847) 946 - 1400,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Whole Brisket 8-10 lb,pieces,1.0,,0,,Pending
+118,Rosh Hashanah 2026,DEBBIE,COTTON,(847) 989 - 1012,,2026-09-09 (Wed),1:00 PM - 2:00 PM,Brisket Point,pieces,3.0,,0,FOR 12 PEOPLE,Pending
+119,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Turkey Breast,pieces,2.0,IN ADDITION TO ON LINE ORDER FOR THIS DAY,0,"BONELESS AND NETTED, ABOUT 7 POUNDS EACH",Pending
+120,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Kishke,each,3.0,IN ADDITION TO ON LINE ORDER FOR THIS DAY,0,,Pending
+125,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Chopped Liver,lbs,3.0,IN ADDITION TO ON LINE ORDER FOR THIS DAY,0,,Pending
+126,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Schnitzel,,2.0,IN ADDITION TO ON LINE ORDER FOR THIS DAY,0,,Pending
+127,Rosh Hashanah 2026,JILL,KALTER,(847) 980 - 0599,,2026-09-11 (Fri),9:00 AM - 10:00 AM,Herb Chicken Tray,,2.0,,0,,Pending
+128,Rosh Hashanah 2026,JILL,KALTER,(847) 980 - 0599,,2026-09-11 (Fri),9:00 AM - 10:00 AM,Meatsballs Tray,,1.0,,0,,Pending
+129,Rosh Hashanah 2026,JILL,KALTER,(847) 980 - 0599,,2026-09-11 (Fri),9:00 AM - 10:00 AM,Squash Souffle Tray,,1.0,,0,,Pending
+130,Rosh Hashanah 2026,JILL,KALTER,(847) 980 - 0599,,2026-09-11 (Fri),9:00 AM - 10:00 AM,Roast Sweet Potatoes,,1.0,,0,,Pending
+131,Rosh Hashanah 2026,KAREN,HERBSTMAN,(847) 802 - 2079,,2026-09-07 (Mon),12:00 PM - 1:00 PM,12-16 lb Turkey,pieces,1.0,,0,,Pending
+132,Rosh Hashanah 2026,BARBARA,GOMBERG,(847) 910 - 4835,,2026-09-11 (Fri),2:00 PM - 3:00 PM,Complete Dinner,,1.0,,0,,Pending
+134,Rosh Hashanah 2026,,Feitelberg,(847) 914 - 0612,,2026-09-03 (Thu),10:00 AM - 11:00 AM,1st Cut 7# or more,pieces,1.0,,0,,Pending
+135,Rosh Hashanah 2026,Pearl,Swidler,(847) 408 - 9897,pearls2912@gmail.com,2026-09-11 (Fri),10:00 AM - 11:00 AM,Chopped Liver,lbs,1.0,,0,,Pending
+136,Rosh Hashanah 2026,Pearl,Swidler,(847) 408 - 9897,pearls2912@gmail.com,2026-09-11 (Fri),10:00 AM - 11:00 AM,Complete Dinner,,1.0,,0,,Pending
+137,Rosh Hashanah 2026,Ruth,Blonder,(847) 322 - 8924,,2026-09-08 (Tue),12:00 PM - 1:00 PM,1st Cut 5-6 #,pieces,2.0,,0,,Pending
+138,Rosh Hashanah 2026,Suzy,Hakimian,(847) 997 - 0818,suzy.hakimian@schechter.org,2026-09-08 (Tue),2:00 PM - 3:00 PM,Whole Brisket 10-12 lb,pieces,1.0,,0,,Pending
+139,Rosh Hashanah 2026,Suzy,Hakimian,(847) 997 - 0818,suzy.hakimian@schechter.org,2026-09-08 (Tue),2:00 PM - 3:00 PM,Fryer Cut in 1/8,pieces,4.0,,0,,Pending
+140,Rosh Hashanah 2026,Suzy,Hakimian,(847) 997 - 0818,suzy.hakimian@schechter.org,2026-09-08 (Tue),2:00 PM - 3:00 PM,Chopped Liver,lbs,1.0,,0,,Pending
+141,Rosh Hashanah 2026,Rhonda,Levy,(847) 867 - 6090,,2026-08-28 (Fri),1:00 PM - 2:00 PM,1st Cut 6-7 #,pieces,2.0,,0,,Pending
+142,Rosh Hashanah 2026,Rhonda,Levy,(847) 867 - 6090,,2026-08-28 (Fri),1:00 PM - 2:00 PM,Capon Cut in 1/8,pieces,1.0,,0,,Pending
+143,Rosh Hashanah 2026,Rhonda,Levy,(847) 867 - 6090,,2026-08-28 (Fri),1:00 PM - 2:00 PM,Turkey Breast,pieces,1.0,,0,"Boneless, Big",Pending
+144,Rosh Hashanah 2026,Nancy,Finkel,(847) 338 - 2026,,2026-09-09 (Wed),12:00 PM - 1:00 PM,1st Cut 7# or more,pieces,1.0,,0,,Pending
+145,Rosh Hashanah 2026,Nancy,Finkel,(847) 338 - 2026,,2026-09-09 (Wed),12:00 PM - 1:00 PM,Capon Cut in 1/8,pieces,1.0,,0,,Pending
+146,Rosh Hashanah 2026,Nancy,Finkel,(847) 338 - 2026,,2026-09-09 (Wed),12:00 PM - 1:00 PM,Fryer Cut in 1/8,pieces,2.0,,0,,Pending
+147,Rosh Hashanah 2026,Nancy,Finkel,(847) 338 - 2026,,2026-09-09 (Wed),12:00 PM - 1:00 PM,Kishke,each,2.0,,0,,Pending
+148,Rosh Hashanah 2026,Joan,Banoff,(847) 204 - 5723,,2026-09-08 (Tue),12:00 PM - 1:00 PM,Turkey Breast,pieces,1.0,,0,10# or more,Pending
+149,Rosh Hashanah 2026,Brandon,Palmer,(847) 312 - 9808,,2026-09-11 (Fri),10:00 AM - 11:00 AM,1st Cut 7# or more,pieces,1.0,,0,,Pending
+150,Rosh Hashanah 2026,Eve,Pinkert,(847) 254 - 2278,,2026-09-11 (Fri),12:00 PM - 1:00 PM,Complete Dinner,,1.0,,0,,Pending
+151,Rosh Hashanah 2026,Marlene,Domash,(847) 404 - 6716,,2026-09-02 (Wed),10:00 AM - 11:00 AM,Whole Brisket 10-12 lb,pieces,2.0,,0,,Pending
+152,Rosh Hashanah 2026,Marlene,Domash,(847) 404 - 6716,,2026-09-02 (Wed),10:00 AM - 11:00 AM,Chicken Liver,lbs,5.0,,0,,Pending
+153,Rosh Hashanah 2026,Laurel,Feldman,(847) 778 - 0929,,2026-09-09 (Wed),10:00 AM - 11:00 AM,1st Cut 5-6 #,pieces,2.0,,0,,Pending
+154,Rosh Hashanah 2026,Gail,Joseph,(847) 373 - 3184,,2026-09-10 (Thu),10:00 AM - 11:00 AM,1st Cut 6-7 #,pieces,2.0,,0,,Pending
+155,Rosh Hashanah 2026,Gail,Joseph,(847) 373 - 3184,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Chicken Broth 1/2 Gallon,each,2.0,,0,,Pending
+156,Rosh Hashanah 2026,Gail,Joseph,(847) 373 - 3184,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Kishke,each,2.0,,0,,Pending
+157,Rosh Hashanah 2026,STEPHANIE,KEENE,(847) 722 - 5930,,2026-09-10 (Thu),9:00 AM - 10:00 AM,1st Cut 7# or more,pieces,1.0,,0,8 #,Pending
+158,Rosh Hashanah 2026,STEPHANIE,KEENE,(847) 722 - 5930,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Breasts Bone-In,pieces,8.0,,0,,Pending
+159,Rosh Hashanah 2026,STEPHANIE,KEENE,(847) 722 - 5930,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Thighs,pieces,10.0,,0,,Pending
+160,Rosh Hashanah 2026,STEPHANIE,KEENE,(847) 722 - 5930,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Drumstick,pieces,14.0,,0,,Pending
+161,Rosh Hashanah 2026,STEPHANIE,KEENE,(847) 722 - 5930,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Kishke,each,1.0,,0,,Pending
+162,Rosh Hashanah 2026,STEPHANIE,KEENE,(847) 722 - 5930,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Meatballs,each,5.0,,0,,Pending
+163,Rosh Hashanah 2026,LOUISE,LOCKER,(847) 212 - 5143,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Noodle Soup Qt,each,5.0,***MATZO BALL SOUP. NOT NOODLE,0,MATZO BALL SOUP NOT NOODLE,Pending
+164,Rosh Hashanah 2026,LOUISE,LOCKER,(847) 212 - 5143,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Meatballs,each,4.0,***MATZO BALL SOUP. NOT NOODLE,0,,Pending
+165,Rosh Hashanah 2026,RONALD,ALPERN,(847) 997 - 4801,,2026-09-03 (Thu),10:00 AM - 11:00 AM,Whole Brisket 10-12 lb,pieces,1.0,,0,10#,Pending
+166,Rosh Hashanah 2026,JUDY,KAPLAN,(847) 962 - 4803,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,2.0,,0,,Pending
+167,Rosh Hashanah 2026,JUDY,KAPLAN,(847) 962 - 4803,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Thighs,pieces,12.0,,0,,Pending
+168,Rosh Hashanah 2026,JUDY,KAPLAN,(847) 962 - 4803,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Drumstick,pieces,12.0,,0,,Pending
+169,Rosh Hashanah 2026,JUDY,KAPLAN,(847) 962 - 4803,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,2.0,,0,,Pending
+170,Rosh Hashanah 2026,JUDY,KAPLAN,(847) 962 - 4803,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Thighs,pieces,12.0,,0,,Pending
+171,Rosh Hashanah 2026,JUDY,KAPLAN,(847) 962 - 4803,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Drumstick,pieces,12.0,,0,,Pending
+172,Rosh Hashanah 2026,ANNE,MCDONOUGH,(847) 770 - 5621,,2026-09-09 (Wed),10:00 AM - 11:00 AM,Family Steak,pieces,3.0,,0,"In VACUUM , 11-12# TOTAL",Pending
+173,Rosh Hashanah 2026,BONNIE,ROTHENBERG,(847) 254 - 2453,,2026-09-10 (Thu),11:00 AM - 12:00 PM,1st Cut 6-7 #,pieces,1.0,,0,,Pending
+174,Rosh Hashanah 2026,SHELLY,FOXMAN,(224) 715 - 5467,,2026-09-10 (Thu),11:00 AM - 12:00 PM,1st Cut 7# or more,pieces,1.0,,0,7-7.5 POUNDS,Pending
+175,Rosh Hashanah 2026,SHELLY,FOXMAN,(224) 715 - 5467,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Capon Cut in 1/8,pieces,1.0,,0,,Pending
+176,Rosh Hashanah 2026,SHELLY,FOXMAN,(224) 715 - 5467,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Ground Beef Lean,lbs,2.0,,0,,Pending
+177,Rosh Hashanah 2026,SHELLY,FOXMAN,(224) 715 - 5467,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Kishke,each,1.0,,0,,Pending
+178,Rosh Hashanah 2026,SHELLY,FOXMAN,(224) 715 - 5467,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Chopped Liver,lbs,0.5,,0,,Pending
+179,Rosh Hashanah 2026,SANDRA,LUND,(847) 433 - 2468,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Whole Brisket 12-14 lb,pieces,1.0,,0,,Pending
 180,Rosh Hashanah 2026,LISA,DUNN,(847) 922 - 9386,HLKATZ@COMCAST.NET,2026-09-11 (Fri),11:00 AM - 12:00 PM,Complete Dinner,,3.0,"4147 2037 6032 9280
 12/30
 375
-60015",0,
-181,Rosh Hashanah 2026,BONNIE,ROTHENBERG,(847) 254 - 2453,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Rib Steak,pieces,2.0,,0,LEAN
-182,Rosh Hashanah 2026,LORI,JACOBSON,(847) 751 - 2277,,2026-09-08 (Tue),9:00 AM - 10:00 AM,1st Cut 3-4 #,pieces,1.0,,0,WANTS 3.75#
-183,Rosh Hashanah 2026,VANESSA,EHRLICH,(847) 571 - 2095,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Thighs,packs,2.0,,0,
-184,Rosh Hashanah 2026,VANESSA,EHRLICH,(847) 571 - 2095,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Wings,packs,1.0,,0,
-185,Rosh Hashanah 2026,VANESSA,EHRLICH,(847) 571 - 2095,,2026-09-10 (Thu),9:00 AM - 10:00 AM,12-16 lb Turkey,pieces,1.0,,0,14-16#
-186,Rosh Hashanah 2026,KARYN,LISS,(847) 209 - 6600,,2026-09-01 (Tue),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,2.0,,0,
-187,Rosh Hashanah 2026,KARYN,LISS,(847) 209 - 6600,,2026-09-01 (Tue),9:00 AM - 10:00 AM,Ground 80/20,lbs,6.0,,0,
-188,Rosh Hashanah 2026,SUSAN,MANDEL,(847) 254 - 9266,,2026-09-09 (Wed),11:00 AM - 12:00 PM,Whole Brisket 14-16 lb,pieces,1.0,,0,"14#, lightly trtimmed"
-189,Rosh Hashanah 2026,SUSAN,MANDEL,(847) 254 - 9266,,2026-09-09 (Wed),11:00 AM - 12:00 PM,Chicken Liver,packs,2.0,,0,
-190,Rosh Hashanah 2026,RAY,LAVIN,(847) 323 - 9800,,2026-09-10 (Thu),1:00 PM - 2:00 PM,Kishke,each,2.0,,0,
-191,Rosh Hashanah 2026,RAY,LAVIN,(847) 323 - 9800,,2026-09-10 (Thu),1:00 PM - 2:00 PM,Complete Dinner,,2.0,,0,
+60015",0,,Pending
+181,Rosh Hashanah 2026,BONNIE,ROTHENBERG,(847) 254 - 2453,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Rib Steak,pieces,2.0,,0,LEAN,Pending
+182,Rosh Hashanah 2026,LORI,JACOBSON,(847) 751 - 2277,,2026-09-08 (Tue),9:00 AM - 10:00 AM,1st Cut 3-4 #,pieces,1.0,,0,WANTS 3.75#,Pending
+183,Rosh Hashanah 2026,VANESSA,EHRLICH,(847) 571 - 2095,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Thighs,packs,2.0,,0,,Pending
+184,Rosh Hashanah 2026,VANESSA,EHRLICH,(847) 571 - 2095,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Wings,packs,1.0,,0,,Pending
+185,Rosh Hashanah 2026,VANESSA,EHRLICH,(847) 571 - 2095,,2026-09-10 (Thu),9:00 AM - 10:00 AM,12-16 lb Turkey,pieces,1.0,,0,14-16#,Pending
+186,Rosh Hashanah 2026,KARYN,LISS,(847) 209 - 6600,,2026-09-01 (Tue),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,2.0,,0,,Pending
+187,Rosh Hashanah 2026,KARYN,LISS,(847) 209 - 6600,,2026-09-01 (Tue),9:00 AM - 10:00 AM,Ground 80/20,lbs,6.0,,0,,Pending
+188,Rosh Hashanah 2026,SUSAN,MANDEL,(847) 254 - 9266,,2026-09-09 (Wed),11:00 AM - 12:00 PM,Whole Brisket 14-16 lb,pieces,1.0,,0,"14#, lightly trtimmed",Pending
+189,Rosh Hashanah 2026,SUSAN,MANDEL,(847) 254 - 9266,,2026-09-09 (Wed),11:00 AM - 12:00 PM,Chicken Liver,packs,2.0,,0,,Pending
+190,Rosh Hashanah 2026,RAY,LAVIN,(847) 323 - 9800,,2026-09-10 (Thu),1:00 PM - 2:00 PM,Kishke,each,2.0,,0,,Pending
+191,Rosh Hashanah 2026,RAY,LAVIN,(847) 323 - 9800,,2026-09-10 (Thu),1:00 PM - 2:00 PM,Complete Dinner,,2.0,,0,,Pending
 192,Rosh Hashanah 2026,MICHELLE,REINSTEIN,(312) 848 - 1452,,2026-09-09 (Wed),9:00 AM - 10:00 AM,1st Cut 4-5 #,pieces,1.0,"*****ALSO HAS DELI MEAT*****
 1# NATURAL TURKEY
 1# ROAST BEEF
 2# CHICKEN SALAD
-2 TUBS ITALIAN BEEF",0,4#
+2 TUBS ITALIAN BEEF",0,4#,Pending
 193,Rosh Hashanah 2026,MICHELLE,REINSTEIN,(312) 848 - 1452,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Breasts Bone-In,packs,4.0,"*****ALSO HAS DELI MEAT*****
 1# NATURAL TURKEY
 1# ROAST BEEF
 2# CHICKEN SALAD
-2 TUBS ITALIAN BEEF",0,4 PACKS
+2 TUBS ITALIAN BEEF",0,4 PACKS,Pending
 194,Rosh Hashanah 2026,MICHELLE,REINSTEIN,(312) 848 - 1452,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Family Steak,pieces,1.0,"*****ALSO HAS DELI MEAT*****
 1# NATURAL TURKEY
 1# ROAST BEEF
 2# CHICKEN SALAD
-2 TUBS ITALIAN BEEF",0,
+2 TUBS ITALIAN BEEF",0,,Pending
 195,Rosh Hashanah 2026,MICHELLE,REINSTEIN,(312) 848 - 1452,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Herb Roasted Chicken,each,1.0,"*****ALSO HAS DELI MEAT*****
 1# NATURAL TURKEY
 1# ROAST BEEF
 2# CHICKEN SALAD
-2 TUBS ITALIAN BEEF",0,CUT IN 8
-196,Rosh Hashanah 2026,AMY,BARRISH,(773) 454 - 1704,,2026-09-09 (Wed),9:00 AM - 10:00 AM,1st Cut 5-6 #,pieces,1.0,,0,
-197,Rosh Hashanah 2026,SHEILA,BARRON,(847) 722 - 4445,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Capon Cut in 1/8,pieces,2.0,,0,
-198,Rosh Hashanah 2026,SHEILA,BARRON,(847) 722 - 4445,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Family Steak,pieces,4.0,,0,4 POUNDS EACH SQUARE SHAPED
-199,Rosh Hashanah 2026,BRIAN,JACOBSON,(847) 636 - 4623,,2026-09-04 (Fri),9:00 AM - 10:00 AM,Whole Brisket 16 lb or More,pieces,1.0,,0,BIGGER IS BETTER
-200,Rosh Hashanah 2026,BRIAN,JACOBSON,(847) 636 - 4623,,2026-09-04 (Fri),9:00 AM - 10:00 AM,Brisket Point,pieces,1.0,,0,AS BIG AS POSSIBLE FOR SMOKING
+2 TUBS ITALIAN BEEF",0,CUT IN 8,Pending
+196,Rosh Hashanah 2026,AMY,BARRISH,(773) 454 - 1704,,2026-09-09 (Wed),9:00 AM - 10:00 AM,1st Cut 5-6 #,pieces,1.0,,0,,Pending
+197,Rosh Hashanah 2026,SHEILA,BARRON,(847) 722 - 4445,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Capon Cut in 1/8,pieces,2.0,,0,,Pending
+198,Rosh Hashanah 2026,SHEILA,BARRON,(847) 722 - 4445,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Family Steak,pieces,4.0,,0,4 POUNDS EACH SQUARE SHAPED,Pending
+199,Rosh Hashanah 2026,BRIAN,JACOBSON,(847) 636 - 4623,,2026-09-04 (Fri),9:00 AM - 10:00 AM,Whole Brisket 16 lb or More,pieces,1.0,,0,BIGGER IS BETTER,Pending
+200,Rosh Hashanah 2026,BRIAN,JACOBSON,(847) 636 - 4623,,2026-09-04 (Fri),9:00 AM - 10:00 AM,Brisket Point,pieces,1.0,,0,AS BIG AS POSSIBLE FOR SMOKING,Pending
 201,Rosh Hashanah 2026,ROBERTA,EDELHEIT,(847) 903 - 3899,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Whole Brisket 12-14 lb,pieces,1.0,"****ADD 1 QUART MATZO BALL SOUP
-ADD 4 ROUND RAISIN CHALLAHS",1,12-15#
+ADD 4 ROUND RAISIN CHALLAHS",1,12-15#,Pending
 202,Rosh Hashanah 2026,ROBERTA,EDELHEIT,(847) 903 - 3899,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Chopped Liver,lbs,0.5,"****ADD 1 QUART MATZO BALL SOUP
-ADD 4 ROUND RAISIN CHALLAHS",1,
-203,Rosh Hashanah 2026,LINDA,SPRING,(847) 421 - 5132,,2026-09-07 (Mon),9:00 AM - 10:00 AM,Whole Brisket 10-12 lb,pieces,1.0,,0,
-204,Rosh Hashanah 2026,DEBORAH,BARKER,(847) 414 - 0335,,2026-09-10 (Thu),9:00 AM - 10:00 AM,1st Cut 4-5 #,pieces,1.0,,0,5 #
-205,Rosh Hashanah 2026,DEBORAH,BARKER,(847) 414 - 0335,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Fryer Whole,pieces,2.0,,0,
-206,Rosh Hashanah 2026,ANNE,ZAVELL,(847) 269 - 1685,,2026-09-09 (Wed),2:00 PM - 3:00 PM,Whole Brisket 16 lb or More,pieces,1.0,,0,AS BIG AS POSSIBLE
-207,Rosh Hashanah 2026,ELINOR,BAYLISS,(847) 530 - 4103,,2026-09-08 (Tue),9:00 AM - 10:00 AM,Brisket Point,pieces,4.0,,0,4 PIECES
-208,Rosh Hashanah 2026,ELINOR,BAYLISS,(847) 530 - 4103,,2026-09-08 (Tue),9:00 AM - 10:00 AM,Breasts Bone-In,pieces,4.0,,0,
-209,Rosh Hashanah 2026,ELINOR,BAYLISS,(847) 530 - 4103,,2026-09-08 (Tue),9:00 AM - 10:00 AM,Thighs,pieces,8.0,,0,"8 PIECES, NOT PACKS"
-210,Rosh Hashanah 2026,ELINOR,BAYLISS,(847) 530 - 4103,,2026-09-08 (Tue),9:00 AM - 10:00 AM,Drumstick,pieces,6.0,,0,PIECES NOT PACKS
-211,Rosh Hashanah 2026,LAURIE,HOCHBERG,(847) 287 - 1563,,2026-09-01 (Tue),9:00 AM - 10:00 AM,Fryer Whole,pieces,3.0,,0,SPATCHCOCKED
-212,Rosh Hashanah 2026,LAURIE,HOCHBERG,(847) 287 - 1563,,2026-09-01 (Tue),9:00 AM - 10:00 AM,B/S Breast,lbs,4.0,,0,2 PACKS OF 2 POUNDS
-213,Rosh Hashanah 2026,LAURIE,HOCHBERG,(847) 287 - 1563,,2026-09-01 (Tue),9:00 AM - 10:00 AM,B/S Thighs,lbs,6.0,,0,IN 3 PACKS OF 2 POUNDS
-214,Rosh Hashanah 2026,LAURIE,HOCHBERG,(847) 287 - 1563,,2026-09-01 (Tue),9:00 AM - 10:00 AM,16-20 lb Turkey,pieces,1.0,,0,SPATCHCOCKED
-215,Rosh Hashanah 2026,LAURIE,HOCHBERG,(847) 287 - 1563,,2026-09-01 (Tue),9:00 AM - 10:00 AM,Bone-in Rib Roast,lbs,18.0,,0,BONE IN 7 BONE WHOLE IN BASKET
-216,Rosh Hashanah 2026,LAURIE,HOCHBERG,(847) 287 - 1563,,2026-09-01 (Tue),9:00 AM - 10:00 AM,Ground Beef Lean,lbs,6.0,,0,
-217,Rosh Hashanah 2026,LAURIE,HOCHBERG,(847) 287 - 1563,,2026-09-01 (Tue),9:00 AM - 10:00 AM,Lamb Rib Chops,pieces,35.0,,0,
-218,Rosh Hashanah 2026,HARRIET,NEMETZ,(847) 814 - 4542,,2026-09-09 (Wed),12:00 PM - 1:00 PM,1st Cut 4-5 #,pieces,1.0,"TWO FIRST CUT BRISKETS, ONE 4-5 POUNDS AND THE OTHER 8 POUNDS",0,
-219,Rosh Hashanah 2026,HARRIET,NEMETZ,(847) 814 - 4542,,2026-09-09 (Wed),12:00 PM - 1:00 PM,1st Cut 7# or more,pieces,1.0,"TWO FIRST CUT BRISKETS, ONE 4-5 POUNDS AND THE OTHER 8 POUNDS",0,ABOUT 8 POUNDS
-220,Rosh Hashanah 2026,HARRIET,NEMETZ,(847) 814 - 4542,,2026-09-09 (Wed),12:00 PM - 1:00 PM,Capon Cut in 1/8,pieces,4.0,"TWO FIRST CUT BRISKETS, ONE 4-5 POUNDS AND THE OTHER 8 POUNDS",0,
-221,Rosh Hashanah 2026,JUDI,KATZ,(845) 893 - 4282,,2026-09-11 (Fri),9:00 AM - 10:00 AM,Matzah Balls,each,60.0,*****DELIVERY*******,0,
-222,Rosh Hashanah 2026,JUDI,KATZ,(845) 893 - 4282,,2026-09-11 (Fri),9:00 AM - 10:00 AM,Chicken Broth 1/2 Gallon,each,12.0,*****DELIVERY*******,0,
-223,Rosh Hashanah 2026,JUDY,WEINER,(847) 721 - 2228,,2026-09-10 (Thu),11:00 AM - 12:00 PM,1st Cut 5-6 #,pieces,1.0,*****adding 1/2# LEAN CORNED BEEF********,0,5#
-224,Rosh Hashanah 2026,JUDY,WEINER,(847) 721 - 2228,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Family Steak,pieces,1.0,*****adding 1/2# LEAN CORNED BEEF********,0,4#
-225,Rosh Hashanah 2026,MARY ANN,BOWERS,(847) 910 - 1080,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Complete Dinner,,1.0,******PAID********,0,
-226,Rosh Hashanah 2026,SHARI,COHEN,(708) 359 - 4625,,2026-09-11 (Fri),11:00 AM - 12:00 PM,Complete Dinner,,1.0,,0,
+ADD 4 ROUND RAISIN CHALLAHS",1,,Pending
+203,Rosh Hashanah 2026,LINDA,SPRING,(847) 421 - 5132,,2026-09-07 (Mon),9:00 AM - 10:00 AM,Whole Brisket 10-12 lb,pieces,1.0,,0,,Pending
+204,Rosh Hashanah 2026,DEBORAH,BARKER,(847) 414 - 0335,,2026-09-10 (Thu),9:00 AM - 10:00 AM,1st Cut 4-5 #,pieces,1.0,,0,5 #,Pending
+205,Rosh Hashanah 2026,DEBORAH,BARKER,(847) 414 - 0335,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Fryer Whole,pieces,2.0,,0,,Pending
+206,Rosh Hashanah 2026,ANNE,ZAVELL,(847) 269 - 1685,,2026-09-09 (Wed),2:00 PM - 3:00 PM,Whole Brisket 16 lb or More,pieces,1.0,,0,AS BIG AS POSSIBLE,Pending
+207,Rosh Hashanah 2026,ELINOR,BAYLISS,(847) 530 - 4103,,2026-09-08 (Tue),9:00 AM - 10:00 AM,Brisket Point,pieces,4.0,,0,4 PIECES,Pending
+208,Rosh Hashanah 2026,ELINOR,BAYLISS,(847) 530 - 4103,,2026-09-08 (Tue),9:00 AM - 10:00 AM,Breasts Bone-In,pieces,4.0,,0,,Pending
+209,Rosh Hashanah 2026,ELINOR,BAYLISS,(847) 530 - 4103,,2026-09-08 (Tue),9:00 AM - 10:00 AM,Thighs,pieces,8.0,,0,"8 PIECES, NOT PACKS",Pending
+210,Rosh Hashanah 2026,ELINOR,BAYLISS,(847) 530 - 4103,,2026-09-08 (Tue),9:00 AM - 10:00 AM,Drumstick,pieces,6.0,,0,PIECES NOT PACKS,Pending
+211,Rosh Hashanah 2026,LAURIE,HOCHBERG,(847) 287 - 1563,,2026-09-01 (Tue),9:00 AM - 10:00 AM,Fryer Whole,pieces,3.0,,0,SPATCHCOCKED,Pending
+212,Rosh Hashanah 2026,LAURIE,HOCHBERG,(847) 287 - 1563,,2026-09-01 (Tue),9:00 AM - 10:00 AM,B/S Breast,lbs,4.0,,0,2 PACKS OF 2 POUNDS,Pending
+213,Rosh Hashanah 2026,LAURIE,HOCHBERG,(847) 287 - 1563,,2026-09-01 (Tue),9:00 AM - 10:00 AM,B/S Thighs,lbs,6.0,,0,IN 3 PACKS OF 2 POUNDS,Pending
+214,Rosh Hashanah 2026,LAURIE,HOCHBERG,(847) 287 - 1563,,2026-09-01 (Tue),9:00 AM - 10:00 AM,16-20 lb Turkey,pieces,1.0,,0,SPATCHCOCKED,Pending
+215,Rosh Hashanah 2026,LAURIE,HOCHBERG,(847) 287 - 1563,,2026-09-01 (Tue),9:00 AM - 10:00 AM,Bone-in Rib Roast,lbs,18.0,,0,BONE IN 7 BONE WHOLE IN BASKET,Pending
+216,Rosh Hashanah 2026,LAURIE,HOCHBERG,(847) 287 - 1563,,2026-09-01 (Tue),9:00 AM - 10:00 AM,Ground Beef Lean,lbs,6.0,,0,,Pending
+217,Rosh Hashanah 2026,LAURIE,HOCHBERG,(847) 287 - 1563,,2026-09-01 (Tue),9:00 AM - 10:00 AM,Lamb Rib Chops,pieces,35.0,,0,,Pending
+218,Rosh Hashanah 2026,HARRIET,NEMETZ,(847) 814 - 4542,,2026-09-09 (Wed),12:00 PM - 1:00 PM,1st Cut 4-5 #,pieces,1.0,"TWO FIRST CUT BRISKETS, ONE 4-5 POUNDS AND THE OTHER 8 POUNDS",0,,Pending
+219,Rosh Hashanah 2026,HARRIET,NEMETZ,(847) 814 - 4542,,2026-09-09 (Wed),12:00 PM - 1:00 PM,1st Cut 7# or more,pieces,1.0,"TWO FIRST CUT BRISKETS, ONE 4-5 POUNDS AND THE OTHER 8 POUNDS",0,ABOUT 8 POUNDS,Pending
+220,Rosh Hashanah 2026,HARRIET,NEMETZ,(847) 814 - 4542,,2026-09-09 (Wed),12:00 PM - 1:00 PM,Capon Cut in 1/8,pieces,4.0,"TWO FIRST CUT BRISKETS, ONE 4-5 POUNDS AND THE OTHER 8 POUNDS",0,,Pending
+221,Rosh Hashanah 2026,JUDI,KATZ,(845) 893 - 4282,,2026-09-11 (Fri),9:00 AM - 10:00 AM,Matzah Balls,each,60.0,*****DELIVERY*******,0,,Pending
+222,Rosh Hashanah 2026,JUDI,KATZ,(845) 893 - 4282,,2026-09-11 (Fri),9:00 AM - 10:00 AM,Chicken Broth 1/2 Gallon,each,12.0,*****DELIVERY*******,0,,Pending
+223,Rosh Hashanah 2026,JUDY,WEINER,(847) 721 - 2228,,2026-09-10 (Thu),11:00 AM - 12:00 PM,1st Cut 5-6 #,pieces,1.0,*****adding 1/2# LEAN CORNED BEEF********,0,5#,Pending
+224,Rosh Hashanah 2026,JUDY,WEINER,(847) 721 - 2228,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Family Steak,pieces,1.0,*****adding 1/2# LEAN CORNED BEEF********,0,4#,Pending
+225,Rosh Hashanah 2026,MARY ANN,BOWERS,(847) 910 - 1080,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Complete Dinner,,1.0,******PAID********,0,,Pending
+226,Rosh Hashanah 2026,SHARI,COHEN,(708) 359 - 4625,,2026-09-11 (Fri),11:00 AM - 12:00 PM,Complete Dinner,,1.0,,0,,Pending
 227,Rosh Hashanah 2026,ELLEN,STEINBERG,(312) 218 - 5480,,2026-09-02 (Wed),9:00 AM - 10:00 AM,Short Rib,lbs,6.0,"****ALSO WANTS 6 HANGAR STEAKS*****
 
-ONLY BENI IS ALLOWED TO HELP HER AS WE MERE MORTALS ARE NOT WORTHY",1,****3 STRIPS = 9 PC PER ORDER SHEET
+ONLY BENI IS ALLOWED TO HELP HER AS WE MERE MORTALS ARE NOT WORTHY",1,****3 STRIPS = 9 PC PER ORDER SHEET,Pending
 228,Rosh Hashanah 2026,ELLEN,STEINBERG,(312) 218 - 5480,,2026-09-02 (Wed),9:00 AM - 10:00 AM,Chicken Broth 1/2 Gallon,each,2.0,"****ALSO WANTS 6 HANGAR STEAKS*****
 
-ONLY BENI IS ALLOWED TO HELP HER AS WE MERE MORTALS ARE NOT WORTHY",1,
+ONLY BENI IS ALLOWED TO HELP HER AS WE MERE MORTALS ARE NOT WORTHY",1,,Pending
 229,Rosh Hashanah 2026,ELLEN,STEINBERG,(312) 218 - 5480,,2026-09-02 (Wed),9:00 AM - 10:00 AM,Short Rib,lbs,6.0,"****ALSO WANTS 6 HANGAR STEAKS*****
 
-ONLY BENI IS ALLOWED TO HELP HER AS WE MERE MORTALS ARE NOT WORTHY",1,****3 STRIPS = 9 PC PER ORDER SHEET
+ONLY BENI IS ALLOWED TO HELP HER AS WE MERE MORTALS ARE NOT WORTHY",1,****3 STRIPS = 9 PC PER ORDER SHEET,Pending
 230,Rosh Hashanah 2026,ELLEN,STEINBERG,(312) 218 - 5480,,2026-09-02 (Wed),9:00 AM - 10:00 AM,Chicken Broth 1/2 Gallon,each,2.0,"****ALSO WANTS 6 HANGAR STEAKS*****
 
-ONLY BENI IS ALLOWED TO HELP HER AS WE MERE MORTALS ARE NOT WORTHY",1,
+ONLY BENI IS ALLOWED TO HELP HER AS WE MERE MORTALS ARE NOT WORTHY",1,,Pending
 231,Rosh Hashanah 2026,JENNIFER,WIRTH,(773) 988 - 1675,,2026-09-08 (Tue),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,3.0,"****ALSO WANTS 1 PACK OF BEEF BONES*****
 
-MAKE SURE CHICKENS ARE CLEANED",0,CLEAN WELL
+MAKE SURE CHICKENS ARE CLEANED",0,CLEAN WELL,Pending
 232,Rosh Hashanah 2026,JENNIFER,WIRTH,(773) 988 - 1675,,2026-09-08 (Tue),9:00 AM - 10:00 AM,Fryer Cut in 1/8,pieces,2.0,"****ALSO WANTS 1 PACK OF BEEF BONES*****
 
-MAKE SURE CHICKENS ARE CLEANED",0,CLEAN WELL
+MAKE SURE CHICKENS ARE CLEANED",0,CLEAN WELL,Pending
 233,Rosh Hashanah 2026,JENNIFER,WIRTH,(773) 988 - 1675,,2026-09-08 (Tue),9:00 AM - 10:00 AM,Thighs,packs,1.0,"****ALSO WANTS 1 PACK OF BEEF BONES*****
 
-MAKE SURE CHICKENS ARE CLEANED",0,CLEAN WELL
+MAKE SURE CHICKENS ARE CLEANED",0,CLEAN WELL,Pending
 234,Rosh Hashanah 2026,JENNIFER,WIRTH,(773) 988 - 1675,,2026-09-08 (Tue),9:00 AM - 10:00 AM,Ground Turkey Thigh,lbs,3.0,"****ALSO WANTS 1 PACK OF BEEF BONES*****
 
-MAKE SURE CHICKENS ARE CLEANED",0,
+MAKE SURE CHICKENS ARE CLEANED",0,,Pending
 235,Rosh Hashanah 2026,JENNIFER,WIRTH,(773) 988 - 1675,,2026-09-08 (Tue),9:00 AM - 10:00 AM,Chuck Eye Roast,lbs,4.0,"****ALSO WANTS 1 PACK OF BEEF BONES*****
 
-MAKE SURE CHICKENS ARE CLEANED",0,CUT AND PUT IN 2 TWO POUND PACKS
-236,Rosh Hashanah 2026,JESSICA,FREEDMAN,(773) 612 - 1115,,2026-09-10 (Thu),10:00 AM - 11:00 AM,1st Cut 6-7 #,pieces,1.0,,0,6 POUNDS
-237,Rosh Hashanah 2026,SANDEE,LEVIN,(847) 372 - 5744,,2026-09-08 (Tue),1:00 PM - 2:00 PM,Capon Cut in 1/8,pieces,2.0,,0,
-238,Rosh Hashanah 2026,SANDEE,LEVIN,(847) 372 - 5744,,2026-09-08 (Tue),1:00 PM - 2:00 PM,Fryer Cut in 1/8,pieces,4.0,,0,
-239,Rosh Hashanah 2026,SANDEE,LEVIN,(847) 372 - 5744,,2026-09-08 (Tue),1:00 PM - 2:00 PM,Chuck Eye Roast,lbs,12.0,,0,"***2 ROASTS, 6 POUNDS EACH"
-240,Rosh Hashanah 2026,SANDEE,LEVIN,(847) 372 - 5744,,2026-09-08 (Tue),1:00 PM - 2:00 PM,Ground Beef Lean,lbs,4.0,,0,
-241,Rosh Hashanah 2026,SANDEE,LEVIN,(847) 372 - 5744,,2026-09-08 (Tue),1:00 PM - 2:00 PM,Lamb Sholder Chop,pieces,4.0,,0,BENI WROTE QUESTION MARK ON THE ORDER SHEET
-242,Rosh Hashanah 2026,ELLEN,LASIN,(847) 641 - 0221,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Breasts Bone-In,pieces,6.0,,0,"6 EACH, NOT PACKS"
-243,Rosh Hashanah 2026,ELLEN,LASIN,(847) 641 - 0221,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Breasts Bone-In,pieces,6.0,,0,"6 EACH, NOT PACKS"
-244,Rosh Hashanah 2026,KAREN,KOPIN,(847) 420 - 0791,,2026-09-03 (Thu),10:00 AM - 11:00 AM,1st Cut 5-6 #,pieces,2.0,,0,5 pounds each
-245,Rosh Hashanah 2026,KAREN,KOPIN,(847) 420 - 0791,,2026-09-03 (Thu),10:00 AM - 11:00 AM,B/S Breast,packs,3.0,,0,
-246,Rosh Hashanah 2026,KAREN,KOPIN,(847) 420 - 0791,,2026-09-03 (Thu),10:00 AM - 11:00 AM,Kishke,each,2.0,,0,
-247,Rosh Hashanah 2026,MIKE,PERLMAN,(773) 490 - 7039,,2026-09-09 (Wed),3:00 PM - 4:00 PM,1st Cut 7# or more,pieces,1.0,,0,7 POUNDS
-248,Rosh Hashanah 2026,MARCI,SHAPIRO,(847) 980 - 8405,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,1.0,,0,LARGE
-249,Rosh Hashanah 2026,MARCI,SHAPIRO,(847) 980 - 8405,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Kishke,each,1.0,,0,
-250,Rosh Hashanah 2026,MARCI,SHAPIRO,(847) 980 - 8405,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Chopped Liver,lbs,0.75,,0,3/4 POUND
-251,Rosh Hashanah 2026,RACHEL,GLUCK,(847) 858 - 8707,,2026-08-31 (Mon),10:00 AM - 11:00 AM,Whole Brisket 14-16 lb,pieces,2.0,,0,14 POUNDS EACH DO NOT TRIM
-252,Rosh Hashanah 2026,MARGARET,COHN,(847) 878 - 9167,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Fryer Cut in 1/8,pieces,3.0,,0,
-253,Rosh Hashanah 2026,STEPHANIE,SMERLING,(312) 953 - 4942,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Herb Roasted Chicken,each,1.0,****PAID*****,0,
-254,Rosh Hashanah 2026,JOYCE,BERLINSKY,(847) 494 - 1080,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Chicken Broth 1/2 Gallon,each,1.0,****PAID******,0,
-255,Rosh Hashanah 2026,JOYCE,BERLINSKY,(847) 494 - 1080,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Schnitzel,,1.0,****PAID******,0,
-256,Rosh Hashanah 2026,JOYCE,BERLINSKY,(847) 494 - 1080,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Squash Souffle Tray,,1.0,****PAID******,0,
-257,Rosh Hashanah 2026,JOYCE,BERLINSKY,(847) 494 - 1080,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Maple Carrots,,1.0,****PAID******,0,
-258,Rosh Hashanah 2026,ROSALIE,ROTH,(847) 674 - 0221,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Bone-in Rib Roast,lbs,9.5,,0,9-10 POUNDS IN A BASKET
-259,Rosh Hashanah 2026,ROSALIE,ROTH,(847) 674 - 0221,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Bone-in Rib Roast,lbs,10.0,,0,IN A BASKET
-260,Rosh Hashanah 2026,ROSALIE,ROTH,(847) 674 - 0221,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Skirt Steak,lbs,20.0,,0,
-261,Rosh Hashanah 2026,BETH SHAPIRO,SHAPIRO KOPIN,(847) 372 - 4973,,2026-09-06 (Sun),10:00 AM - 11:00 AM,Whole Brisket 8-10 lb,pieces,1.0,,0,
-262,Rosh Hashanah 2026,BETH SHAPIRO,SHAPIRO KOPIN,(847) 372 - 4973,,2026-09-06 (Sun),10:00 AM - 11:00 AM,Ground Beef Lean,lbs,10.0,,0,
-263,Rosh Hashanah 2026,BETH SHAPIRO,SHAPIRO KOPIN,(847) 372 - 4973,,2026-09-06 (Sun),10:00 AM - 11:00 AM,Kishke,each,2.0,,0,
-264,Rosh Hashanah 2026,CHERYL,BANKS,(847) 436 - 9036,,2026-09-03 (Thu),10:00 AM - 11:00 AM,Capon Cut in 1/8,pieces,2.0,WANTS A BOSTON ROAST NOT RIBEYE ROAST,0,
-265,Rosh Hashanah 2026,CHERYL,BANKS,(847) 436 - 9036,,2026-09-03 (Thu),10:00 AM - 11:00 AM,Boneless Ribeye Roast,lbs,6.0,WANTS A BOSTON ROAST NOT RIBEYE ROAST,0,LIKE ROAST BEEF NOT CHUCK ROAST
-266,Rosh Hashanah 2026,DAN,KAZIN,(312) 316 - 8426,,2026-09-08 (Tue),10:00 AM - 11:00 AM,Whole Brisket 14-16 lb,pieces,1.0,,0,14 POUNDS
-267,Rosh Hashanah 2026,DAN,KAZIN,(312) 316 - 8426,,2026-09-08 (Tue),10:00 AM - 11:00 AM,Matzah Balls,each,18.0,,0,
-268,Rosh Hashanah 2026,DAN,KAZIN,(312) 316 - 8426,,2026-09-08 (Tue),10:00 AM - 11:00 AM,Whole Brisket 14-16 lb,pieces,1.0,,0,14 POUNDS
-269,Rosh Hashanah 2026,DAN,KAZIN,(312) 316 - 8426,,2026-09-08 (Tue),10:00 AM - 11:00 AM,Matzah Balls,each,18.0,,0,
-270,Rosh Hashanah 2026,DAN,KAZIN,(312) 316 - 8426,,2026-09-08 (Tue),10:00 AM - 11:00 AM,Whole Brisket 14-16 lb,pieces,1.0,,0,14 POUNDS
-271,Rosh Hashanah 2026,DAN,KAZIN,(312) 316 - 8426,,2026-09-08 (Tue),10:00 AM - 11:00 AM,Matzah Balls,each,18.0,,0,
-272,Rosh Hashanah 2026,LESLIE,STERN,(773) 791 - 6650,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Turkey Breast,pieces,1.0,****SHE ALSO WANTS 4 PACKS OF TURKEY PATTIES*****,0,LARGE FRESH BREAST 12 POUNDS DESIRED
-273,Rosh Hashanah 2026,LESLIE,STERN,(773) 791 - 6650,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Ground Lamb,lbs,3.0,****SHE ALSO WANTS 4 PACKS OF TURKEY PATTIES*****,0,
-274,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-08-30 (Sun),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,2.0,,0,
-275,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Brisket Point,pieces,2.0,,0,6 POUNDS TOTAL
-276,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-09 (Wed),9:00 AM - 10:00 AM,B/S Breast,packs,2.0,,0,CUT IN HALF SO THEY ARE THINNER NOT CHUNKS OR STRIPS
-277,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-10 (Thu),12:00 PM - 1:00 PM,Meatsballs Tray,,1.0,,0,
-278,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-10 (Thu),12:00 PM - 1:00 PM,Roasted Potato,,1.0,,0,
-279,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-10 (Thu),12:00 PM - 1:00 PM,Maple Carrots,,1.0,,0,
-280,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-04 (Fri),9:00 AM - 10:00 AM,B/S Breast,packs,2.0,,0,"CUT IN HALF SO THEY ARE THINNER OVALS, NOT CHUNKS OR HALF OVALS"
-281,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-04 (Fri),9:00 AM - 10:00 AM,Skirt Steak,lbs,4.0,,0,TENDERIZED
-282,Rosh Hashanah 2026,LESLIE,KIND,(847) 380 - 5463,,2026-09-04 (Fri),9:00 AM - 10:00 AM,1st Cut 7# or more,pieces,1.0,,0,7 POUNDS
-283,Rosh Hashanah 2026,LESLIE,KIND,(847) 380 - 5463,,2026-09-04 (Fri),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,1.0,,0,
-284,Rosh Hashanah 2026,LESLIE,KIND,(847) 380 - 5463,,2026-09-04 (Fri),9:00 AM - 10:00 AM,Fryer Cut in 1/8,pieces,2.0,,0,
-285,Rosh Hashanah 2026,MARILYN,HIRSCH,(847) 266 - 0426,,2026-09-11 (Fri),11:00 AM - 12:00 PM,Chopped Liver,lbs,1.0,*****PAID******,0,
-286,Rosh Hashanah 2026,MARILYN,HIRSCH,(847) 266 - 0426,,2026-09-11 (Fri),11:00 AM - 12:00 PM,Herb Chicken Tray,,1.0,*****PAID******,0,
-287,Rosh Hashanah 2026,MARILYN,HIRSCH,(847) 266 - 0426,,2026-09-11 (Fri),11:00 AM - 12:00 PM,Meatsballs Tray,,2.0,*****PAID******,0,
-288,Rosh Hashanah 2026,MARILYN,HIRSCH,(847) 266 - 0426,,2026-09-11 (Fri),11:00 AM - 12:00 PM,Roast Sweet Potatoes,,2.0,*****PAID******,0,
-289,Rosh Hashanah 2026,MARILYN,HIRSCH,(847) 266 - 0426,,2026-09-09 (Wed),10:00 AM - 11:00 AM,Whole Brisket 16 lb or More,pieces,1.0,,0,16 POUNDS
-290,Rosh Hashanah 2026,MARILYN,HIRSCH,(847) 266 - 0426,,2026-09-09 (Wed),10:00 AM - 11:00 AM,Capon Cut in 1/8,pieces,3.0,,0,
-291,Rosh Hashanah 2026,SHERYL,SACHMAN,(847) 997 - 0422,,2026-09-10 (Thu),9:00 AM - 10:00 AM,1st Cut 7# or more,pieces,1.0,,0,
-292,Rosh Hashanah 2026,BARBARA,HOCHWERT,(847) 922 - 8402,,2026-09-11 (Fri),12:00 PM - 1:00 PM,Braised Brisket,,1.0,,0,
-293,Rosh Hashanah 2026,BARBARA,HOCHWERT,(847) 922 - 8402,,2026-09-11 (Fri),12:00 PM - 1:00 PM,Smoked Brisket,,1.0,,0,
-294,Rosh Hashanah 2026,BARBARA,HOCHWERT,(847) 922 - 8402,,2026-09-11 (Fri),12:00 PM - 1:00 PM,Roast Sweet Potatoes,,1.0,,0,
-295,Rosh Hashanah 2026,MORRIS,LEHRFELD,(847) 910 - 7112,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Braised Brisket,,1.0,*****PAID*****,0,
-296,Rosh Hashanah 2026,MORRIS,LEHRFELD,(847) 910 - 7112,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Smoked Brisket,,1.0,*****PAID*****,0,
-297,Rosh Hashanah 2026,MORRIS,LEHRFELD,(847) 910 - 7112,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Herb Chicken Tray,,1.0,*****PAID*****,0,
-298,Rosh Hashanah 2026,KAREN,GRANDON,(818) 522 - 1532,,2026-09-11 (Fri),12:00 PM - 1:00 PM,Chopped Liver,lbs,1.0,****PAID*****,0,
-299,Rosh Hashanah 2026,KAREN,GRANDON,(818) 522 - 1532,,2026-09-11 (Fri),12:00 PM - 1:00 PM,Smoked Brisket,,1.0,****PAID*****,0,
-300,Rosh Hashanah 2026,KAREN,GRANDON,(818) 522 - 1532,,2026-09-11 (Fri),12:00 PM - 1:00 PM,Herb Chicken Tray,,1.0,****PAID*****,0,
-301,Rosh Hashanah 2026,KAREN,GRANDON,(818) 522 - 1532,,2026-09-11 (Fri),12:00 PM - 1:00 PM,Meatsballs Tray,,1.0,****PAID*****,0,
-302,Rosh Hashanah 2026,KAREN,GRANDON,(818) 522 - 1532,,2026-09-11 (Fri),12:00 PM - 1:00 PM,Roasted Potato,,1.0,****PAID*****,0,
-303,Rosh Hashanah 2026,KAREN,GRANDON,(818) 522 - 1532,,2026-09-11 (Fri),12:00 PM - 1:00 PM,Maple Carrots,,1.0,****PAID*****,0,
-304,Rosh Hashanah 2026,TOBY,HALPERN,(847) 323 - 3081,,2026-09-09 (Wed),11:00 AM - 12:00 PM,Breasts Bone-In,lbs,2.0,CHICKEN WITH BONES NO SKIN,1,****NO SKIN****
-305,Rosh Hashanah 2026,TOBY,HALPERN,(847) 323 - 3081,,2026-09-09 (Wed),11:00 AM - 12:00 PM,Thighs,lbs,4.0,CHICKEN WITH BONES NO SKIN,1,****NO SKIN*****
-306,Rosh Hashanah 2026,TOBY,HALPERN,(847) 323 - 3081,,2026-09-09 (Wed),11:00 AM - 12:00 PM,Drumstick,pieces,2.0,CHICKEN WITH BONES NO SKIN,1,PC NOT PACK
+MAKE SURE CHICKENS ARE CLEANED",0,CUT AND PUT IN 2 TWO POUND PACKS,Pending
+236,Rosh Hashanah 2026,JESSICA,FREEDMAN,(773) 612 - 1115,,2026-09-10 (Thu),10:00 AM - 11:00 AM,1st Cut 6-7 #,pieces,1.0,,0,6 POUNDS,Pending
+237,Rosh Hashanah 2026,SANDEE,LEVIN,(847) 372 - 5744,,2026-09-08 (Tue),1:00 PM - 2:00 PM,Capon Cut in 1/8,pieces,2.0,,0,,Pending
+238,Rosh Hashanah 2026,SANDEE,LEVIN,(847) 372 - 5744,,2026-09-08 (Tue),1:00 PM - 2:00 PM,Fryer Cut in 1/8,pieces,4.0,,0,,Pending
+239,Rosh Hashanah 2026,SANDEE,LEVIN,(847) 372 - 5744,,2026-09-08 (Tue),1:00 PM - 2:00 PM,Chuck Eye Roast,lbs,12.0,,0,"***2 ROASTS, 6 POUNDS EACH",Pending
+240,Rosh Hashanah 2026,SANDEE,LEVIN,(847) 372 - 5744,,2026-09-08 (Tue),1:00 PM - 2:00 PM,Ground Beef Lean,lbs,4.0,,0,,Pending
+241,Rosh Hashanah 2026,SANDEE,LEVIN,(847) 372 - 5744,,2026-09-08 (Tue),1:00 PM - 2:00 PM,Lamb Sholder Chop,pieces,4.0,,0,BENI WROTE QUESTION MARK ON THE ORDER SHEET,Pending
+242,Rosh Hashanah 2026,ELLEN,LASIN,(847) 641 - 0221,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Breasts Bone-In,pieces,6.0,,0,"6 EACH, NOT PACKS",Pending
+243,Rosh Hashanah 2026,ELLEN,LASIN,(847) 641 - 0221,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Breasts Bone-In,pieces,6.0,,0,"6 EACH, NOT PACKS",Pending
+244,Rosh Hashanah 2026,KAREN,KOPIN,(847) 420 - 0791,,2026-09-03 (Thu),10:00 AM - 11:00 AM,1st Cut 5-6 #,pieces,2.0,,0,5 pounds each,Pending
+245,Rosh Hashanah 2026,KAREN,KOPIN,(847) 420 - 0791,,2026-09-03 (Thu),10:00 AM - 11:00 AM,B/S Breast,packs,3.0,,0,,Pending
+246,Rosh Hashanah 2026,KAREN,KOPIN,(847) 420 - 0791,,2026-09-03 (Thu),10:00 AM - 11:00 AM,Kishke,each,2.0,,0,,Pending
+247,Rosh Hashanah 2026,MIKE,PERLMAN,(773) 490 - 7039,,2026-09-09 (Wed),3:00 PM - 4:00 PM,1st Cut 7# or more,pieces,1.0,,0,7 POUNDS,Pending
+248,Rosh Hashanah 2026,MARCI,SHAPIRO,(847) 980 - 8405,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,1.0,,0,LARGE,Pending
+249,Rosh Hashanah 2026,MARCI,SHAPIRO,(847) 980 - 8405,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Kishke,each,1.0,,0,,Pending
+250,Rosh Hashanah 2026,MARCI,SHAPIRO,(847) 980 - 8405,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Chopped Liver,lbs,0.75,,0,3/4 POUND,Pending
+251,Rosh Hashanah 2026,RACHEL,GLUCK,(847) 858 - 8707,,2026-08-31 (Mon),10:00 AM - 11:00 AM,Whole Brisket 14-16 lb,pieces,2.0,,0,14 POUNDS EACH DO NOT TRIM,Pending
+252,Rosh Hashanah 2026,MARGARET,COHN,(847) 878 - 9167,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Fryer Cut in 1/8,pieces,3.0,,0,,Pending
+253,Rosh Hashanah 2026,STEPHANIE,SMERLING,(312) 953 - 4942,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Herb Roasted Chicken,each,1.0,****PAID*****,0,,Pending
+254,Rosh Hashanah 2026,JOYCE,BERLINSKY,(847) 494 - 1080,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Chicken Broth 1/2 Gallon,each,1.0,****PAID******,0,,Pending
+255,Rosh Hashanah 2026,JOYCE,BERLINSKY,(847) 494 - 1080,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Schnitzel,,1.0,****PAID******,0,,Pending
+256,Rosh Hashanah 2026,JOYCE,BERLINSKY,(847) 494 - 1080,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Squash Souffle Tray,,1.0,****PAID******,0,,Pending
+257,Rosh Hashanah 2026,JOYCE,BERLINSKY,(847) 494 - 1080,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Maple Carrots,,1.0,****PAID******,0,,Pending
+258,Rosh Hashanah 2026,ROSALIE,ROTH,(847) 674 - 0221,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Bone-in Rib Roast,lbs,9.5,,0,9-10 POUNDS IN A BASKET,Pending
+259,Rosh Hashanah 2026,ROSALIE,ROTH,(847) 674 - 0221,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Bone-in Rib Roast,lbs,10.0,,0,IN A BASKET,Pending
+260,Rosh Hashanah 2026,ROSALIE,ROTH,(847) 674 - 0221,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Skirt Steak,lbs,20.0,,0,,Pending
+261,Rosh Hashanah 2026,BETH SHAPIRO,SHAPIRO KOPIN,(847) 372 - 4973,,2026-09-06 (Sun),10:00 AM - 11:00 AM,Whole Brisket 8-10 lb,pieces,1.0,,0,,Pending
+262,Rosh Hashanah 2026,BETH SHAPIRO,SHAPIRO KOPIN,(847) 372 - 4973,,2026-09-06 (Sun),10:00 AM - 11:00 AM,Ground Beef Lean,lbs,10.0,,0,,Pending
+263,Rosh Hashanah 2026,BETH SHAPIRO,SHAPIRO KOPIN,(847) 372 - 4973,,2026-09-06 (Sun),10:00 AM - 11:00 AM,Kishke,each,2.0,,0,,Pending
+264,Rosh Hashanah 2026,CHERYL,BANKS,(847) 436 - 9036,,2026-09-03 (Thu),10:00 AM - 11:00 AM,Capon Cut in 1/8,pieces,2.0,WANTS A BOSTON ROAST NOT RIBEYE ROAST,0,,Pending
+265,Rosh Hashanah 2026,CHERYL,BANKS,(847) 436 - 9036,,2026-09-03 (Thu),10:00 AM - 11:00 AM,Boneless Ribeye Roast,lbs,6.0,WANTS A BOSTON ROAST NOT RIBEYE ROAST,0,LIKE ROAST BEEF NOT CHUCK ROAST,Pending
+266,Rosh Hashanah 2026,DAN,KAZIN,(312) 316 - 8426,,2026-09-08 (Tue),10:00 AM - 11:00 AM,Whole Brisket 14-16 lb,pieces,1.0,,0,14 POUNDS,Pending
+267,Rosh Hashanah 2026,DAN,KAZIN,(312) 316 - 8426,,2026-09-08 (Tue),10:00 AM - 11:00 AM,Matzah Balls,each,18.0,,0,,Pending
+268,Rosh Hashanah 2026,DAN,KAZIN,(312) 316 - 8426,,2026-09-08 (Tue),10:00 AM - 11:00 AM,Whole Brisket 14-16 lb,pieces,1.0,,0,14 POUNDS,Pending
+269,Rosh Hashanah 2026,DAN,KAZIN,(312) 316 - 8426,,2026-09-08 (Tue),10:00 AM - 11:00 AM,Matzah Balls,each,18.0,,0,,Pending
+270,Rosh Hashanah 2026,DAN,KAZIN,(312) 316 - 8426,,2026-09-08 (Tue),10:00 AM - 11:00 AM,Whole Brisket 14-16 lb,pieces,1.0,,0,14 POUNDS,Pending
+271,Rosh Hashanah 2026,DAN,KAZIN,(312) 316 - 8426,,2026-09-08 (Tue),10:00 AM - 11:00 AM,Matzah Balls,each,18.0,,0,,Pending
+272,Rosh Hashanah 2026,LESLIE,STERN,(773) 791 - 6650,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Turkey Breast,pieces,1.0,****SHE ALSO WANTS 4 PACKS OF TURKEY PATTIES*****,0,LARGE FRESH BREAST 12 POUNDS DESIRED,Pending
+273,Rosh Hashanah 2026,LESLIE,STERN,(773) 791 - 6650,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Ground Lamb,lbs,3.0,****SHE ALSO WANTS 4 PACKS OF TURKEY PATTIES*****,0,,Pending
+274,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-08-30 (Sun),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,2.0,,0,,Pending
+275,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Brisket Point,pieces,2.0,,0,6 POUNDS TOTAL,Pending
+276,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-09 (Wed),9:00 AM - 10:00 AM,B/S Breast,packs,2.0,,0,CUT IN HALF SO THEY ARE THINNER NOT CHUNKS OR STRIPS,Pending
+277,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-10 (Thu),12:00 PM - 1:00 PM,Meatsballs Tray,,1.0,,0,,Pending
+278,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-10 (Thu),12:00 PM - 1:00 PM,Roasted Potato,,1.0,,0,,Pending
+279,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-10 (Thu),12:00 PM - 1:00 PM,Maple Carrots,,1.0,,0,,Pending
+280,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-04 (Fri),9:00 AM - 10:00 AM,B/S Breast,packs,2.0,,0,"CUT IN HALF SO THEY ARE THINNER OVALS, NOT CHUNKS OR HALF OVALS",Pending
+281,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-04 (Fri),9:00 AM - 10:00 AM,Skirt Steak,lbs,4.0,,0,TENDERIZED,Pending
+282,Rosh Hashanah 2026,LESLIE,KIND,(847) 380 - 5463,,2026-09-04 (Fri),9:00 AM - 10:00 AM,1st Cut 7# or more,pieces,1.0,,0,7 POUNDS,Pending
+283,Rosh Hashanah 2026,LESLIE,KIND,(847) 380 - 5463,,2026-09-04 (Fri),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,1.0,,0,,Pending
+284,Rosh Hashanah 2026,LESLIE,KIND,(847) 380 - 5463,,2026-09-04 (Fri),9:00 AM - 10:00 AM,Fryer Cut in 1/8,pieces,2.0,,0,,Pending
+285,Rosh Hashanah 2026,MARILYN,HIRSCH,(847) 266 - 0426,,2026-09-11 (Fri),11:00 AM - 12:00 PM,Chopped Liver,lbs,1.0,*****PAID******,0,,Pending
+286,Rosh Hashanah 2026,MARILYN,HIRSCH,(847) 266 - 0426,,2026-09-11 (Fri),11:00 AM - 12:00 PM,Herb Chicken Tray,,1.0,*****PAID******,0,,Pending
+287,Rosh Hashanah 2026,MARILYN,HIRSCH,(847) 266 - 0426,,2026-09-11 (Fri),11:00 AM - 12:00 PM,Meatsballs Tray,,2.0,*****PAID******,0,,Pending
+288,Rosh Hashanah 2026,MARILYN,HIRSCH,(847) 266 - 0426,,2026-09-11 (Fri),11:00 AM - 12:00 PM,Roast Sweet Potatoes,,2.0,*****PAID******,0,,Pending
+289,Rosh Hashanah 2026,MARILYN,HIRSCH,(847) 266 - 0426,,2026-09-09 (Wed),10:00 AM - 11:00 AM,Whole Brisket 16 lb or More,pieces,1.0,,0,16 POUNDS,Pending
+290,Rosh Hashanah 2026,MARILYN,HIRSCH,(847) 266 - 0426,,2026-09-09 (Wed),10:00 AM - 11:00 AM,Capon Cut in 1/8,pieces,3.0,,0,,Pending
+291,Rosh Hashanah 2026,SHERYL,SACHMAN,(847) 997 - 0422,,2026-09-10 (Thu),9:00 AM - 10:00 AM,1st Cut 7# or more,pieces,1.0,,0,,Pending
+292,Rosh Hashanah 2026,BARBARA,HOCHWERT,(847) 922 - 8402,,2026-09-11 (Fri),12:00 PM - 1:00 PM,Braised Brisket,,1.0,,0,,Pending
+293,Rosh Hashanah 2026,BARBARA,HOCHWERT,(847) 922 - 8402,,2026-09-11 (Fri),12:00 PM - 1:00 PM,Smoked Brisket,,1.0,,0,,Pending
+294,Rosh Hashanah 2026,BARBARA,HOCHWERT,(847) 922 - 8402,,2026-09-11 (Fri),12:00 PM - 1:00 PM,Roast Sweet Potatoes,,1.0,,0,,Pending
+295,Rosh Hashanah 2026,MORRIS,LEHRFELD,(847) 910 - 7112,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Braised Brisket,,1.0,*****PAID*****,0,,Pending
+296,Rosh Hashanah 2026,MORRIS,LEHRFELD,(847) 910 - 7112,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Smoked Brisket,,1.0,*****PAID*****,0,,Pending
+297,Rosh Hashanah 2026,MORRIS,LEHRFELD,(847) 910 - 7112,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Herb Chicken Tray,,1.0,*****PAID*****,0,,Pending
+298,Rosh Hashanah 2026,KAREN,GRANDON,(818) 522 - 1532,,2026-09-11 (Fri),12:00 PM - 1:00 PM,Chopped Liver,lbs,1.0,****PAID*****,0,,Pending
+299,Rosh Hashanah 2026,KAREN,GRANDON,(818) 522 - 1532,,2026-09-11 (Fri),12:00 PM - 1:00 PM,Smoked Brisket,,1.0,****PAID*****,0,,Pending
+300,Rosh Hashanah 2026,KAREN,GRANDON,(818) 522 - 1532,,2026-09-11 (Fri),12:00 PM - 1:00 PM,Herb Chicken Tray,,1.0,****PAID*****,0,,Pending
+301,Rosh Hashanah 2026,KAREN,GRANDON,(818) 522 - 1532,,2026-09-11 (Fri),12:00 PM - 1:00 PM,Meatsballs Tray,,1.0,****PAID*****,0,,Pending
+302,Rosh Hashanah 2026,KAREN,GRANDON,(818) 522 - 1532,,2026-09-11 (Fri),12:00 PM - 1:00 PM,Roasted Potato,,1.0,****PAID*****,0,,Pending
+303,Rosh Hashanah 2026,KAREN,GRANDON,(818) 522 - 1532,,2026-09-11 (Fri),12:00 PM - 1:00 PM,Maple Carrots,,1.0,****PAID*****,0,,Pending
+304,Rosh Hashanah 2026,TOBY,HALPERN,(847) 323 - 3081,,2026-09-09 (Wed),11:00 AM - 12:00 PM,Breasts Bone-In,lbs,2.0,CHICKEN WITH BONES NO SKIN,1,****NO SKIN****,Pending
+305,Rosh Hashanah 2026,TOBY,HALPERN,(847) 323 - 3081,,2026-09-09 (Wed),11:00 AM - 12:00 PM,Thighs,lbs,4.0,CHICKEN WITH BONES NO SKIN,1,****NO SKIN*****,Pending
+306,Rosh Hashanah 2026,TOBY,HALPERN,(847) 323 - 3081,,2026-09-09 (Wed),11:00 AM - 12:00 PM,Drumstick,pieces,2.0,CHICKEN WITH BONES NO SKIN,1,PC NOT PACK,Pending
 307,Rosh Hashanah 2026,SYDELLE,REICH,(516) 384 - 9921,,2026-09-09 (Wed),11:00 AM - 12:00 PM,Capon Cut in 1/8,pieces,2.0,"*****CAPONS NO SKIN*****
 GROUND BEEF 2 @ 2# EACH
-POTATO KUGEL A SMALL ONE NOT A TRAY",1,5 POUNDS EACH NO SKIN
+POTATO KUGEL A SMALL ONE NOT A TRAY",1,5 POUNDS EACH NO SKIN,Pending
 308,Rosh Hashanah 2026,SYDELLE,REICH,(516) 384 - 9921,,2026-09-09 (Wed),11:00 AM - 12:00 PM,Ground Beef Lean,lbs,4.0,"*****CAPONS NO SKIN*****
 GROUND BEEF 2 @ 2# EACH
-POTATO KUGEL A SMALL ONE NOT A TRAY",1,2 PACKS OF 2 POUNDS EACH
+POTATO KUGEL A SMALL ONE NOT A TRAY",1,2 PACKS OF 2 POUNDS EACH,Pending
 309,Rosh Hashanah 2026,SYDELLE,REICH,(516) 384 - 9921,,2026-09-09 (Wed),11:00 AM - 12:00 PM,Potato Kugel,each,1.0,"*****CAPONS NO SKIN*****
 GROUND BEEF 2 @ 2# EACH
-POTATO KUGEL A SMALL ONE NOT A TRAY",1,
-310,Rosh Hashanah 2026,MARYL,DAYAN,(847) 217 - 2105,,2026-09-09 (Wed),2:00 PM - 3:00 PM,Ground 80/20,lbs,3.0,,0,
-311,Rosh Hashanah 2026,JULIE,KRAFF,(847) 877 - 8222,,2026-09-11 (Fri),1:00 PM - 2:00 PM,Smoked Brisket,,2.0,,0,
-312,Rosh Hashanah 2026,JULIE,KRAFF,(847) 877 - 8222,,2026-09-11 (Fri),1:00 PM - 2:00 PM,Meatsballs Tray,,1.0,,0,
-313,Rosh Hashanah 2026,JULIE,KRAFF,(847) 877 - 8222,,2026-09-11 (Fri),1:00 PM - 2:00 PM,Smoked Brisket,,2.0,,0,
-314,Rosh Hashanah 2026,JULIE,KRAFF,(847) 877 - 8222,,2026-09-11 (Fri),1:00 PM - 2:00 PM,Meatsballs Tray,,1.0,,0,
+POTATO KUGEL A SMALL ONE NOT A TRAY",1,,Pending
+310,Rosh Hashanah 2026,MARYL,DAYAN,(847) 217 - 2105,,2026-09-09 (Wed),2:00 PM - 3:00 PM,Ground 80/20,lbs,3.0,,0,,Pending
+311,Rosh Hashanah 2026,JULIE,KRAFF,(847) 877 - 8222,,2026-09-11 (Fri),1:00 PM - 2:00 PM,Smoked Brisket,,2.0,,0,,Pending
+312,Rosh Hashanah 2026,JULIE,KRAFF,(847) 877 - 8222,,2026-09-11 (Fri),1:00 PM - 2:00 PM,Meatsballs Tray,,1.0,,0,,Pending
+313,Rosh Hashanah 2026,JULIE,KRAFF,(847) 877 - 8222,,2026-09-11 (Fri),1:00 PM - 2:00 PM,Smoked Brisket,,2.0,,0,,Pending
+314,Rosh Hashanah 2026,JULIE,KRAFF,(847) 877 - 8222,,2026-09-11 (Fri),1:00 PM - 2:00 PM,Meatsballs Tray,,1.0,,0,,Pending
 315,Rosh Hashanah 2026,IRIS,ROSENBERG,(847) 507 - 9911,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Chopped Liver,lbs,1.0,"****ALSO HAS****
 TENDERS TRAY
 FRANKS IN A BLANKET TRAY
 BBQ SALAMI TRAY
-ALL PAID",1,
+ALL PAID",1,,Pending
 316,Rosh Hashanah 2026,IRIS,ROSENBERG,(847) 507 - 9911,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Smoked Brisket,,1.0,"****ALSO HAS****
 TENDERS TRAY
 FRANKS IN A BLANKET TRAY
 BBQ SALAMI TRAY
-ALL PAID",1,
+ALL PAID",1,,Pending
 317,Rosh Hashanah 2026,IRIS,ROSENBERG,(847) 507 - 9911,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Schnitzel,,1.0,"****ALSO HAS****
 TENDERS TRAY
 FRANKS IN A BLANKET TRAY
 BBQ SALAMI TRAY
-ALL PAID",1,
+ALL PAID",1,,Pending
 318,Rosh Hashanah 2026,IRIS,ROSENBERG,(847) 507 - 9911,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Meatsballs Tray,,1.0,"****ALSO HAS****
 TENDERS TRAY
 FRANKS IN A BLANKET TRAY
 BBQ SALAMI TRAY
-ALL PAID",1,
+ALL PAID",1,,Pending
 319,Rosh Hashanah 2026,IRIS,ROSENBERG,(847) 507 - 9911,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Squash Souffle Tray,,1.0,"****ALSO HAS****
 TENDERS TRAY
 FRANKS IN A BLANKET TRAY
 BBQ SALAMI TRAY
-ALL PAID",1,
+ALL PAID",1,,Pending
 320,Rosh Hashanah 2026,IRIS,ROSENBERG,(847) 507 - 9911,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Maple Carrots,,1.0,"****ALSO HAS****
 TENDERS TRAY
 FRANKS IN A BLANKET TRAY
 BBQ SALAMI TRAY
-ALL PAID",1,
+ALL PAID",1,,Pending
 321,Rosh Hashanah 2026,IRIS,ROSENBERG,(847) 507 - 9911,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Roast Sweet Potatoes,,1.0,"****ALSO HAS****
 TENDERS TRAY
 FRANKS IN A BLANKET TRAY
 BBQ SALAMI TRAY
-ALL PAID",1,
-322,Rosh Hashanah 2026,ALI,DRUMM,(847) 691 - 4905,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Complete Dinner,,1.0,PAID,0,
-323,Rosh Hashanah 2026,BARBARA,FOX,(847) 858 - 6242,,2026-09-10 (Thu),1:00 PM - 2:00 PM,12-16 lb Turkey,pieces,2.0,,0,2 BIRDS 14-16 POUNDS EACH
-324,Rosh Hashanah 2026,KELLY,DEUTSCH,(847) 372 - 8406,,2026-09-09 (Wed),10:00 AM - 11:00 AM,Thighs,pieces,16.0,,0,
-325,Rosh Hashanah 2026,KELLY,DEUTSCH,(847) 372 - 8406,,2026-09-09 (Wed),10:00 AM - 11:00 AM,Bone-in Rib Roast,lbs,6.0,,0,IN A BASKET
-326,Rosh Hashanah 2026,MARGIE,ZIVIN,(847) 475 - 3020,,2026-08-30 (Sun),9:00 AM - 10:00 AM,1st Cut 5-6 #,pieces,1.0,,0,5 POUNDS
-327,Rosh Hashanah 2026,MARGIE,ZIVIN,(847) 475 - 3020,,2026-08-30 (Sun),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,1.0,,0,
-328,Rosh Hashanah 2026,MARGIE,ZIVIN,(847) 475 - 3020,,2026-08-30 (Sun),9:00 AM - 10:00 AM,Turkey Breast,pieces,1.0,,0,FROZEN 8 POUNDS
-329,Rosh Hashanah 2026,JEANNE,WEINSTEIN,(224) 875 - 5565,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Whole Brisket 12-14 lb,pieces,1.0,PRONOUNCED JEANNIE NOT JEAN,0,SCORED
-330,Rosh Hashanah 2026,BARBARA,LERCH,(847) 570 - 2112,,2026-09-09 (Wed),2:00 PM - 3:00 PM,Breasts Bone-In,pieces,12.0,*****VERY VERY VERY VERY CLEAN,1,SMALL PIECES VERY CLEAN
-331,Rosh Hashanah 2026,BARBARA,LERCH,(847) 570 - 2112,,2026-09-09 (Wed),2:00 PM - 3:00 PM,Thighs,pieces,8.0,*****VERY VERY VERY VERY CLEAN,1,VERY CLEAN
-332,Rosh Hashanah 2026,BARBARA,LERCH,(847) 570 - 2112,,2026-09-09 (Wed),2:00 PM - 3:00 PM,Drumstick,pieces,4.0,*****VERY VERY VERY VERY CLEAN,1,VERY CLEAN
-333,Rosh Hashanah 2026,BARBARA,LERCH,(847) 570 - 2112,,2026-09-09 (Wed),2:00 PM - 3:00 PM,Wings,pieces,2.0,*****VERY VERY VERY VERY CLEAN,1,VERY CLEAN
-334,Rosh Hashanah 2026,LISA,FISHBEIN,(847) 703 - 3077,,2026-09-11 (Fri),9:00 AM - 10:00 AM,1st Cut 7# or more,pieces,1.0,,0,SHE WANTS IT LARGE.  NO JOKES PLEASE
-335,Rosh Hashanah 2026,PAULA,DOMSKY,(847) 226 - 7400,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Whole Brisket 12-14 lb,pieces,1.0,,0,
-336,Rosh Hashanah 2026,KATHY,PADDOR,(847) 727 - 3636,,2026-08-30 (Sun),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,1.0,,0,4-5 POUNDS
-337,Rosh Hashanah 2026,KATHY,PADDOR,(847) 727 - 3636,,2026-08-30 (Sun),9:00 AM - 10:00 AM,Short Rib,lbs,2.5,,0,ENGLISH CUT
+ALL PAID",1,,Pending
+322,Rosh Hashanah 2026,ALI,DRUMM,(847) 691 - 4905,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Complete Dinner,,1.0,PAID,0,,Pending
+323,Rosh Hashanah 2026,BARBARA,FOX,(847) 858 - 6242,,2026-09-10 (Thu),1:00 PM - 2:00 PM,12-16 lb Turkey,pieces,2.0,,0,2 BIRDS 14-16 POUNDS EACH,Pending
+324,Rosh Hashanah 2026,KELLY,DEUTSCH,(847) 372 - 8406,,2026-09-09 (Wed),10:00 AM - 11:00 AM,Thighs,pieces,16.0,,0,,Pending
+325,Rosh Hashanah 2026,KELLY,DEUTSCH,(847) 372 - 8406,,2026-09-09 (Wed),10:00 AM - 11:00 AM,Bone-in Rib Roast,lbs,6.0,,0,IN A BASKET,Pending
+326,Rosh Hashanah 2026,MARGIE,ZIVIN,(847) 475 - 3020,,2026-08-30 (Sun),9:00 AM - 10:00 AM,1st Cut 5-6 #,pieces,1.0,,0,5 POUNDS,Pending
+327,Rosh Hashanah 2026,MARGIE,ZIVIN,(847) 475 - 3020,,2026-08-30 (Sun),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,1.0,,0,,Pending
+328,Rosh Hashanah 2026,MARGIE,ZIVIN,(847) 475 - 3020,,2026-08-30 (Sun),9:00 AM - 10:00 AM,Turkey Breast,pieces,1.0,,0,FROZEN 8 POUNDS,Pending
+329,Rosh Hashanah 2026,JEANNE,WEINSTEIN,(224) 875 - 5565,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Whole Brisket 12-14 lb,pieces,1.0,PRONOUNCED JEANNIE NOT JEAN,0,SCORED,Pending
+330,Rosh Hashanah 2026,BARBARA,LERCH,(847) 570 - 2112,,2026-09-09 (Wed),2:00 PM - 3:00 PM,Breasts Bone-In,pieces,12.0,*****VERY VERY VERY VERY CLEAN,1,SMALL PIECES VERY CLEAN,Pending
+331,Rosh Hashanah 2026,BARBARA,LERCH,(847) 570 - 2112,,2026-09-09 (Wed),2:00 PM - 3:00 PM,Thighs,pieces,8.0,*****VERY VERY VERY VERY CLEAN,1,VERY CLEAN,Pending
+332,Rosh Hashanah 2026,BARBARA,LERCH,(847) 570 - 2112,,2026-09-09 (Wed),2:00 PM - 3:00 PM,Drumstick,pieces,4.0,*****VERY VERY VERY VERY CLEAN,1,VERY CLEAN,Pending
+333,Rosh Hashanah 2026,BARBARA,LERCH,(847) 570 - 2112,,2026-09-09 (Wed),2:00 PM - 3:00 PM,Wings,pieces,2.0,*****VERY VERY VERY VERY CLEAN,1,VERY CLEAN,Pending
+334,Rosh Hashanah 2026,LISA,FISHBEIN,(847) 703 - 3077,,2026-09-11 (Fri),9:00 AM - 10:00 AM,1st Cut 7# or more,pieces,1.0,,0,SHE WANTS IT LARGE.  NO JOKES PLEASE,Pending
+335,Rosh Hashanah 2026,PAULA,DOMSKY,(847) 226 - 7400,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Whole Brisket 12-14 lb,pieces,1.0,,0,,Pending
+336,Rosh Hashanah 2026,KATHY,PADDOR,(847) 727 - 3636,,2026-08-30 (Sun),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,1.0,,0,4-5 POUNDS,Pending
+337,Rosh Hashanah 2026,KATHY,PADDOR,(847) 727 - 3636,,2026-08-30 (Sun),9:00 AM - 10:00 AM,Short Rib,lbs,2.5,,0,ENGLISH CUT,Pending
