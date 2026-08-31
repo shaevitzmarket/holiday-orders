@@ -150,6 +150,7 @@ ROSH_CATALOG = {
         "Fryer Whole": {"units": ["pieces", "lbs", "packs"]},
         "Fryer Cut in 1/8": {"units": ["pieces", "lbs", "packs"]},
         "Fryer Cut in 1/4": {"units": ["pieces", "lbs", "packs"]},
+        "Fryer Cut in 1/10": {"units": ["pieces", "lbs", "packs"]},
         "Breasts Bone-In": {"units": ["pieces", "lbs", "packs"]},
         "B/S Breast": {"units": ["lbs", "pieces", "packs"]},
         "B/S breast Thin Cut": {"units": ["packs", "lbs", "pieces"]},
