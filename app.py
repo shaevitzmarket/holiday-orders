@@ -199,6 +199,7 @@ ROSH_CATALOG = {
     "Soup, Deli, and Pre-Cooked": {
         "Matzah Balls": {"unit": "each", "is_weight": False},
         "Noodle Soup Qt": {"unit": "each", "is_weight": False},
+        "Matzah Soup Qt": {"unit": "each", "is_weight": False},
         "Chicken Broth Qt": {"unit": "each", "is_weight": False},
         "Chicken Broth 1/2 Gallon": {"unit": "each", "is_weight": False},
         "Kishke": {"unit": "each", "is_weight": False},
