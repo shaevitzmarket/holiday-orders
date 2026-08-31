@@ -9,11 +9,20 @@ st.set_page_config(
     page_title="Holiday Order Management System", page_icon="📦", layout="wide"
 )
 
-# Initialize Session State for Auto-Clearing Form
+# Initialize Session State & Query Params for Hide Completed Preference
 if "form_key" not in st.session_state:
     st.session_state.form_key = 0
 if "success_msg" not in st.session_state:
     st.session_state.success_msg = ""
+
+if "hide_completed" not in st.session_state:
+    # Default to True so completed orders stay hidden by default across logins/reloads
+    param_val = st.query_params.get("hide_completed", "true").lower() == "true"
+    st.session_state.hide_completed = param_val
+
+def update_hide_completed():
+    st.session_state.hide_completed = st.session_state.hide_completed_widget
+    st.query_params["hide_completed"] = str(st.session_state.hide_completed).lower()
 
 
 # 1. GITHUB PERMANENT STORAGE HELPERS
@@ -513,10 +522,15 @@ with tab2:
         c_sel, c_chk = st.columns([3, 1])
         with c_chk:
             st.markdown("<div style='margin-top: 28px;'></div>", unsafe_allow_html=True)
-            hide_completed_edit = st.checkbox("🙈 Hide Completed Orders", value=False, key="hide_completed_edit")
+            st.checkbox(
+                "🙈 Hide Completed Orders", 
+                value=st.session_state.hide_completed, 
+                key="hide_completed_widget",
+                on_change=update_hide_completed
+            )
 
         df_edit_filtered = df_raw.copy()
-        if hide_completed_edit:
+        if st.session_state.hide_completed:
             df_edit_filtered = df_edit_filtered[df_edit_filtered["status"] != "Completed"]
 
         order_list = []
@@ -936,14 +950,19 @@ with tab4:
 
         with f_col3:
             st.markdown("<div style='margin-top: 28px;'></div>", unsafe_allow_html=True)
-            hide_completed = st.checkbox("🙈 Hide Completed Orders", value=False)
+            st.checkbox(
+                "🙈 Hide Completed Orders", 
+                value=st.session_state.hide_completed, 
+                key="hide_completed_widget_prep",
+                on_change=update_hide_completed
+            )
 
         # Filter logic
         filtered_df = df_raw[df_raw["pickup_date"] == selected_date].copy()
         if selected_station != "All Stations":
             filtered_df = filtered_df[filtered_df["prep_station"] == selected_station]
             
-        if hide_completed:
+        if st.session_state.hide_completed:
             filtered_df = filtered_df[filtered_df["status"] != "Completed"]
 
         if not filtered_df.empty:
