@@ -61,9 +61,9 @@ id,holiday,first_name,last_name,phone,email,pickup_date,pickup_time,item_name,un
 94,Rosh Hashanah 2026,MARGIE,JACOBS,(312) 953 - 1189,MARJORIECAREYJACOBS@MSN.COM,2026-09-10 (Thu),12:00 PM - 1:00 PM,Turkey Meatballs,each,2.0,,0,,Pending
 95,Rosh Hashanah 2026,MARCI,CRANE,(847) 612 - 1430,KENNETHCRANE@SBCGLOBAL.NET,2026-09-11 (Fri),11:00 AM - 12:00 PM,Schnitzel,,1.0,,0,,Pending
 98,Rosh Hashanah 2026,Elaine,GREENBERG,(847) 910 - 3051,,2026-09-06 (Sun),12:00 PM - 1:00 PM,Brisket Point,pieces,3.0,,0,6 # TOTAL,Pending
-99,Rosh Hashanah 2026,SHARON,FEDDERLY,(414) 520 - 5807,,2026-08-30 (Sun),1:00 PM - 2:00 PM,Whole Brisket 16 lb or More,pieces,1.0,,0,TRIMMED,Pending
-100,Rosh Hashanah 2026,SHARON,FEDDERLY,(414) 520 - 5807,,2026-08-30 (Sun),1:00 PM - 2:00 PM,Fryer Cut in 1/8,pieces,5.0,,0,,Pending
-103,Rosh Hashanah 2026,SHARON,FEDDERLY,(414) 520 - 5807,,2026-08-30 (Sun),1:00 PM - 2:00 PM,Legs,packs,4.0,,0,,Pending
+99,Rosh Hashanah 2026,SHARON,FEDDERLY,(414) 520 - 5807,,2026-08-30 (Sun),1:00 PM - 2:00 PM,Whole Brisket 16 lb or More,pieces,1.0,,0,TRIMMED,Completed
+100,Rosh Hashanah 2026,SHARON,FEDDERLY,(414) 520 - 5807,,2026-08-30 (Sun),1:00 PM - 2:00 PM,Fryer Cut in 1/8,pieces,5.0,,0,,Completed
+103,Rosh Hashanah 2026,SHARON,FEDDERLY,(414) 520 - 5807,,2026-08-30 (Sun),1:00 PM - 2:00 PM,Legs,packs,4.0,,0,,Completed
 104,Rosh Hashanah 2026,MARLA,ZELIKOW,(847) 529 - 8602,MARLAZELIKOW@GMAIL.COM,2026-09-10 (Thu),9:00 AM - 10:00 AM,Drumstick,pieces,12.0,ADD 3 ROUND CHALLAHS,0,No Skin,Pending
 105,Rosh Hashanah 2026,Maureen,STOLLMAN,(847) 409 - 1227,,2026-08-28 (Fri),9:00 AM - 10:00 AM,1st Cut 5-6 #,pieces,2.0,,0,,Completed
 106,Rosh Hashanah 2026,CHERYL,BERGER,(201) 694 - 2289,,2026-08-25 (Tue),9:00 AM - 10:00 AM,1st Cut 5-6 #,pieces,1.0,,0,TRIMMED,Completed
