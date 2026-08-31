@@ -37,14 +37,14 @@ id,holiday,first_name,last_name,phone,email,pickup_date,pickup_time,item_name,un
 63,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Kishke,each,2.0,,0,,Completed
 64,Rosh Hashanah 2026,KIMBERLEY,LEVY,(847) 840 - 0108,,2026-08-27 (Thu),9:00 AM - 10:00 AM,Chopped Liver,lbs,2.0,,0,,Completed
 66,Rosh Hashanah 2026,KAREN,KOPIN,(847) 420 - 0791,,2026-09-03 (Thu),10:00 AM - 11:00 AM,Capon Cut in 1/8,pieces,2.0,,0,,Pending
-67,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,1st Cut 5-6 #,pieces,2.0,,0,,Pending
-68,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,Whole Capon,pieces,2.0,,0,,Pending
-69,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,Fryer Cut in 1/8,pieces,8.0,,0,,Pending
-70,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,Thighs,pieces,15.0,,0,In packs of 5,Pending
-71,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,Ground 80/20,lbs,5.0,,0,,Pending
-72,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,Ground Beef Lean,lbs,5.0,,0,,Pending
-73,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,Veal Chop 1st Cut,pieces,30.0,,0,"24 pc 1"" ; 6 pc 3/4"" ",Pending
-74,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-08-31 (Mon),9:00 AM - 10:00 AM,Kishke,each,2.0,,0,,Pending
+67,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-09-01 (Tue),9:00 AM - 10:00 AM,1st Cut 5-6 #,pieces,2.0,,0,,Pending
+68,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-09-01 (Tue),9:00 AM - 10:00 AM,Whole Capon,pieces,2.0,,0,,Pending
+69,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-09-01 (Tue),9:00 AM - 10:00 AM,Fryer Cut in 1/8,pieces,8.0,,0,,Pending
+70,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-09-01 (Tue),9:00 AM - 10:00 AM,Thighs,pieces,15.0,,0,In packs of 5,Pending
+71,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-09-01 (Tue),9:00 AM - 10:00 AM,Ground 80/20,lbs,5.0,,0,,Pending
+72,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-09-01 (Tue),9:00 AM - 10:00 AM,Ground Beef Lean,lbs,5.0,,0,,Pending
+73,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-09-01 (Tue),9:00 AM - 10:00 AM,Veal Chop 1st Cut,pieces,30.0,,0,"24 pc 1"" ; 6 pc 3/4"" ",Pending
+74,Rosh Hashanah 2026,KAREN,KESNER,(847) 226 - 4775,KESNERK@GMAIL.COM,2026-09-01 (Tue),9:00 AM - 10:00 AM,Kishke,each,2.0,,0,,Pending
 75,Rosh Hashanah 2026,CHERYL,SHAPIRO,(847) 420 - 9831,,2026-09-08 (Tue),12:00 PM - 1:00 PM,Turkey Breast,pieces,1.0,,0,Big,Pending
 76,Rosh Hashanah 2026,CHERYL,SHAPIRO,(847) 420 - 9831,,2026-09-08 (Tue),12:00 PM - 1:00 PM,Short Rib,lbs,6.0,,0,Wants 4 STRIPS (est. 6#),Pending
 77,Rosh Hashanah 2026,CHERYL,SHAPIRO,(847) 420 - 9831,,2026-09-08 (Tue),12:00 PM - 1:00 PM,Matzah Balls,each,10.0,,0,,Pending
