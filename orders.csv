@@ -117,12 +117,9 @@ id,holiday,first_name,last_name,phone,email,pickup_date,pickup_time,item_name,un
 162,Rosh Hashanah 2026,STEPHANIE,KEENE,(847) 722 - 5930,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Meatballs,each,5.0,,0,,Pending
 164,Rosh Hashanah 2026,LOUISE,LOCKER,(847) 212 - 5143,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Meatballs,each,4.0,5 Qts MATZO BALL SOUP,0,,Pending
 165,Rosh Hashanah 2026,RONALD,ALPERN,(847) 997 - 4801,,2026-09-03 (Thu),10:00 AM - 11:00 AM,Whole Brisket 10-12 lb,pieces,1.0,,0,10#,Pending
-166,Rosh Hashanah 2026,JUDY,KAPLAN,(847) 962 - 4803,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,2.0,,0,,Pending
-167,Rosh Hashanah 2026,JUDY,KAPLAN,(847) 962 - 4803,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Thighs,pieces,12.0,,0,,Pending
-168,Rosh Hashanah 2026,JUDY,KAPLAN,(847) 962 - 4803,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Drumstick,pieces,12.0,,0,,Pending
-169,Rosh Hashanah 2026,JUDY,KAPLAN,(847) 962 - 4803,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,2.0,,0,,Pending
-170,Rosh Hashanah 2026,JUDY,KAPLAN,(847) 962 - 4803,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Thighs,pieces,12.0,,0,,Pending
-171,Rosh Hashanah 2026,JUDY,KAPLAN,(847) 962 - 4803,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Drumstick,pieces,12.0,,0,,Pending
+166,Rosh Hashanah 2026,JUDY,KAPLAN,(847) 962 - 4803,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,2.0,,0,,Completed
+167,Rosh Hashanah 2026,JUDY,KAPLAN,(847) 962 - 4803,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Thighs,pieces,12.0,,0,,Completed
+168,Rosh Hashanah 2026,JUDY,KAPLAN,(847) 962 - 4803,,2026-08-31 (Mon),9:00 AM - 10:00 AM,Drumstick,pieces,12.0,,0,,Completed
 172,Rosh Hashanah 2026,ANNE,MCDONOUGH,(847) 770 - 5621,,2026-09-09 (Wed),10:00 AM - 11:00 AM,Family Steak,pieces,3.0,,0,"In VACUUM , 11-12# TOTAL",Pending
 173,Rosh Hashanah 2026,BONNIE,ROTHENBERG,(847) 254 - 2453,,2026-09-10 (Thu),11:00 AM - 12:00 PM,1st Cut 6-7 #,pieces,1.0,,0,,Pending
 174,Rosh Hashanah 2026,SHELLY,FOXMAN,(224) 715 - 5467,,2026-09-10 (Thu),12:00 PM - 1:00 PM,1st Cut 7# or more,pieces,1.0,,0,,Pending
