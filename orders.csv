@@ -162,10 +162,8 @@ id,holiday,first_name,last_name,phone,email,pickup_date,pickup_time,item_name,un
 198,Rosh Hashanah 2026,SHEILA,BARRON,(847) 722 - 4445,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Family Steak,pieces,4.0,,0,,Pending
 199,Rosh Hashanah 2026,BRIAN,JACOBSON,(847) 636 - 4623,,2026-09-04 (Fri),10:00 AM - 11:00 AM,Whole Brisket 16 lb or More,pieces,1.0,,0,BIGGER IS BETTER,Pending
 200,Rosh Hashanah 2026,BRIAN,JACOBSON,(847) 636 - 4623,,2026-09-04 (Fri),10:00 AM - 11:00 AM,Brisket Point,pieces,1.0,,0,Big,Pending
-201,Rosh Hashanah 2026,ROBERTA,EDELHEIT,(847) 903 - 3899,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Whole Brisket 12-14 lb,pieces,1.0,"****ADD 1 QUART MATZO BALL SOUP
-ADD 4 ROUND RAISIN CHALLAHS",1,12-15#,Pending
-202,Rosh Hashanah 2026,ROBERTA,EDELHEIT,(847) 903 - 3899,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Chopped Liver,lbs,0.5,"****ADD 1 QUART MATZO BALL SOUP
-ADD 4 ROUND RAISIN CHALLAHS",1,,Pending
+201,Rosh Hashanah 2026,ROBERTA,EDELHEIT,(847) 903 - 3899,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Whole Brisket 12-14 lb,pieces,1.0,ADD 4 ROUND RAISIN CHALLAHS,1,,Pending
+202,Rosh Hashanah 2026,ROBERTA,EDELHEIT,(847) 903 - 3899,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Chopped Liver,lbs,0.5,ADD 4 ROUND RAISIN CHALLAHS,1,,Pending
 203,Rosh Hashanah 2026,LINDA,SPRING,(847) 421 - 5132,,2026-09-07 (Mon),9:00 AM - 10:00 AM,Whole Brisket 10-12 lb,pieces,1.0,,0,,Pending
 205,Rosh Hashanah 2026,DEBORAH,BARKER,(847) 414 - 0335,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Fryer Whole,pieces,2.0,,0,,Pending
 206,Rosh Hashanah 2026,ANNE,ZAVELL,(847) 269 - 1685,,2026-09-09 (Wed),2:00 PM - 3:00 PM,Whole Brisket 16 lb or More,pieces,1.0,,0,AS BIG AS POSSIBLE,Pending
@@ -627,3 +625,4 @@ DELIVERY
 NBK, 60062
 4100 3903 0550 7952
 07/29    481    60035",1,,Pending
+558,Rosh Hashanah 2026,ROBERTA,EDELHEIT,(847) 903 - 3899,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Matzah Soup Qt,each,1.0,ADD 4 ROUND RAISIN CHALLAHS,1,,Pending
