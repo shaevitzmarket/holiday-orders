@@ -222,7 +222,7 @@ id,holiday,first_name,last_name,phone,email,pickup_date,pickup_time,item_name,un
 255,Rosh Hashanah 2026,JOYCE,BERLINSKY,(847) 494 - 1080,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Schnitzel,,1.0,PAID,0,,Pending
 256,Rosh Hashanah 2026,JOYCE,BERLINSKY,(847) 494 - 1080,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Squash Souffle Tray,,1.0,PAID,0,,Pending
 257,Rosh Hashanah 2026,JOYCE,BERLINSKY,(847) 494 - 1080,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Maple Carrots,,1.0,PAID,0,,Pending
-259,Rosh Hashanah 2026,ROSALIE,ROTH,(847) 674 - 0221,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Bone-in Rib Roast,lbs,10.0,,0,9-10# IN BASKET,Pending
+259,Rosh Hashanah 2026,ROSALIE,ROTH,(847) 674 - 0221,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Bone-in Rib Roast,lbs,10.0,,0,10# IN BASKET OR BIGGER,Pending
 261,Rosh Hashanah 2026,BETH SHAPIRO,SHAPIRO KOPIN,(847) 372 - 4973,,2026-09-06 (Sun),10:00 AM - 11:00 AM,Whole Brisket 8-10 lb,pieces,1.0,,0,,Pending
 262,Rosh Hashanah 2026,BETH SHAPIRO,SHAPIRO KOPIN,(847) 372 - 4973,,2026-09-06 (Sun),10:00 AM - 11:00 AM,Ground Beef Lean,lbs,10.0,,0,,Pending
 263,Rosh Hashanah 2026,BETH SHAPIRO,SHAPIRO KOPIN,(847) 372 - 4973,,2026-09-06 (Sun),10:00 AM - 11:00 AM,Kishke,each,2.0,,0,,Pending
@@ -622,3 +622,4 @@ NBK, 60062
 578,Rosh Hashanah 2026,JEN,GEIRINGER,(773) 339 - 8485,,2026-09-11 (Fri),11:00 AM - 12:00 PM,Roasted Potato,,1.0,,0,,Pending
 579,Rosh Hashanah 2026,MICHAEL,KRULE,(847) 372 - 1236,,2026-09-08 (Tue),4:00 PM - 5:00 PM,B/S Breast,lbs,6.0,****NARCISISTIC TERRORIST OF THE HIGHEST ORDER*******,1,,Pending
 580,Rosh Hashanah 2026,MICHAEL,KRULE,(847) 372 - 1236,,2026-09-08 (Tue),4:00 PM - 5:00 PM,Wings,lbs,3.0,****NARCISISTIC TERRORIST OF THE HIGHEST ORDER*******,1,,Pending
+581,Rosh Hashanah 2026,ROSALIE,ROTH,(847) 674 - 0221,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Family Steak,pieces,6.0,,0,,Pending
