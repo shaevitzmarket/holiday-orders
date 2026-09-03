@@ -129,7 +129,7 @@ id,holiday,first_name,last_name,phone,email,pickup_date,pickup_time,item_name,un
 179,Rosh Hashanah 2026,SANDRA,LUND,(847) 433 - 2468,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Whole Brisket 12-14 lb,pieces,1.0,,0,,Pending
 180,Rosh Hashanah 2026,LISA,DUNN,(847) 922 - 9386,HLKATZ@COMCAST.NET,2026-09-11 (Fri),11:00 AM - 12:00 PM,Complete Dinner,,3.0,PAID,0,,Pending
 181,Rosh Hashanah 2026,BONNIE,ROTHENBERG,(847) 254 - 2453,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Rib Steak,pieces,2.0,,0,,Pending
-182,Rosh Hashanah 2026,LORI,JACOBSON,(847) 751 - 2277,,2026-09-08 (Tue),9:00 AM - 10:00 AM,1st Cut 3-4 #,pieces,1.0,,0,WANTS 3.75#,Pending
+182,Rosh Hashanah 2026,LORI,JACOBSON,(847) 751 - 2277,,2026-09-08 (Tue),9:00 AM - 10:00 AM,1st Cut 3-4 #,pieces,1.0,,0,WANTS 4 POUNDS,Pending
 183,Rosh Hashanah 2026,VANESSA,EHRLICH,(847) 571 - 2095,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Thighs,packs,2.0,,0,,Pending
 184,Rosh Hashanah 2026,VANESSA,EHRLICH,(847) 571 - 2095,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Wings,packs,1.0,,0,,Pending
 185,Rosh Hashanah 2026,VANESSA,EHRLICH,(847) 571 - 2095,,2026-09-10 (Thu),10:00 AM - 11:00 AM,12-16 lb Turkey,pieces,1.0,,0,14-16#,Pending
@@ -705,3 +705,4 @@ NOTE TWO TYPES OF SHORT RIBS!!!!",1,1 INCH CUT SPECIAL RIBS AND 6 POUNDS ENGLISH
 657,Rosh Hashanah 2026,JENNIFER,AUERBACH,(847) 476 - 2512,,2026-09-09 (Wed),11:00 AM - 12:00 PM,Wings,packs,2.0,,0,,Pending
 658,Rosh Hashanah 2026,IRENE,WEINMAN,(847) 432 - 8334,,2026-09-11 (Fri),12:00 PM - 1:00 PM,Kishke,each,1.0,ALSO WANTS 8 PIECES OF SCHNITZEL BUT I DID NOT GUARANTEE WE WOULD HAVE IT,1,,Pending
 659,Rosh Hashanah 2026,IRENE,WEINMAN,(847) 432 - 8334,,2026-09-11 (Fri),12:00 PM - 1:00 PM,Chopped Liver,lbs,1.0,ALSO WANTS 8 PIECES OF SCHNITZEL BUT I DID NOT GUARANTEE WE WOULD HAVE IT,1,,Pending
+660,Rosh Hashanah 2026,LORI,JACOBSON,(847) 751 - 2277,,2026-09-08 (Tue),9:00 AM - 10:00 AM,Noodle Soup Qt,each,1.0,,0,,Pending
