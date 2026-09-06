@@ -217,9 +217,9 @@ id,holiday,first_name,last_name,phone,email,pickup_date,pickup_time,item_name,un
 256,Rosh Hashanah 2026,JOYCE,BERLINSKY,(847) 494 - 1080,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Squash Souffle Tray,,1.0,PAID,0,,Pending
 257,Rosh Hashanah 2026,JOYCE,BERLINSKY,(847) 494 - 1080,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Maple Carrots,,1.0,PAID,0,,Pending
 259,Rosh Hashanah 2026,ROSALIE,ROTH,(847) 674 - 0221,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Bone-in Rib Roast,lbs,11.0,,0,10# IN BASKET OR BIGGER,Pending
-261,Rosh Hashanah 2026,BETH SHAPIRO,SHAPIRO KOPIN,(847) 372 - 4973,,2026-09-06 (Sun),10:00 AM - 11:00 AM,Whole Brisket 8-10 lb,pieces,1.0,,0,,Pending
-262,Rosh Hashanah 2026,BETH SHAPIRO,SHAPIRO KOPIN,(847) 372 - 4973,,2026-09-06 (Sun),10:00 AM - 11:00 AM,Ground Beef Lean,lbs,10.0,,0,,Pending
-263,Rosh Hashanah 2026,BETH SHAPIRO,SHAPIRO KOPIN,(847) 372 - 4973,,2026-09-06 (Sun),10:00 AM - 11:00 AM,Kishke,each,2.0,,0,,Pending
+261,Rosh Hashanah 2026,BETH SHAPIRO,SHAPIRO KOPIN,(847) 372 - 4973,,2026-09-06 (Sun),10:00 AM - 11:00 AM,Whole Brisket 8-10 lb,pieces,1.0,,0,,Completed
+262,Rosh Hashanah 2026,BETH SHAPIRO,SHAPIRO KOPIN,(847) 372 - 4973,,2026-09-06 (Sun),10:00 AM - 11:00 AM,Ground Beef Lean,lbs,10.0,,0,,Completed
+263,Rosh Hashanah 2026,BETH SHAPIRO,SHAPIRO KOPIN,(847) 372 - 4973,,2026-09-06 (Sun),10:00 AM - 11:00 AM,Kishke,each,2.0,,0,,Completed
 264,Rosh Hashanah 2026,CHERYL,BANKS,(847) 436 - 9036,,2026-09-03 (Thu),10:00 AM - 11:00 AM,Capon Cut in 1/8,pieces,2.0,,0,,Completed
 266,Rosh Hashanah 2026,DAN,KAZIN,(312) 316 - 8426,,2026-09-08 (Tue),11:00 AM - 12:00 PM,Whole Brisket 14-16 lb,pieces,1.0,,0,14 POUNDS,Pending
 267,Rosh Hashanah 2026,DAN,KAZIN,(312) 316 - 8426,,2026-09-08 (Tue),11:00 AM - 12:00 PM,Matzah Balls,each,18.0,,0,,Pending
