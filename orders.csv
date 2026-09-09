@@ -207,9 +207,9 @@ id,holiday,first_name,last_name,phone,email,pickup_date,pickup_time,item_name,un
 245,Rosh Hashanah 2026,KAREN,KOPIN,(847) 420 - 0791,,2026-09-04 (Fri),10:00 AM - 11:00 AM,B/S Breast,packs,3.0,,0,,Completed
 246,Rosh Hashanah 2026,KAREN,KOPIN,(847) 420 - 0791,,2026-09-04 (Fri),10:00 AM - 11:00 AM,Kishke,each,2.0,,0,,Completed
 247,Rosh Hashanah 2026,MIKE,PERLMAN,(773) 490 - 7039,,2026-09-08 (Tue),3:00 PM - 4:00 PM,1st Cut 7# or more,pieces,1.0,,0,,Completed
-248,Rosh Hashanah 2026,MARCI,SHAPIRO,(847) 980 - 8405,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,1.0,,0,,Pending
-249,Rosh Hashanah 2026,MARCI,SHAPIRO,(847) 980 - 8405,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Kishke,each,1.0,,0,,Pending
-250,Rosh Hashanah 2026,MARCI,SHAPIRO,(847) 980 - 8405,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Chopped Liver,lbs,0.75,,0,,Pending
+248,Rosh Hashanah 2026,MARCI,SHAPIRO,(847) 980 - 8405,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,1.0,,0,,Completed
+249,Rosh Hashanah 2026,MARCI,SHAPIRO,(847) 980 - 8405,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Kishke,each,1.0,,0,,Completed
+250,Rosh Hashanah 2026,MARCI,SHAPIRO,(847) 980 - 8405,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Chopped Liver,lbs,0.75,,0,,Completed
 251,Rosh Hashanah 2026,RACHEL,GLUCK,(847) 858 - 8707,,2026-08-31 (Mon),10:00 AM - 11:00 AM,Whole Brisket 14-16 lb,pieces,2.0,,0,14 POUNDS EACH DO NOT TRIM,Completed
 252,Rosh Hashanah 2026,MARGARET,COHN,(847) 878 - 9167,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Fryer Cut in 1/8,pieces,3.0,,0,,Pending
 254,Rosh Hashanah 2026,JOYCE,BERLINSKY,(847) 494 - 1080,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Chicken Broth 1/2 Gallon,each,1.0,PAID,0,,Pending
