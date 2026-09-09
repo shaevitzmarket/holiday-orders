@@ -216,7 +216,7 @@ id,holiday,first_name,last_name,phone,email,pickup_date,pickup_time,item_name,un
 255,Rosh Hashanah 2026,JOYCE,BERLINSKY,(847) 494 - 1080,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Schnitzel,,1.0,PAID,0,,Pending
 256,Rosh Hashanah 2026,JOYCE,BERLINSKY,(847) 494 - 1080,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Squash Souffle Tray,,1.0,PAID,0,,Pending
 257,Rosh Hashanah 2026,JOYCE,BERLINSKY,(847) 494 - 1080,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Maple Carrots,,1.0,PAID,0,,Pending
-259,Rosh Hashanah 2026,ROSALIE,ROTH,(847) 674 - 0221,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Bone-in Rib Roast,lbs,11.0,,0,10# IN BASKET OR BIGGER,Pending
+259,Rosh Hashanah 2026,ROSALIE,ROTH,(847) 674 - 0221,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Bone-in Rib Roast,lbs,11.0,,0,10# IN BASKET OR BIGGER,Completed
 261,Rosh Hashanah 2026,BETH SHAPIRO,SHAPIRO KOPIN,(847) 372 - 4973,,2026-09-06 (Sun),10:00 AM - 11:00 AM,Whole Brisket 8-10 lb,pieces,1.0,,0,,Completed
 262,Rosh Hashanah 2026,BETH SHAPIRO,SHAPIRO KOPIN,(847) 372 - 4973,,2026-09-06 (Sun),10:00 AM - 11:00 AM,Ground Beef Lean,lbs,10.0,,0,,Completed
 263,Rosh Hashanah 2026,BETH SHAPIRO,SHAPIRO KOPIN,(847) 372 - 4973,,2026-09-06 (Sun),10:00 AM - 11:00 AM,Kishke,each,2.0,,0,,Completed
@@ -593,7 +593,7 @@ NBK, 60062
 577,Rosh Hashanah 2026,JEN,GEIRINGER,(773) 339 - 8485,,2026-09-11 (Fri),11:00 AM - 12:00 PM,Squash Souffle Tray,,1.0,,0,,Pending
 578,Rosh Hashanah 2026,JEN,GEIRINGER,(773) 339 - 8485,,2026-09-11 (Fri),11:00 AM - 12:00 PM,Roasted Potato,,1.0,,0,,Pending
 579,Rosh Hashanah 2026,MICHAEL,KRULE,(847) 372 - 1236,,2026-09-07 (Mon),4:00 PM - 5:00 PM,B/S Breast,lbs,6.0,,0,,Completed
-581,Rosh Hashanah 2026,ROSALIE,ROTH,(847) 674 - 0221,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Family Steak,pieces,2.0,,0,6# kebab in 2 packs,Pending
+581,Rosh Hashanah 2026,ROSALIE,ROTH,(847) 674 - 0221,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Family Steak,pieces,2.0,,0,6# kebab in 2 packs,Completed
 582,Rosh Hashanah 2026,LOIS,CHAISIN,(847) 922 - 1270,,2026-09-06 (Sun),9:00 AM - 10:00 AM,Short Rib,lbs,36.0,"****ALSO WANTS 4 PIECES OF PICKLED BRISKET*****
 NOTE TWO TYPES OF SHORT RIBS!!!!",1,1 INCH CUT SPECIAL RIBS AND 6 POUNDS ENGLISH CUT,Completed
 583,Rosh Hashanah 2026,LEE,BLUM,(847) 738 - 7994,,2026-09-09 (Wed),12:00 PM - 1:00 PM,1st Cut 3-4 #,pieces,1.0,,0,,Completed
