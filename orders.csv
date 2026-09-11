@@ -228,9 +228,9 @@ id,holiday,first_name,last_name,phone,email,pickup_date,pickup_time,item_name,un
 274,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-08-30 (Sun),9:00 AM - 10:00 AM,Capon Cut in 1/8,pieces,2.0,,0,,Completed
 275,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-09 (Wed),9:00 AM - 10:00 AM,Brisket Point,pieces,2.0,,0,6 # TOTAL,Completed
 276,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-09 (Wed),9:00 AM - 10:00 AM,B/S Breast,packs,2.0,,0,"Butterfly, cut 1/2",Completed
-277,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-10 (Thu),1:00 PM - 2:00 PM,Meatsballs Tray,,1.0,,0,,Pending
-278,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-10 (Thu),1:00 PM - 2:00 PM,Roasted Potato,,1.0,,0,,Pending
-279,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-10 (Thu),1:00 PM - 2:00 PM,Maple Carrots,,1.0,,0,,Pending
+277,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-10 (Thu),1:00 PM - 2:00 PM,Meatsballs Tray,,1.0,,0,,Completed
+278,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-10 (Thu),1:00 PM - 2:00 PM,Roasted Potato,,1.0,,0,,Completed
+279,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-10 (Thu),1:00 PM - 2:00 PM,Maple Carrots,,1.0,,0,,Completed
 280,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-04 (Fri),10:00 AM - 11:00 AM,B/S Breast,packs,2.0,,0,"Butterfly, cut in 1/2",Completed
 281,Rosh Hashanah 2026,DEBRA,LANDIS,(847) 772 - 7623,,2026-09-04 (Fri),10:00 AM - 11:00 AM,Skirt Steak,lbs,4.0,,0,TENDERIZED,Completed
 282,Rosh Hashanah 2026,LESLIE,KIND,(847) 380 - 5463,,2026-09-04 (Fri),10:00 AM - 11:00 AM,1st Cut 7# or more,pieces,1.0,,0,,Completed
