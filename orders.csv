@@ -684,8 +684,8 @@ VACUUM PACK FLAT IRON",0,,Completed
 668,Rosh Hashanah 2026,KAREN,SILVERSTEIN,(847) 778 - 4007,,2026-09-11 (Fri),11:00 AM - 12:00 PM,Braised Brisket,,1.0,,0,,Pending
 669,Rosh Hashanah 2026,KAREN,SILVERSTEIN,(847) 778 - 4007,,2026-09-11 (Fri),11:00 AM - 12:00 PM,Herb Chicken Tray,,1.0,,0,,Pending
 670,Rosh Hashanah 2026,DEBBIE,POCKROSS,(773) 307 - 6748,,2026-09-08 (Tue),10:00 AM - 11:00 AM,1st Cut 4-5 #,pieces,1.0,,0,,Completed
-671,Rosh Hashanah 2026,LOIS,LOURIE,(847) 971 - 8386,,2026-09-11 (Fri),9:00 AM - 10:00 AM,Matzah Balls,each,12.0,,0,,Pending
-672,Rosh Hashanah 2026,LOIS,LOURIE,(847) 971 - 8386,,2026-09-11 (Fri),9:00 AM - 10:00 AM,Chicken Broth 1/2 Gallon,each,2.0,,0,,Pending
+671,Rosh Hashanah 2026,LOIS,LOURIE,(847) 971 - 8386,,2026-09-11 (Fri),9:00 AM - 10:00 AM,Matzah Balls,each,12.0,babka,0,,Pending
+672,Rosh Hashanah 2026,LOIS,LOURIE,(847) 971 - 8386,,2026-09-11 (Fri),9:00 AM - 10:00 AM,Chicken Broth 1/2 Gallon,each,2.0,babka,0,,Pending
 673,Rosh Hashanah 2026,JANE,PICKUS,(847) 217 - 1897,,2026-09-08 (Tue),9:00 AM - 10:00 AM,1st Cut 5-6 #,pieces,1.0,,0,,Completed
 674,Rosh Hashanah 2026,Beth,Hayes,(847) 764 - 6930,,2026-09-11 (Fri),9:00 AM - 10:00 AM,Ground 80/20,lbs,5.0,,0,,Pending
 675,Rosh Hashanah 2026,Beth,Hayes,(847) 764 - 6930,,2026-09-11 (Fri),9:00 AM - 10:00 AM,Kishke,each,1.0,,0,,Pending
@@ -860,3 +860,4 @@ ADD 1 tray franks in blanket",1,,Completed
 843,Rosh Hashanah 2026,AMY,PESSIS,(847) 641 - 5889,,2026-09-10 (Thu),2:00 PM - 3:00 PM,Family Steak,pieces,1.0,,0,,Completed
 844,Rosh Hashanah 2026,LAURA,FRAINT,(847) 212 - 4221,,2026-09-10 (Thu),2:00 PM - 3:00 PM,Short Rib,lbs,4.5,SPECIAL RIBS,1,SPECIAL RIBS,Completed
 845,Rosh Hashanah 2026,KAREN,SILVERSTEIN,(847) 778 - 4007,,2026-09-11 (Fri),11:00 AM - 12:00 PM,Matzah Soup Qt,each,10.0,,0,,Pending
+846,Rosh Hashanah 2026,LOIS,LOURIE,(847) 971 - 8386,,2026-09-11 (Fri),9:00 AM - 10:00 AM,Maple Carrots,,1.0,babka,0,,Pending
