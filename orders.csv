@@ -157,8 +157,8 @@ id,holiday,first_name,last_name,phone,email,pickup_date,pickup_time,item_name,un
 198,Rosh Hashanah 2026,SHEILA,BARRON,(847) 722 - 4445,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Family Steak,pieces,4.0,,0,,Completed
 199,Rosh Hashanah 2026,BRIAN,JACOBSON,(847) 636 - 4623,,2026-09-04 (Fri),10:00 AM - 11:00 AM,Whole Brisket 16 lb or More,pieces,1.0,,0,BIGGER IS BETTER,Completed
 200,Rosh Hashanah 2026,BRIAN,JACOBSON,(847) 636 - 4623,,2026-09-04 (Fri),10:00 AM - 11:00 AM,Brisket Point,pieces,1.0,,0,Big,Completed
-201,Rosh Hashanah 2026,ROBERTA,EDELHEIT,(847) 903 - 3899,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Whole Brisket 12-14 lb,pieces,1.0,ADD 4 ROUND RAISIN CHALLAHS,1,,Pending
-202,Rosh Hashanah 2026,ROBERTA,EDELHEIT,(847) 903 - 3899,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Chopped Liver,lbs,0.5,ADD 4 ROUND RAISIN CHALLAHS,1,,Pending
+201,Rosh Hashanah 2026,ROBERTA,EDELHEIT,(847) 903 - 3899,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Whole Brisket 12-14 lb,pieces,1.0,ADD 4 ROUND RAISIN CHALLAHS,1,,Completed
+202,Rosh Hashanah 2026,ROBERTA,EDELHEIT,(847) 903 - 3899,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Chopped Liver,lbs,0.5,ADD 4 ROUND RAISIN CHALLAHS,1,,Completed
 203,Rosh Hashanah 2026,LINDA,SPRING,(847) 421 - 5132,,2026-09-07 (Mon),9:00 AM - 10:00 AM,Whole Brisket 10-12 lb,pieces,1.0,,0,,Completed
 205,Rosh Hashanah 2026,DEBORAH,BARKER,(847) 414 - 0335,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Fryer Whole,pieces,2.0,,0,,Completed
 206,Rosh Hashanah 2026,ANNE,ZAVELL,(847) 269 - 1685,,2026-09-09 (Wed),2:00 PM - 3:00 PM,Whole Brisket 16 lb or More,pieces,1.0,,0,AS BIG AS POSSIBLE,Completed
@@ -571,7 +571,7 @@ DELIVERY
 NBK, 60062
 4100 3903 0550 7952
 07/29    481    60035",1,,Pending
-558,Rosh Hashanah 2026,ROBERTA,EDELHEIT,(847) 903 - 3899,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Matzah Soup Qt,each,1.0,ADD 4 ROUND RAISIN CHALLAHS,1,,Pending
+558,Rosh Hashanah 2026,ROBERTA,EDELHEIT,(847) 903 - 3899,,2026-09-10 (Thu),9:00 AM - 10:00 AM,Matzah Soup Qt,each,1.0,ADD 4 ROUND RAISIN CHALLAHS,1,,Completed
 559,Rosh Hashanah 2026,LOUISE,LOCKER,(847) 212 - 5143,,2026-09-10 (Thu),11:00 AM - 12:00 PM,Matzah Soup Qt,each,5.0,,0,,Pending
 560,Rosh Hashanah 2026,JOAN,PERLMAN,(847) 922 - 0960,,2026-09-11 (Fri),2:00 PM - 3:00 PM,Meatballs,each,3.0,,0,,Pending
 561,Rosh Hashanah 2026,PAMELA,MILLER,(847) 494 - 9293,,2026-09-10 (Thu),12:00 PM - 1:00 PM,Matzah Soup Qt,each,4.0,,0,,Completed
