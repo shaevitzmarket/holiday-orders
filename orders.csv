@@ -74,10 +74,10 @@ id,holiday,first_name,last_name,phone,email,pickup_date,pickup_time,item_name,un
 115,Rosh Hashanah 2026,MICHAEL,DUNN,(847) 828 - 5600,,2026-09-01 (Tue),10:00 AM - 11:00 AM,Ground 80/20,lbs,10.0,,0,"5 PACKS, 2 # EACH",Completed
 116,Rosh Hashanah 2026,MICHAEL,DUNN,(847) 828 - 5600,,2026-09-08 (Tue),10:00 AM - 11:00 AM,Roast Turkey Breast,each,3.0,,0,"Dinner Slices, no bones, extra gravy",Completed
 117,Rosh Hashanah 2026,AMY,FELDMAN,(847) 946 - 1400,,2026-09-10 (Thu),10:00 AM - 11:00 AM,Whole Brisket 8-10 lb,pieces,1.0,,0,,Completed
-119,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),12:00 PM - 1:00 PM,Turkey Breast,pieces,2.0,,0,"BONELESS AND NETTED, 7 # EACH",Pending
-120,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),12:00 PM - 1:00 PM,Kishke,each,3.0,,0,,Pending
-125,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),12:00 PM - 1:00 PM,Chopped Liver,lbs,3.0,,0,paid,Pending
-126,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),12:00 PM - 1:00 PM,Schnitzel,,2.0,,0,paid,Pending
+119,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),12:00 PM - 1:00 PM,Turkey Breast,pieces,2.0,,0,"BONELESS AND NETTED, 7 # EACH",Completed
+120,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),12:00 PM - 1:00 PM,Kishke,each,3.0,,0,,Completed
+125,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),12:00 PM - 1:00 PM,Chopped Liver,lbs,3.0,,0,paid,Completed
+126,Rosh Hashanah 2026,EMILY,LAWHEAD,(219) 680 - 0917,,2026-09-10 (Thu),12:00 PM - 1:00 PM,Schnitzel,,2.0,,0,paid,Completed
 127,Rosh Hashanah 2026,JILL,KALTER,(847) 980 - 0599,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Herb Chicken Tray,,2.0,,0,,Pending
 128,Rosh Hashanah 2026,JILL,KALTER,(847) 980 - 0599,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Meatsballs Tray,,1.0,,0,,Pending
 129,Rosh Hashanah 2026,JILL,KALTER,(847) 980 - 0599,,2026-09-11 (Fri),10:00 AM - 11:00 AM,Squash Souffle Tray,,1.0,,0,,Pending
