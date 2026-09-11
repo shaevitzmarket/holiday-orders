@@ -9,14 +9,13 @@ st.set_page_config(
     page_title="Holiday Order Management System", page_icon="📦", layout="wide"
 )
 
-# Initialize Session State & Query Params for Hide Completed Preference
+# Initialize Session State & Query Params for Preferences
 if "form_key" not in st.session_state:
     st.session_state.form_key = 0
 if "success_msg" not in st.session_state:
     st.session_state.success_msg = ""
 
 if "hide_completed" not in st.session_state:
-    # Default to True so completed orders stay hidden by default across logins/reloads
     param_val = st.query_params.get("hide_completed", "true").lower() == "true"
     st.session_state.hide_completed = param_val
 
@@ -518,6 +517,57 @@ with tab2:
         df_raw["item_note"] = df_raw["item_note"].fillna("")
         df_raw["unit"] = df_raw["unit"].fillna("")
         df_raw["status"] = df_raw["status"].fillna("Pending")
+
+        # ⚡ BULK STATUS UPDATE SECTION
+        with st.expander("⚡ Bulk Update Order Status (Mark Multiple Orders as Completed)"):
+            c_bdate, c_bstat = st.columns(2)
+            b_dates = ["All Dates"] + sorted(df_raw["pickup_date"].unique().tolist())
+            sel_bdate = c_bdate.selectbox("Filter by Pickup Date:", b_dates, key="bulk_date_filter")
+            target_status = c_bstat.selectbox("Set Selected Orders To:", ["Completed", "Pending"], key="bulk_target_status")
+
+            bulk_df = df_raw.copy()
+            if sel_bdate != "All Dates":
+                bulk_df = bulk_df[bulk_df["pickup_date"] == sel_bdate]
+
+            bulk_unique = bulk_df[['first_name', 'last_name', 'phone', 'email', 'pickup_date', 'pickup_time', 'status']].drop_duplicates()
+            bulk_unique = bulk_unique.sort_values(by=['pickup_date', 'last_name', 'first_name'])
+
+            bulk_options = []
+            for _, r in bulk_unique.iterrows():
+                s_icon = "✅" if r['status'] == "Completed" else "⏳"
+                lbl = f"{s_icon} {r['first_name']} {r['last_name']} | {r['phone']} | {r['pickup_date']} @ {r['pickup_time']}"
+                bulk_options.append((lbl, r['phone'], r['pickup_date'], r['email']))
+
+            selected_bulk_orders = st.multiselect(
+                "Select Orders to Bulk Update:",
+                options=bulk_options,
+                format_func=lambda x: x[0],
+                key="bulk_order_multiselect"
+            )
+
+            if st.button("💾 Apply Bulk Status Update", type="primary", key="btn_bulk_update"):
+                if not selected_bulk_orders:
+                    st.warning("Please select at least one order to update.")
+                else:
+                    df_master = load_orders()
+                    updated_count = 0
+                    for _, b_phone, b_date, b_email in selected_bulk_orders:
+                        mask = (
+                            (df_master["holiday"] == selected_holiday) &
+                            (df_master["phone"] == b_phone) &
+                            (df_master["pickup_date"] == b_date) &
+                            (df_master["email"] == b_email)
+                        )
+                        df_master.loc[mask, "status"] = target_status
+                        updated_count += 1
+
+                    if save_orders_to_github(df_master, f"Bulk update {updated_count} orders to {target_status}"):
+                        st.success(f"Successfully updated {updated_count} order(s) to **{target_status}**!")
+                        st.rerun()
+                    else:
+                        st.error("Failed to save updates to GitHub.")
+
+        st.markdown("---")
 
         c_sel, c_chk = st.columns([3, 1])
         with c_chk:
