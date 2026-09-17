@@ -243,6 +243,19 @@ ROSH_CATALOG = {
 
 HOLIDAY_CATALOGS = {
     "Rosh Hashanah 2026": ROSH_CATALOG,
+    "Thanksgiving 2026": {
+        "Turkeys": {
+            "12-16 lb Turkey": {"unit": "pieces", "is_weight": False},
+            "16-20 lb Turkey": {"unit": "pieces", "is_weight": False},
+            "20-24 lb Turkey": {"unit": "pieces", "is_weight": False},
+            "Turkey Breast": {"unit": "pieces", "is_weight": False},
+        },
+        "Sides": {
+            "Corn Souffle": {"unit": "each", "is_weight": False},
+            "Potato Kugel": {"unit": "each", "is_weight": False},
+            "Squash Souffle": {"unit": "each", "is_weight": False},
+        },
+    },
     "Passover 2027": {
         "Poultry": {
             "Whole Capon": {"units": ["pieces", "lbs", "packs"]},
@@ -251,15 +264,6 @@ HOLIDAY_CATALOGS = {
         "Sides": {
             "Matzah Balls": {"unit": "each", "is_weight": False},
             "Potato Kugel": {"unit": "each", "is_weight": False},
-        },
-    },
-    "Thanksgiving 2026": {
-        "Turkeys": {
-            "12-16 lb Turkey": {"unit": "pieces", "is_weight": False},
-            "16-20 lb Turkey": {"unit": "pieces", "is_weight": False},
-        },
-        "Sides": {
-            "Corn Souffle": {"unit": "each", "is_weight": False},
         },
     },
 }
@@ -350,6 +354,32 @@ with tab1:
         st.session_state.success_msg = ""
 
     st.subheader("Customer & Pickup Information")
+
+    # 🔍 RETURNING CUSTOMER AUTOFILL LOOKUP
+    df_all_past = load_orders()
+    past_customers = [("-- New Customer / Blank --", "", "", "")]
+    if not df_all_past.empty:
+        unique_custs = df_all_past[['first_name', 'last_name', 'phone']].drop_duplicates().sort_values(by=['last_name', 'first_name'])
+        for _, r in unique_custs.iterrows():
+            if r['last_name'] or r['first_name']:
+                lbl = f"👤 {r['last_name']}, {r['first_name']} | {r['phone']}"
+                past_customers.append((lbl, r['first_name'], r['last_name'], r['phone']))
+
+    def handle_autofill_select():
+        sel = st.session_state[f"autofill_select_{st.session_state.form_key}"]
+        if isinstance(sel, tuple) and sel[0] != "-- New Customer / Blank --":
+            st.session_state[f"fn_{st.session_state.form_key}"] = sel[1]
+            st.session_state[f"ln_{st.session_state.form_key}"] = sel[2]
+            st.session_state[f"phone_{st.session_state.form_key}"] = sel[3]
+
+    st.selectbox(
+        "🔍 Search Returning Customer (Optional Autofill):",
+        options=past_customers,
+        format_func=lambda x: x[0],
+        key=f"autofill_select_{st.session_state.form_key}",
+        on_change=handle_autofill_select
+    )
+
     c_fn, c_ln = st.columns(2)
     first_name = c_fn.text_input("First Name", key=f"fn_{st.session_state.form_key}")
     last_name = c_ln.text_input("Last Name", key=f"ln_{st.session_state.form_key}")
