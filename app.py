@@ -57,7 +57,7 @@ EMPTY_COLUMNS = [
 
 PREP_STATIONS = {
     "🥩 Meat & Butcher": ["Beef", "Briskets", "Lamb & Veal"],
-    "🍗 Poultry": ["Chicken", "Turkey"],
+    "🍗 Poultry": ["Chicken", "Turkey", "Turkeys"],
     "🍲 Deli & Soups": ["Soup, Deli, and Pre-Cooked"],
     "👨‍🍳 Catering": ["Catering Trays"]
 }
@@ -241,21 +241,25 @@ ROSH_CATALOG = {
     },
 }
 
+THANKSGIVING_CATALOG = {
+    "Turkeys": {
+        "12-16 lb Turkey": {"units": ["Cleaned", "Spatchcock"]},
+        "16-20 lb Turkey": {"units": ["Cleaned", "Spatchcock"]},
+        "20-24 lb Turkey": {"units": ["Cleaned", "Spatchcock"]},
+        "Turkey Breast": {"unit": "pieces", "is_weight": False},
+    },
+    "Chicken": ROSH_CATALOG["Chicken"],
+    "Beef": ROSH_CATALOG["Beef"],
+    "Sides": {
+        "Corn Souffle": {"unit": "each", "is_weight": False},
+        "Potato Kugel": {"unit": "each", "is_weight": False},
+        "Squash Souffle": {"unit": "each", "is_weight": False},
+    },
+}
+
 HOLIDAY_CATALOGS = {
     "Rosh Hashanah 2026": ROSH_CATALOG,
-    "Thanksgiving 2026": {
-        "Turkeys": {
-            "12-16 lb Turkey": {"unit": "pieces", "is_weight": False},
-            "16-20 lb Turkey": {"unit": "pieces", "is_weight": False},
-            "20-24 lb Turkey": {"unit": "pieces", "is_weight": False},
-            "Turkey Breast": {"unit": "pieces", "is_weight": False},
-        },
-        "Sides": {
-            "Corn Souffle": {"unit": "each", "is_weight": False},
-            "Potato Kugel": {"unit": "each", "is_weight": False},
-            "Squash Souffle": {"unit": "each", "is_weight": False},
-        },
-    },
+    "Thanksgiving 2026": THANKSGIVING_CATALOG,
     "Passover 2027": {
         "Poultry": {
             "Whole Capon": {"units": ["pieces", "lbs", "packs"]},
