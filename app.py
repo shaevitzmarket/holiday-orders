@@ -83,23 +83,25 @@ def load_orders():
                 df["item_note"] = ""
             if "status" not in df.columns:
                 df["status"] = "Pending"
+            if "email" not in df.columns:
+                df["email"] = ""
             
             df["status"] = df["status"].fillna("Pending")
+            df["email"] = df["email"].fillna("")
             
             # Dynamically Generate Alphabetical Daily Order Numbers
             if not df.empty and "pickup_date" in df.columns:
                 df["first_name"] = df["first_name"].fillna("")
                 df["last_name"] = df["last_name"].fillna("")
                 df["phone"] = df["phone"].fillna("")
-                df["email"] = df["email"].fillna("")
                 df["item_note"] = df["item_note"].fillna("")
                 df["unit"] = df["unit"].fillna("")
                 
-                orders = df[['pickup_date', 'last_name', 'first_name', 'phone', 'email']].drop_duplicates()
-                orders = orders.sort_values(by=['pickup_date', 'last_name', 'first_name', 'phone', 'email'])
+                orders = df[['pickup_date', 'last_name', 'first_name', 'phone']].drop_duplicates()
+                orders = orders.sort_values(by=['pickup_date', 'last_name', 'first_name', 'phone'])
                 orders['Daily Order #'] = orders.groupby('pickup_date').cumcount() + 1
                 
-                df = df.merge(orders, on=['pickup_date', 'last_name', 'first_name', 'phone', 'email'], how='left')
+                df = df.merge(orders, on=['pickup_date', 'last_name', 'first_name', 'phone'], how='left')
                 
             return df
         else:
@@ -348,24 +350,22 @@ with tab1:
         st.session_state.success_msg = ""
 
     st.subheader("Customer & Pickup Information")
-    c1, c2 = st.columns(2)
-    with c1:
-        first_name = st.text_input("First Name", key=f"fn_{st.session_state.form_key}")
-        phone_input = st.text_input(
-            "Phone Number", placeholder="e.g. 8475551234 or (847) 555-1234", key=f"phone_{st.session_state.form_key}"
-        )
-        pickup_date = st.date_input("Pickup Date", key=f"date_{st.session_state.form_key}")
+    c_fn, c_ln = st.columns(2)
+    first_name = c_fn.text_input("First Name", key=f"fn_{st.session_state.form_key}")
+    last_name = c_ln.text_input("Last Name", key=f"ln_{st.session_state.form_key}")
+
+    c_ph, c_dt, c_tm = st.columns([2, 2, 2])
+    phone_input = c_ph.text_input(
+        "Phone Number", placeholder="e.g. 8475551234 or (847) 555-1234", key=f"phone_{st.session_state.form_key}"
+    )
+    pickup_date = c_dt.date_input("Pickup Date", key=f"date_{st.session_state.form_key}")
+    pickup_time = c_tm.selectbox("Pickup Time Slot", TIME_SLOTS, key=f"time_{st.session_state.form_key}")
+
+    is_saturday = pickup_date.weekday() == 5
+    if is_saturday:
+        st.error("❌ We are closed on Saturdays. Please select a different pickup date.")
         
-        is_saturday = pickup_date.weekday() == 5
-        if is_saturday:
-            st.error("❌ We are closed on Saturdays. Please select a different pickup date.")
-            
-        st.caption(f"🗓️ Selected Day: **{pickup_date.strftime('%A')}**")
-        
-    with c2:
-        last_name = st.text_input("Last Name", key=f"ln_{st.session_state.form_key}")
-        email = st.text_input("Email Address", key=f"email_{st.session_state.form_key}")
-        pickup_time = st.selectbox("Pickup Time Slot", TIME_SLOTS, key=f"time_{st.session_state.form_key}")
+    st.caption(f"🗓️ Selected Day: **{pickup_date.strftime('%A')}**")
 
     st.markdown("---")
     st.subheader("Select Ordered Items & Quantities")
@@ -466,7 +466,7 @@ with tab1:
                         "first_name": first_name,
                         "last_name": last_name,
                         "phone": formatted_phone,
-                        "email": email,
+                        "email": "",
                         "pickup_date": formatted_date,
                         "pickup_time": str(pickup_time),
                         "item_name": item_name,
@@ -512,7 +512,6 @@ with tab2:
         df_raw["first_name"] = df_raw["first_name"].fillna("")
         df_raw["last_name"] = df_raw["last_name"].fillna("")
         df_raw["phone"] = df_raw["phone"].fillna("")
-        df_raw["email"] = df_raw["email"].fillna("")
         df_raw["notes"] = df_raw["notes"].fillna("")
         df_raw["item_note"] = df_raw["item_note"].fillna("")
         df_raw["unit"] = df_raw["unit"].fillna("")
@@ -529,14 +528,14 @@ with tab2:
             if sel_bdate != "All Dates":
                 bulk_df = bulk_df[bulk_df["pickup_date"] == sel_bdate]
 
-            bulk_unique = bulk_df[['first_name', 'last_name', 'phone', 'email', 'pickup_date', 'pickup_time', 'status']].drop_duplicates()
+            bulk_unique = bulk_df[['first_name', 'last_name', 'phone', 'pickup_date', 'pickup_time', 'status']].drop_duplicates()
             bulk_unique = bulk_unique.sort_values(by=['pickup_date', 'last_name', 'first_name'])
 
             bulk_options = []
             for _, r in bulk_unique.iterrows():
                 s_icon = "✅" if r['status'] == "Completed" else "⏳"
                 lbl = f"{s_icon} {r['first_name']} {r['last_name']} | {r['phone']} | {r['pickup_date']} @ {r['pickup_time']}"
-                bulk_options.append((lbl, r['phone'], r['pickup_date'], r['email']))
+                bulk_options.append((lbl, r['phone'], r['pickup_date']))
 
             selected_bulk_orders = st.multiselect(
                 "Select Orders to Bulk Update:",
@@ -551,12 +550,11 @@ with tab2:
                 else:
                     df_master = load_orders()
                     updated_count = 0
-                    for _, b_phone, b_date, b_email in selected_bulk_orders:
+                    for _, b_phone, b_date in selected_bulk_orders:
                         mask = (
                             (df_master["holiday"] == selected_holiday) &
                             (df_master["phone"] == b_phone) &
-                            (df_master["pickup_date"] == b_date) &
-                            (df_master["email"] == b_email)
+                            (df_master["pickup_date"] == b_date)
                         )
                         df_master.loc[mask, "status"] = target_status
                         updated_count += 1
@@ -584,18 +582,17 @@ with tab2:
             df_edit_filtered = df_edit_filtered[df_edit_filtered["status"] != "Completed"]
 
         order_list = []
-        unique_orders = df_edit_filtered[['Daily Order #', 'first_name', 'last_name', 'phone', 'email', 'pickup_date', 'pickup_time', 'status']].drop_duplicates()
+        unique_orders = df_edit_filtered[['Daily Order #', 'first_name', 'last_name', 'phone', 'pickup_date', 'pickup_time', 'status']].drop_duplicates()
         unique_orders = unique_orders.sort_values(by=['pickup_date', 'Daily Order #'])
         
         for idx, row in unique_orders.iterrows():
             status_icon = "✅" if row['status'] == "Completed" else "⏳"
-            email_part = f" | {row['email']}" if row['email'] else ""
-            label = f"{status_icon} {row['first_name']} {row['last_name']} | {row['phone']}{email_part} | {row['pickup_date']} @ {row['pickup_time']}"
-            order_list.append((label, row["phone"], row["pickup_date"], row["email"]))
+            label = f"{status_icon} {row['first_name']} {row['last_name']} | {row['phone']} | {row['pickup_date']} @ {row['pickup_time']}"
+            order_list.append((label, row["phone"], row["pickup_date"]))
 
         if order_list:
             selected_order = c_sel.selectbox(
-                "Select Customer Order (Search by typing Last Name or Phone):",
+                "Select Customer Order (Search by Last Name or Phone Number):",
                 options=order_list,
                 format_func=lambda x: x[0] if x is not None else "",
             )
@@ -603,10 +600,9 @@ with tab2:
             if selected_order is not None:
                 sel_phone = selected_order[1]
                 sel_date = selected_order[2]
-                sel_email = selected_order[3]
 
                 df_order_items = df_raw[
-                    (df_raw["phone"] == sel_phone) & (df_raw["pickup_date"] == sel_date) & (df_raw["email"] == sel_email)
+                    (df_raw["phone"] == sel_phone) & (df_raw["pickup_date"] == sel_date)
                 ].copy()
 
                 if not df_order_items.empty:
@@ -624,9 +620,7 @@ with tab2:
                         new_ln = c_ln.text_input("Last Name", value=str(first_row["last_name"]))
                         new_completed = c_st.checkbox("✅ Mark Order as Completed / Picked Up", value=(curr_status == "Completed"))
                         
-                        c_ph, c_em = st.columns(2)
-                        new_ph = c_ph.text_input("Phone Number", value=str(first_row["phone"]))
-                        new_em = c_em.text_input("Email", value=str(first_row["email"]))
+                        new_ph = st.text_input("Phone Number", value=str(first_row["phone"]))
 
                         st.markdown("##### 🗓️ Pickup Details")
                         c_pd, c_pt = st.columns(2)
@@ -804,7 +798,6 @@ with tab2:
                                         df_master.loc[mask, "first_name"] = new_fn
                                         df_master.loc[mask, "last_name"] = new_ln
                                         df_master.loc[mask, "phone"] = formatted_phone
-                                        df_master.loc[mask, "email"] = new_em
                                         df_master.loc[mask, "pickup_date"] = new_date_formatted
                                         
                                         df_master.loc[mask, "quantity"] = round(q_val, 2)
@@ -824,7 +817,7 @@ with tab2:
                                         "first_name": new_fn,
                                         "last_name": new_ln,
                                         "phone": formatted_phone,
-                                        "email": new_em,
+                                        "email": "",
                                         "pickup_date": new_date_formatted,
                                         "pickup_time": new_time,
                                         "item_name": item_name,
@@ -851,7 +844,7 @@ with tab2:
                     )
                     cust_name = f"{first_row['first_name']} {first_row['last_name']}"
                     if st.button(
-                        f"💥 Delete ALL Items for {cust_name} ({first_row['email']}) on {first_row['pickup_date']}",
+                        f"💥 Delete ALL Items for {cust_name} on {first_row['pickup_date']}",
                         type="primary",
                     ):
                         df_master = load_orders()
@@ -860,12 +853,11 @@ with tab2:
                                 (df_master["holiday"] == selected_holiday)
                                 & (df_master["phone"] == first_row["phone"])
                                 & (df_master["pickup_date"] == first_row["pickup_date"])
-                                & (df_master["email"] == first_row["email"])
                             )
                         ]
-                        save_orders_to_github(df_master, f"Delete order for {cust_name} ({first_row['email']})")
+                        save_orders_to_github(df_master, f"Delete order for {cust_name}")
                         st.success(
-                            f"All items for {cust_name} ({first_row['email']}) deleted from GitHub!"
+                            f"All items for {cust_name} deleted from GitHub!"
                         )
                         st.rerun()
 
@@ -891,7 +883,6 @@ with tab3:
         df_raw["first_name"] = df_raw["first_name"].fillna("")
         df_raw["last_name"] = df_raw["last_name"].fillna("")
         df_raw["phone"] = df_raw["phone"].fillna("")
-        df_raw["email"] = df_raw["email"].fillna("")
         df_raw["notes"] = df_raw["notes"].fillna("")
         df_raw["item_note"] = df_raw["item_note"].fillna("")
         df_raw["unit"] = df_raw["unit"].fillna("")
@@ -903,7 +894,7 @@ with tab3:
         )
 
         m1, m2 = st.columns(2)
-        m1.metric("📦 Total Customer Orders (Season)", len(df_raw.groupby(["phone", "pickup_date", "email"])))
+        m1.metric("📦 Total Customer Orders (Season)", len(df_raw.groupby(["phone", "pickup_date"])))
         m2.metric("🥩 Total Line Items (Season)", len(df_raw))
 
         st.markdown("### 🏆 Grand Totals List")
@@ -948,7 +939,7 @@ with tab3:
             drill_df = df_raw[df_raw["item_name"] == selected_drilldown].copy()
             drill_df["Customer Name"] = drill_df["first_name"] + " " + drill_df["last_name"]
             
-            display_cols = ["Daily Order #", "Customer Name", "status", "phone", "email", "pickup_date", "pickup_time", "quantity", "unit", "item_note"]
+            display_cols = ["Daily Order #", "Customer Name", "status", "phone", "pickup_date", "pickup_time", "quantity", "unit", "item_note"]
             drill_display = drill_df[display_cols].sort_values(by=["pickup_date", "Daily Order #"])
             drill_display["quantity"] = drill_display["quantity"].apply(format_qty)
             
@@ -976,7 +967,6 @@ with tab4:
         df_raw["first_name"] = df_raw["first_name"].fillna("")
         df_raw["last_name"] = df_raw["last_name"].fillna("")
         df_raw["phone"] = df_raw["phone"].fillna("")
-        df_raw["email"] = df_raw["email"].fillna("")
         df_raw["notes"] = df_raw["notes"].fillna("")
         df_raw["item_note"] = df_raw["item_note"].fillna("")
         df_raw["unit"] = df_raw["unit"].fillna("")
@@ -1081,7 +1071,6 @@ with tab5:
         df_raw["first_name"] = df_raw["first_name"].fillna("")
         df_raw["last_name"] = df_raw["last_name"].fillna("")
         df_raw["phone"] = df_raw["phone"].fillna("")
-        df_raw["email"] = df_raw["email"].fillna("")
         df_raw["notes"] = df_raw["notes"].fillna("")
         df_raw["item_note"] = df_raw["item_note"].fillna("")
         df_raw["unit"] = df_raw["unit"].fillna("")
@@ -1094,7 +1083,7 @@ with tab5:
             ]
 
     if not df_raw.empty:
-        df_raw['Flag'] = df_raw.groupby(['pickup_date', 'last_name', 'first_name', 'phone', 'email'])['custom_flag'].transform('max')
+        df_raw['Flag'] = df_raw.groupby(['pickup_date', 'last_name', 'first_name', 'phone'])['custom_flag'].transform('max')
         df_raw['Flag'] = df_raw['Flag'].apply(lambda x: "🚨 CUSTOM" if str(x) == "1" else "OK")
 
         def make_pivot_val(row):
@@ -1111,7 +1100,7 @@ with tab5:
         df_raw['pivot_val'] = df_raw.apply(make_pivot_val, axis=1)
 
         pivot_df = df_raw.pivot_table(
-            index=['Daily Order #', 'status', 'Flag', 'first_name', 'last_name', 'phone', 'email', 'pickup_date', 'pickup_time', 'notes'],
+            index=['Daily Order #', 'status', 'Flag', 'first_name', 'last_name', 'phone', 'pickup_date', 'pickup_time', 'notes'],
             columns='item_name',
             values='pivot_val',
             aggfunc=lambda x: ' + '.join(str(v) for v in x)
