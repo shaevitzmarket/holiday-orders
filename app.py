@@ -57,7 +57,7 @@ EMPTY_COLUMNS = [
 
 PREP_STATIONS = {
     "🥩 Meat & Butcher": ["Beef", "Briskets", "Lamb & Veal"],
-    "🍗 Poultry": ["Chicken", "Turkey", "Turkeys"],
+    "🍗 Poultry": ["Chicken", "Turkey"],
     "🍲 Deli & Soups": ["Soup, Deli, and Pre-Cooked"],
     "👨‍🍳 Catering": ["Catering Trays"]
 }
@@ -179,9 +179,15 @@ ROSH_CATALOG = {
     },
     "Turkey": {
         "Turkey Breast": {"unit": "pieces", "is_weight": False},
+        "Boneless Turkey Breast": {"units": ["pieces", "lbs", "packs"]},
         "12-16 lb Turkey": {"unit": "pieces", "is_weight": False},
         "16-20 lb Turkey": {"unit": "pieces", "is_weight": False},
         "20-24 lb Turkey": {"unit": "pieces", "is_weight": False},
+        "Turkey Drumstick": {"units": ["pieces", "lbs", "packs"]},
+        "Turkey Wings": {"units": ["packs", "lbs", "pieces"]},
+        "Turkey Thighs": {"units": ["lbs", "pieces", "packs"]},
+        "Turkey Legs": {"units": ["pieces", "lbs", "packs"]},
+        "Turkey Necks": {"units": ["packs", "lbs", "pieces"]},
         "Ground Turkey Thigh": {"unit": "lbs", "is_weight": True},
         "Ground Turkey Breast": {"unit": "lbs", "is_weight": True},
     },
@@ -241,13 +247,13 @@ ROSH_CATALOG = {
     },
 }
 
-# Thanksgiving specific chicken catalog (removed necks, chx fat, chicken liver, cornish hen)
+# Thanksgiving specific chicken catalog
 THANKSGIVING_CHICKEN = {
     k: v for k, v in ROSH_CATALOG["Chicken"].items() 
     if k not in ["Necks", "Chx Fat", "Chicken Liver", "cornish hen"]
 }
 
-# Thanksgiving specific beef catalog (added Briskets with modifier dropdowns)
+# Thanksgiving specific beef catalog
 THANKSGIVING_BEEF = {
     "Whole Brisket": {"units": ["10-12#", "12-14#", "14-16#", "16# or more"]},
     "1st Cut Brisket": {"units": ["4-5#", "5-6#", "6-7#", "7# or more"]},
@@ -256,11 +262,19 @@ THANKSGIVING_BEEF = {
 }
 
 THANKSGIVING_CATALOG = {
-    "Turkeys": {
+    "Turkey": {
         "12-16 lb Turkey": {"unit": "pieces", "is_weight": False, "modifiers": ["Cleaned", "Spatchcock"]},
         "16-20 lb Turkey": {"unit": "pieces", "is_weight": False, "modifiers": ["Cleaned", "Spatchcock"]},
         "20-24 lb Turkey": {"unit": "pieces", "is_weight": False, "modifiers": ["Cleaned", "Spatchcock"]},
         "Turkey Breast": {"unit": "pieces", "is_weight": False},
+        "Boneless Turkey Breast": {"units": ["pieces", "lbs", "packs"]},
+        "Turkey Drumstick": {"units": ["pieces", "lbs", "packs"]},
+        "Turkey Wings": {"units": ["packs", "lbs", "pieces"]},
+        "Turkey Thighs": {"units": ["lbs", "pieces", "packs"]},
+        "Turkey Legs": {"units": ["pieces", "lbs", "packs"]},
+        "Turkey Necks": {"units": ["packs", "lbs", "pieces"]},
+        "Ground Turkey Breast": {"unit": "lbs", "is_weight": True},
+        "Ground Turkey Thigh": {"unit": "lbs", "is_weight": True},
     },
     "Chicken": THANKSGIVING_CHICKEN,
     "Beef": THANKSGIVING_BEEF,
@@ -1013,7 +1027,7 @@ with tab2:
                         st.rerun()
 
     else:
-        st.info("No matching orders found.")
+        st.info("No active orders found for this holiday.")
 
 
 # -------------------------------------------------------------------------
