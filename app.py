@@ -241,6 +241,20 @@ ROSH_CATALOG = {
     },
 }
 
+# Thanksgiving specific chicken catalog (removed necks, chx fat, chicken liver, cornish hen)
+THANKSGIVING_CHICKEN = {
+    k: v for k, v in ROSH_CATALOG["Chicken"].items() 
+    if k not in ["Necks", "Chx Fat", "Chicken Liver", "cornish hen"]
+}
+
+# Thanksgiving specific beef catalog (added Briskets with modifier dropdowns)
+THANKSGIVING_BEEF = {
+    "Whole Brisket": {"units": ["10-12#", "12-14#", "14-16#", "16# or more"]},
+    "1st Cut Brisket": {"units": ["4-5#", "5-6#", "6-7#", "7# or more"]},
+    "2nd Cut Brisket": {"unit": "pieces", "is_weight": False},
+    **ROSH_CATALOG["Beef"]
+}
+
 THANKSGIVING_CATALOG = {
     "Turkeys": {
         "12-16 lb Turkey": {"unit": "pieces", "is_weight": False, "modifiers": ["Cleaned", "Spatchcock"]},
@@ -248,8 +262,8 @@ THANKSGIVING_CATALOG = {
         "20-24 lb Turkey": {"unit": "pieces", "is_weight": False, "modifiers": ["Cleaned", "Spatchcock"]},
         "Turkey Breast": {"unit": "pieces", "is_weight": False},
     },
-    "Chicken": ROSH_CATALOG["Chicken"],
-    "Beef": ROSH_CATALOG["Beef"],
+    "Chicken": THANKSGIVING_CHICKEN,
+    "Beef": THANKSGIVING_BEEF,
     "Sides": {
         "Corn Souffle": {"unit": "each", "is_weight": False},
         "Potato Kugel": {"unit": "each", "is_weight": False},
@@ -258,8 +272,8 @@ THANKSGIVING_CATALOG = {
 }
 
 HOLIDAY_CATALOGS = {
-    "Rosh Hashanah 2026": ROSH_CATALOG,
     "Thanksgiving 2026": THANKSGIVING_CATALOG,
+    "Rosh Hashanah 2026": ROSH_CATALOG,
     "Passover 2027": {
         "Poultry": {
             "Whole Capon": {"units": ["pieces", "lbs", "packs"]},
