@@ -179,9 +179,15 @@ ROSH_CATALOG = {
     },
     "Turkey": {
         "Turkey Breast": {"unit": "pieces", "is_weight": False},
+        "Boneless Turkey Breast": {"units": ["pieces", "lbs", "packs"]},
         "12-16 lb Turkey": {"unit": "pieces", "is_weight": False},
         "16-20 lb Turkey": {"unit": "pieces", "is_weight": False},
         "20-24 lb Turkey": {"unit": "pieces", "is_weight": False},
+        "Turkey Drumstick": {"units": ["pieces", "lbs", "packs"]},
+        "Turkey Wings": {"units": ["packs", "lbs", "pieces"]},
+        "Turkey Thighs": {"units": ["lbs", "pieces", "packs"]},
+        "Turkey Legs": {"units": ["pieces", "lbs", "packs"]},
+        "Turkey Necks": {"units": ["packs", "lbs", "pieces"]},
         "Ground Turkey Thigh": {"unit": "lbs", "is_weight": True},
         "Ground Turkey Breast": {"unit": "lbs", "is_weight": True},
     },
@@ -244,7 +250,10 @@ ROSH_CATALOG = {
 # Thanksgiving specific chicken catalog
 THANKSGIVING_CHICKEN = {
     k: v for k, v in ROSH_CATALOG["Chicken"].items() 
-    if k not in ["Necks", "Chx Fat", "Chicken Liver", "cornish hen"]
+    if k not in [
+        "Necks", "Chx Fat", "Chicken Liver", "cornish hen",
+        "Capon Cut in 1/4", "Fryer Cut in 1/4"
+    ]
 }
 
 # Thanksgiving specific beef catalog
@@ -252,27 +261,32 @@ THANKSGIVING_BEEF = {
     "Whole Brisket": {"units": ["10-12#", "12-14#", "14-16#", "16# or more"]},
     "1st Cut Brisket": {"units": ["4-5#", "5-6#", "6-7#", "7# or more"]},
     "2nd Cut Brisket": {"unit": "pieces", "is_weight": False},
-    **ROSH_CATALOG["Beef"]
+    **{
+        k: (
+            {"unit": "lbs", "is_weight": True, "modifiers": ["special ribs", "english cut"]}
+            if k == "Short Rib"
+            else v
+        )
+        for k, v in ROSH_CATALOG["Beef"].items()
+    }
 }
 
 THANKSGIVING_PREPARED = {
-    "Whole Roasted Turkey & Gravy": {"unit": "each", "is_weight": False},
-    "Whole Smoked Turkey & Gravy": {"unit": "each", "is_weight": False},
-    "Sliced Roasted Turkey Breast": {"unit": "lbs", "is_weight": True},
     "Green Bean Casserole": {"unit": "each", "is_weight": False},
     "Shaevitz Salami Challah Stuffing": {"unit": "each", "is_weight": False},
     "Corn Souffle": {"unit": "each", "is_weight": False},
     "Butternut Squash Souffle": {"unit": "each", "is_weight": False},
-    "Potato Kugel": {"unit": "each", "is_weight": False},
-    "Rosemary Roasted Potatoes": {"unit": "each", "is_weight": False},
     "Butternut Squash Soup Qt": {"unit": "each", "is_weight": False},
     "Turkey Gravy": {"unit": "lbs", "is_weight": True},
     "Maple Cranberry Sauce": {"unit": "lbs", "is_weight": True},
-    "Pumpkin Pie": {"unit": "each", "is_weight": False},
 }
 
 THANKSGIVING_CATERING = {
     "Complete Thanksgiving Dinner": {"unit": "", "is_weight": False},
+    "Whole Roasted Turkey & Gravy": {"unit": "each", "is_weight": False},
+    "Whole Smoked Turkey & Gravy": {"unit": "each", "is_weight": False},
+    "Sliced Roasted Turkey Breast": {"unit": "lbs", "is_weight": True},
+    "Rosemary Roasted Potatoes": {"unit": "each", "is_weight": False},
     "The Ultimate Deli Platter": {"unit": "", "is_weight": False},
     "Smoked Brisket Tray": {"unit": "", "is_weight": False},
     "Chicken Schnitzel Tray": {"unit": "", "is_weight": False},
@@ -298,6 +312,7 @@ THANKSGIVING_CATALOG = {
     },
     "Chicken": THANKSGIVING_CHICKEN,
     "Beef": THANKSGIVING_BEEF,
+    "Soup, Deli, and Pre-Cooked": ROSH_CATALOG["Soup, Deli, and Pre-Cooked"],
     "Prepared Foods & Sides": THANKSGIVING_PREPARED,
     "Catering Trays": THANKSGIVING_CATERING,
 }
@@ -454,35 +469,51 @@ with tab1:
 
     for category, items in catalog.items():
         with st.expander(f"📁 {category} ({len(items)} items)"):
+            safe_cat = clean_key(category)
             
             for item_name, item_info in items.items():
                 has_multi_units = "units" in item_info
                 has_modifiers = "modifiers" in item_info
+                is_weight = item_info.get("is_weight", False)
                 safe_key = clean_key(item_name)
                 
                 if has_modifiers:
-                    c_name, c_qty, c_m1, c_m2, c_note = st.columns([2.5, 1.2, 1.2, 1.3, 5.0])
+                    c_name, c_qty, c_m1, c_m2, c_note = st.columns([2.3, 1.1, 1.4, 1.4, 4.8])
                     
                     with c_name:
                         st.markdown(f"<div style='margin-top: 5px;'><b>{item_name}</b></div>", unsafe_allow_html=True)
                         
                     with c_qty:
-                        qty = float(st.number_input(
-                            "Qty", min_value=0, step=1,
-                            key=f"qty_{selected_holiday}_{safe_key}_{st.session_state.form_key}",
-                            label_visibility="collapsed"
-                        ))
+                        if is_weight:
+                            qty = st.number_input(
+                                "Qty", min_value=0.0, step=0.25, format="%.2f",
+                                key=f"qty_{selected_holiday}_{safe_cat}_{safe_key}_{st.session_state.form_key}",
+                                label_visibility="collapsed"
+                            )
+                        else:
+                            qty = float(st.number_input(
+                                "Qty", min_value=0, step=1,
+                                key=f"qty_{selected_holiday}_{safe_cat}_{safe_key}_{st.session_state.form_key}",
+                                label_visibility="collapsed"
+                            ))
+
+                    mod1_label = item_info["modifiers"][0]
+                    mod2_label = item_info["modifiers"][1]
 
                     with c_m1:
-                        m1_val = st.checkbox("Cleaned", key=f"m1_{selected_holiday}_{safe_key}_{st.session_state.form_key}")
+                        m1_val = st.checkbox(mod1_label, key=f"m1_{selected_holiday}_{safe_cat}_{safe_key}_{st.session_state.form_key}")
 
                     with c_m2:
-                        m2_val = st.checkbox("Spatchcock", key=f"m2_{selected_holiday}_{safe_key}_{st.session_state.form_key}")
+                        m2_val = st.checkbox(mod2_label, key=f"m2_{selected_holiday}_{safe_cat}_{safe_key}_{st.session_state.form_key}")
 
                     selected_mods = []
-                    if m1_val: selected_mods.append("Cleaned")
-                    if m2_val: selected_mods.append("Spatchcock")
-                    unit_str_to_save = ", ".join(selected_mods) if selected_mods else "pieces"
+                    if m1_val: selected_mods.append(mod1_label)
+                    if m2_val: selected_mods.append(mod2_label)
+                    
+                    if is_weight:
+                        unit_str_to_save = f"lbs ({', '.join(selected_mods)})" if selected_mods else "lbs"
+                    else:
+                        unit_str_to_save = ", ".join(selected_mods) if selected_mods else "pieces"
 
                     with c_note:
                         item_note = ""
@@ -490,7 +521,7 @@ with tab1:
                             item_note = st.text_input(
                                 "Note",
                                 placeholder=f"📝 Specific note for {item_name}...",
-                                key=f"inote_{selected_holiday}_{safe_key}_{st.session_state.form_key}",
+                                key=f"inote_{selected_holiday}_{safe_cat}_{safe_key}_{st.session_state.form_key}",
                                 label_visibility="collapsed"
                             )
                             order_items.append((item_name, unit_str_to_save, qty, item_note))
@@ -505,7 +536,7 @@ with tab1:
                         if has_multi_units:
                             selected_unit = st.selectbox(
                                 "Unit", item_info["units"], 
-                                key=f"u_{selected_holiday}_{safe_key}_{st.session_state.form_key}",
+                                key=f"u_{selected_holiday}_{safe_cat}_{safe_key}_{st.session_state.form_key}",
                                 label_visibility="collapsed"
                             )
                             is_weight = (selected_unit == "lbs")
@@ -520,13 +551,13 @@ with tab1:
                         if is_weight:
                             qty = st.number_input(
                                 "Qty", min_value=0.0, step=0.25, format="%.2f",
-                                key=f"qty_{selected_holiday}_{safe_key}_{st.session_state.form_key}",
+                                key=f"qty_{selected_holiday}_{safe_cat}_{safe_key}_{st.session_state.form_key}",
                                 label_visibility="collapsed"
                             )
                         else:
                             qty = float(st.number_input(
                                 "Qty", min_value=0, step=1,
-                                key=f"qty_{selected_holiday}_{safe_key}_{st.session_state.form_key}",
+                                key=f"qty_{selected_holiday}_{safe_cat}_{safe_key}_{st.session_state.form_key}",
                                 label_visibility="collapsed"
                             ))
 
@@ -536,7 +567,7 @@ with tab1:
                             item_note = st.text_input(
                                 "Note",
                                 placeholder=f"📝 Specific note for {item_name}...",
-                                key=f"inote_{selected_holiday}_{safe_key}_{st.session_state.form_key}",
+                                key=f"inote_{selected_holiday}_{safe_cat}_{safe_key}_{st.session_state.form_key}",
                                 label_visibility="collapsed"
                             )
                             order_items.append((item_name, unit_str_to_save, qty, item_note))
@@ -786,29 +817,43 @@ with tab2:
                             
                             has_multi_units = "units" in item_catalog_data
                             has_modifiers = "modifiers" in item_catalog_data
+                            is_weight = item_catalog_data.get("is_weight", False)
                             
                             if has_modifiers:
-                                c_name, c_qty, c_m1, c_m2, c_note = st.columns([2.5, 1.2, 1.2, 1.3, 5.0])
+                                c_name, c_qty, c_m1, c_m2, c_note = st.columns([2.3, 1.1, 1.4, 1.4, 4.8])
                                 
                                 with c_name:
                                     st.markdown(f"<div style='margin-top: 5px;'><b>{item_name}</b></div>", unsafe_allow_html=True)
                                     
                                 with c_qty:
-                                    updated_quantities[item_id] = float(st.number_input(
-                                        "Qty", min_value=0, value=int(float(item_row["quantity"])), step=1,
-                                        key=f"edit_qty_{item_id}_{safe_key}", label_visibility="collapsed"
-                                    ))
+                                    if is_weight:
+                                        updated_quantities[item_id] = st.number_input(
+                                            "Qty", min_value=0.0, value=float(item_row["quantity"]), step=0.25, format="%.2f",
+                                            key=f"edit_qty_{item_id}_{safe_key}", label_visibility="collapsed"
+                                        )
+                                    else:
+                                        updated_quantities[item_id] = float(st.number_input(
+                                            "Qty", min_value=0, value=int(float(item_row["quantity"])), step=1,
+                                            key=f"edit_qty_{item_id}_{safe_key}", label_visibility="collapsed"
+                                        ))
                                 
+                                mod1_label = item_catalog_data["modifiers"][0]
+                                mod2_label = item_catalog_data["modifiers"][1]
                                 current_unit_str = str(item_row["unit"])
+
                                 with c_m1:
-                                    e_m1 = st.checkbox("Cleaned", value=("Cleaned" in current_unit_str), key=f"e_m1_{item_id}_{safe_key}")
+                                    e_m1 = st.checkbox(mod1_label, value=(mod1_label.lower() in current_unit_str.lower()), key=f"e_m1_{item_id}_{safe_key}")
                                 with c_m2:
-                                    e_m2 = st.checkbox("Spatchcock", value=("Spatchcock" in current_unit_str), key=f"e_m2_{item_id}_{safe_key}")
+                                    e_m2 = st.checkbox(mod2_label, value=(mod2_label.lower() in current_unit_str.lower()), key=f"e_m2_{item_id}_{safe_key}")
                                 
                                 e_mods = []
-                                if e_m1: e_mods.append("Cleaned")
-                                if e_m2: e_mods.append("Spatchcock")
-                                updated_item_units[item_id] = ", ".join(e_mods) if e_mods else "pieces"
+                                if e_m1: e_mods.append(mod1_label)
+                                if e_m2: e_mods.append(mod2_label)
+                                
+                                if is_weight:
+                                    updated_item_units[item_id] = f"lbs ({', '.join(e_mods)})" if e_mods else "lbs"
+                                else:
+                                    updated_item_units[item_id] = ", ".join(e_mods) if e_mods else "pieces"
                                 
                                 with c_note:
                                     updated_item_notes[item_id] = st.text_input(
@@ -876,6 +921,7 @@ with tab2:
                         new_items_to_add = {}
                         for category, items in catalog.items():
                             with st.expander(f"📁 Add {category}"):
+                                safe_cat = clean_key(category)
                                 for idx_add, (item_name, item_info) in enumerate(items.items()):
                                     if item_name in df_order_items["item_name"].values:
                                         continue
@@ -883,34 +929,48 @@ with tab2:
                                     safe_key = clean_key(item_name)
                                     has_multi_units = "units" in item_info
                                     has_modifiers = "modifiers" in item_info
+                                    is_w = item_info.get("is_weight", False)
                                     
                                     if has_modifiers:
-                                        c_name, c_qty, c_m1, c_m2, c_note = st.columns([2.5, 1.2, 1.2, 1.3, 5.0])
+                                        c_name, c_qty, c_m1, c_m2, c_note = st.columns([2.3, 1.1, 1.4, 1.4, 4.8])
                                         
                                         with c_name:
                                             st.markdown(f"<div style='margin-top: 5px;'><b>{item_name}</b></div>", unsafe_allow_html=True)
                                             
                                         with c_qty:
-                                            n_qty = float(st.number_input(
-                                                "Qty", min_value=0, step=1, 
-                                                key=f"add_{safe_key}_{first_row['id']}", label_visibility="collapsed"
-                                            ))
+                                            if is_w:
+                                                n_qty = st.number_input(
+                                                    "Qty", min_value=0.0, step=0.25, format="%.2f", 
+                                                    key=f"add_{safe_cat}_{safe_key}_{first_row['id']}", label_visibility="collapsed"
+                                                )
+                                            else:
+                                                n_qty = float(st.number_input(
+                                                    "Qty", min_value=0, step=1, 
+                                                    key=f"add_{safe_cat}_{safe_key}_{first_row['id']}", label_visibility="collapsed"
+                                                ))
                                             
+                                        mod1_label = item_info["modifiers"][0]
+                                        mod2_label = item_info["modifiers"][1]
+
                                         with c_m1:
-                                            a_m1 = st.checkbox("Cleaned", key=f"a_m1_{safe_key}_{first_row['id']}")
+                                            a_m1 = st.checkbox(mod1_label, key=f"a_m1_{safe_cat}_{safe_key}_{first_row['id']}")
                                         with c_m2:
-                                            a_m2 = st.checkbox("Spatchcock", key=f"a_m2_{safe_key}_{first_row['id']}")
+                                            a_m2 = st.checkbox(mod2_label, key=f"a_m2_{safe_cat}_{safe_key}_{first_row['id']}")
                                         
                                         a_mods = []
-                                        if a_m1: a_mods.append("Cleaned")
-                                        if a_m2: a_mods.append("Spatchcock")
-                                        s_unit = ", ".join(a_mods) if a_mods else "pieces"
+                                        if a_m1: a_mods.append(mod1_label)
+                                        if a_m2: a_mods.append(mod2_label)
+                                        
+                                        if is_w:
+                                            s_unit = f"lbs ({', '.join(a_mods)})" if a_mods else "lbs"
+                                        else:
+                                            s_unit = ", ".join(a_mods) if a_mods else "pieces"
                                         
                                         with c_note:
                                             if n_qty > 0:
                                                 n_note = st.text_input(
                                                     "Note", placeholder="📝 Specific note...", 
-                                                    key=f"add_n_{safe_key}_{first_row['id']}", label_visibility="collapsed"
+                                                    key=f"add_n_{safe_cat}_{safe_key}_{first_row['id']}", label_visibility="collapsed"
                                                 )
                                                 new_items_to_add[item_name] = {"qty": n_qty, "note": n_note, "unit": s_unit}
 
@@ -923,11 +983,10 @@ with tab2:
                                         with c_unit:
                                             if has_multi_units:
                                                 s_unit = st.selectbox(
-                                                    "Unit", item_info["units"], key=f"a_u_{safe_key}_{first_row['id']}", label_visibility="collapsed"
+                                                    "Unit", item_info["units"], key=f"a_u_{safe_cat}_{safe_key}_{first_row['id']}", label_visibility="collapsed"
                                                 )
                                                 is_w = (s_unit == "lbs")
                                             else:
-                                                is_w = item_info.get("is_weight", False)
                                                 s_unit = item_info.get("unit", "")
                                                 st.markdown(f"<div style='margin-top: 5px; color: gray;'>{s_unit or 'Tray / Dinner'}</div>", unsafe_allow_html=True)
                                         
@@ -935,19 +994,19 @@ with tab2:
                                             if is_w:
                                                 n_qty = st.number_input(
                                                     "Qty", min_value=0.0, step=0.25, format="%.2f", 
-                                                    key=f"add_{safe_key}_{first_row['id']}", label_visibility="collapsed"
+                                                    key=f"add_{safe_cat}_{safe_key}_{first_row['id']}", label_visibility="collapsed"
                                                 )
                                             else:
                                                 n_qty = float(st.number_input(
                                                     "Qty", min_value=0, step=1, 
-                                                    key=f"add_{safe_key}_{first_row['id']}", label_visibility="collapsed"
+                                                    key=f"add_{safe_cat}_{safe_key}_{first_row['id']}", label_visibility="collapsed"
                                                 ))
                                                 
                                         with c_note:
                                             if n_qty > 0:
                                                 n_note = st.text_input(
                                                     "Note", placeholder="📝 Specific note...", 
-                                                    key=f"add_n_{safe_key}_{first_row['id']}", label_visibility="collapsed"
+                                                    key=f"add_n_{safe_cat}_{safe_key}_{first_row['id']}", label_visibility="collapsed"
                                                 )
                                                 new_items_to_add[item_name] = {"qty": n_qty, "note": n_note, "unit": s_unit}
                                     
