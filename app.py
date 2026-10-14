@@ -1090,4 +1090,216 @@ with tab3:
             
         df_grand_totals["quantity"] = pd.to_numeric(df_grand_totals["quantity"], errors="coerce")
         df_gt_sum = (
-            df_grand_totals
+            df_grand_totals.groupby(["category", "item_name", "unit"])["quantity"]
+            .sum()
+            .reset_index()
+        )
+        df_gt_sum.columns = [
+            "Category",
+            "Item Name",
+            "Unit of Measure",
+            "Grand Total Quantity Needed",
+        ]
+        df_gt_sum["Grand Total Quantity Needed"] = df_gt_sum["Grand Total Quantity Needed"].apply(format_qty)
+        
+        st.dataframe(df_gt_sum, use_container_width=True)
+
+        csv_data_gt = df_gt_sum.to_csv(index=False).encode("utf-8")
+        st.download_button(
+            label="📥 Export Season Grand Totals (CSV)",
+            data=csv_data_gt,
+            file_name=f"{selected_holiday}_Season_Inventory.csv",
+            mime="text/csv",
+        )
+
+        st.markdown("---")
+        st.markdown("### 🔍 Master Item Drill-Down")
+        item_choices = ["(Select an item)"] + sorted(df_raw["item_name"].unique().tolist())
+        selected_drilldown = st.selectbox("Select an item to see exactly who ordered it across all dates:", item_choices)
+        
+        if selected_drilldown != "(Select an item)":
+            drill_df = df_raw[df_raw["item_name"] == selected_drilldown].copy()
+            drill_df["Customer Name"] = drill_df["first_name"] + " " + drill_df["last_name"]
+            
+            display_cols = ["Daily Order #", "Customer Name", "status", "phone", "pickup_date", "pickup_time", "quantity", "unit", "item_note"]
+            drill_display = drill_df[display_cols].sort_values(by=["pickup_date", "Daily Order #"])
+            drill_display["quantity"] = drill_display["quantity"].apply(format_qty)
+            
+            st.dataframe(drill_display, use_container_width=True)
+
+    else:
+        st.info("No active orders found for this holiday.")
+
+
+# -------------------------------------------------------------------------
+# TAB 4: DAILY STATION PREP
+# -------------------------------------------------------------------------
+with tab4:
+    st.subheader("🔪 Daily Station Prep Sheets")
+    st.caption("Organized specifically for your morning butcher and kitchen routines. Select a date and a station to generate a clean prep list.")
+
+    df_all = load_orders()
+    df_raw = (
+        df_all[df_all["holiday"] == selected_holiday].copy()
+        if not df_all.empty and "holiday" in df_all.columns
+        else pd.DataFrame()
+    )
+
+    if not df_raw.empty:
+        df_raw["first_name"] = df_raw["first_name"].fillna("")
+        df_raw["last_name"] = df_raw["last_name"].fillna("")
+        df_raw["phone"] = df_raw["phone"].fillna("")
+        df_raw["notes"] = df_raw["notes"].fillna("")
+        df_raw["item_note"] = df_raw["item_note"].fillna("")
+        df_raw["unit"] = df_raw["unit"].fillna("")
+        df_raw["status"] = df_raw["status"].fillna("Pending")
+
+        catalog = HOLIDAY_CATALOGS[selected_holiday]
+        df_raw["category"] = df_raw["item_name"].apply(
+            lambda x: get_item_category(x, catalog)
+        )
+        df_raw["prep_station"] = df_raw["category"].apply(get_prep_station)
+
+        f_col1, f_col2, f_col3 = st.columns([2, 2, 2])
+
+        with f_col1:
+            available_dates = sorted(df_raw["pickup_date"].unique().tolist())
+            selected_date = st.selectbox("🗓️ 1. Select Pickup Date:", available_dates)
+
+        with f_col2:
+            available_stations = ["All Stations"] + list(PREP_STATIONS.keys()) + ["Other / Custom"]
+            selected_station = st.selectbox("🔪 2. Select Prep Station:", available_stations)
+
+        with f_col3:
+            st.markdown("<div style='margin-top: 28px;'></div>", unsafe_allow_html=True)
+            st.checkbox(
+                "🙈 Hide Completed Orders", 
+                value=st.session_state.hide_completed, 
+                key="hide_completed_widget_prep",
+                on_change=update_hide_completed
+            )
+
+        # Filter logic
+        filtered_df = df_raw[df_raw["pickup_date"] == selected_date].copy()
+        if selected_station != "All Stations":
+            filtered_df = filtered_df[filtered_df["prep_station"] == selected_station]
+            
+        if st.session_state.hide_completed:
+            filtered_df = filtered_df[filtered_df["status"] != "Completed"]
+
+        if not filtered_df.empty:
+            st.markdown(f"### Preparing: **{selected_station}** on **{selected_date}**")
+
+            # 1. BULK PULL LIST
+            st.markdown("#### 🛒 1. Bulk Station Pull List")
+            filtered_df["quantity"] = pd.to_numeric(filtered_df["quantity"], errors="coerce")
+            df_totals = (
+                filtered_df.groupby(["item_name", "unit"])["quantity"]
+                .sum()
+                .reset_index()
+            )
+            df_totals.columns = ["Item Name", "Unit of Measure", "Total Quantity Needed"]
+            df_totals["Total Quantity Needed"] = df_totals["Total Quantity Needed"].apply(format_qty)
+            st.dataframe(df_totals, use_container_width=True)
+
+            # 2. PACKING & CUTS BREAKDOWN
+            st.markdown("#### 🔪 2. Packing & Cuts Breakdown")
+            st.caption("Line-by-line orders for this station so butchers know exactly what to cut and who it goes to.")
+            
+            filtered_df["Customer Name"] = filtered_df["first_name"] + " " + filtered_df["last_name"]
+            display_cols = ["Daily Order #", "Customer Name", "status", "item_name", "quantity", "unit", "item_note"]
+            
+            drill_display = filtered_df[display_cols].sort_values(by=["Daily Order #", "item_name"])
+            drill_display["quantity"] = drill_display["quantity"].apply(format_qty)
+            
+            st.dataframe(drill_display, use_container_width=True)
+
+            # EXPORT BUTTON FOR THIS SPECIFIC STATION
+            safe_station_name = selected_station.replace(" & ", "_").replace(" ", "_")
+            safe_date_name = selected_date.split()[0]
+            csv_data = drill_display.to_csv(index=False).encode("utf-8")
+            
+            st.download_button(
+                label=f"📥 Export {selected_station} Prep Sheet (CSV)",
+                data=csv_data,
+                file_name=f"Prep_{safe_station_name}_{safe_date_name}.csv",
+                mime="text/csv",
+            )
+            
+        else:
+            st.success(f"No orders to prep for {selected_station} on {selected_date}.")
+
+    else:
+        st.info("No active orders found for this holiday.")
+
+
+# -------------------------------------------------------------------------
+# TAB 5: WIDE ORDERS OVERVIEW
+# -------------------------------------------------------------------------
+with tab5:
+    st.subheader("📋 Wide Customer Orders Overview")
+    st.caption("A full horizontal spreadsheet view of every customer order. (💬 = Item Note)")
+    
+    search_term_wide = st.text_input("Optional: Search by Last Name or Phone Number:", key="wide_search")
+
+    df_all = load_orders()
+    df_raw = (
+        df_all[df_all["holiday"] == selected_holiday].copy()
+        if not df_all.empty and "holiday" in df_all.columns
+        else pd.DataFrame()
+    )
+
+    if not df_raw.empty:
+        df_raw["first_name"] = df_raw["first_name"].fillna("")
+        df_raw["last_name"] = df_raw["last_name"].fillna("")
+        df_raw["phone"] = df_raw["phone"].fillna("")
+        df_raw["notes"] = df_raw["notes"].fillna("")
+        df_raw["item_note"] = df_raw["item_note"].fillna("")
+        df_raw["unit"] = df_raw["unit"].fillna("")
+        df_raw["status"] = df_raw["status"].fillna("Pending")
+
+        if search_term_wide:
+            df_raw = df_raw[
+                (df_raw["last_name"].astype(str).str.contains(search_term_wide, case=False, na=False))
+                | (df_raw["phone"].astype(str).str.contains(search_term_wide, case=False, na=False))
+            ]
+
+    if not df_raw.empty:
+        df_raw['Flag'] = df_raw.groupby(['pickup_date', 'last_name', 'first_name', 'phone'])['custom_flag'].transform('max')
+        df_raw['Flag'] = df_raw['Flag'].apply(lambda x: "🚨 CUSTOM" if str(x) == "1" else "OK")
+
+        def make_pivot_val(row):
+            val = format_qty(row['quantity'])
+            unit_val = str(row.get('unit', '')).strip()
+            if unit_val and unit_val.lower() != 'nan' and unit_val not in ["pieces", "each", ""]:
+                val = f"{val} {unit_val}"
+                
+            note = str(row.get('item_note', '')).strip()
+            if note and note.lower() != 'nan':
+                return f"{val} 💬"
+            return val
+            
+        df_raw['pivot_val'] = df_raw.apply(make_pivot_val, axis=1)
+
+        pivot_df = df_raw.pivot_table(
+            index=['Daily Order #', 'status', 'Flag', 'first_name', 'last_name', 'phone', 'pickup_date', 'pickup_time', 'notes'],
+            columns='item_name',
+            values='pivot_val',
+            aggfunc=lambda x: ' + '.join(str(v) for v in x)
+        ).reset_index()
+
+        pivot_df.fillna("", inplace=True)
+        pivot_df.columns.name = None
+        pivot_df = pivot_df.sort_values(by=['pickup_date', 'Daily Order #'])
+
+        st.dataframe(pivot_df, use_container_width=True)
+        
+        csv_orders = pivot_df.to_csv(index=False).encode("utf-8")
+        st.download_button(
+            label="📥 Export Wide Orders Table (CSV)",
+            data=csv_orders,
+            file_name="Customer_Orders_Wide_Format.csv",
+            mime="text/csv",
+        )
+    else:
+        st.info("No active orders match your criteria.")
