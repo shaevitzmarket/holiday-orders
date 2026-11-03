@@ -1114,8 +1114,8 @@ with tab2:
 # TAB 3: SEASON INVENTORY & GRAND TOTALS
 # -------------------------------------------------------------------------
 with tab3:
-    st.subheader("📊 Season Inventory & Grand Totals")
-    st.caption("High-level aggregates for the entire holiday season. Use this tab for ordering from suppliers.")
+    st.subheader("📊 Season Inventory & Production Totals")
+    st.caption("High-level aggregates for butcher and kitchen planning. Filter by date range to pull supplies for 2-3 day prep cycles.")
 
     df_all = load_orders()
     df_raw = (
@@ -1133,21 +1133,162 @@ with tab3:
         df_raw["unit"] = df_raw["unit"].fillna("")
         df_raw["status"] = df_raw["status"].fillna("Pending")
 
+        # Parse Clean Date for Filtering
+        df_raw["clean_date"] = pd.to_datetime(
+            df_raw["pickup_date"].astype(str).str.split().str[0], errors="coerce"
+        ).dt.date
+
         catalog = HOLIDAY_CATALOGS[selected_holiday]
         df_raw["category"] = df_raw["item_name"].apply(
             lambda x: get_item_category(x, catalog)
         )
 
-        m1, m2 = st.columns(2)
-        m1.metric("📦 Total Customer Orders (Season)", len(df_raw.groupby(["phone", "pickup_date"])))
-        m2.metric("🥩 Total Line Items (Season)", len(df_raw))
+        # ---------------------------------------------------------
+        # 🗓️ TIMELINE & DATE RANGE FILTER CONTROLS
+        # ---------------------------------------------------------
+        valid_dates = sorted([d for d in df_raw["clean_date"].dropna().unique()])
+        
+        st.markdown("##### 🗓️ Filter Timeline")
+        col_dr1, col_dr2 = st.columns([1.5, 2.5])
+        
+        with col_dr1:
+            date_filter_mode = st.radio(
+                "Timeline Scope:",
+                ["Full Holiday Season", "Custom Date Range"],
+                horizontal=True,
+                key="season_date_mode"
+            )
 
-        st.markdown("### 🏆 Grand Totals List")
+        df_filtered = df_raw.copy()
+        date_range_label = "Full Season"
+
+        if date_filter_mode == "Custom Date Range" and valid_dates:
+            min_date, max_date = valid_dates[0], valid_dates[-1]
+            with col_dr2:
+                selected_dates = st.date_input(
+                    "Select Date Range (Start Date – End Date):",
+                    value=(min_date, max_date),
+                    min_value=min_date,
+                    max_value=max_date,
+                    key="season_date_range_input"
+                )
+
+            if isinstance(selected_dates, (tuple, list)):
+                if len(selected_dates) == 2:
+                    s_date, e_date = selected_dates
+                    df_filtered = df_raw[(df_raw["clean_date"] >= s_date) & (df_raw["clean_date"] <= e_date)]
+                    date_range_label = f"{s_date.strftime('%b %d')} – {e_date.strftime('%b %d, %Y')}"
+                elif len(selected_dates) == 1:
+                    s_date = selected_dates[0]
+                    df_filtered = df_raw[df_raw["clean_date"] == s_date]
+                    date_range_label = s_date.strftime('%b %d, %Y')
+
+        st.markdown(f"**Active View:** `{date_range_label}` ({len(df_filtered.groupby(['phone', 'pickup_date']))} Customer Orders)")
+
+        m1, m2 = st.columns(2)
+        m1.metric("📦 Active Customer Orders", len(df_filtered.groupby(["phone", "pickup_date"])))
+        m2.metric("🥩 Total Order Line Items", len(df_filtered))
+
+        st.markdown("---")
+
+        # ---------------------------------------------------------
+        # 🦃 WHOLE TURKEY PRODUCTION & PREP BREAKDOWN
+        # ---------------------------------------------------------
+        whole_turkey_items = ["12-16 lb Turkey", "16-20 lb Turkey", "20-24 lb Turkey"]
+        df_turkeys = df_filtered[df_filtered["item_name"].isin(whole_turkey_items)].copy()
+
+        if not df_turkeys.empty:
+            st.markdown("### 🦃 Whole Turkey Summary & Butcher Prep Breakdown")
+            st.caption(f"Exact bird counts and prep station tasks for: **{date_range_label}**")
+
+            df_turkeys["quantity"] = pd.to_numeric(df_turkeys["quantity"], errors="coerce").fillna(0)
+
+            def get_prep_class(unit_str):
+                u = str(unit_str).lower()
+                has_cleaned = "cleaned" in u
+                has_spatchcock = "spatchcock" in u
+                if has_cleaned and has_spatchcock:
+                    return "Cleaned & Spatchcock"
+                elif has_cleaned:
+                    return "Cleaned Only"
+                elif has_spatchcock:
+                    return "Spatchcock Only"
+                return "Regular (No Mods)"
+
+            df_turkeys["prep_style"] = df_turkeys["unit"].apply(get_prep_class)
+
+            # High Level Metrics Row
+            total_whole_birds = int(df_turkeys["quantity"].sum())
+            total_regular = int(df_turkeys[df_turkeys["prep_style"] == "Regular (No Mods)"]["quantity"].sum())
+            total_to_clean = int(df_turkeys[df_turkeys["prep_style"].isin(["Cleaned Only", "Cleaned & Spatchcock"])]["quantity"].sum())
+            total_to_spatchcock = int(df_turkeys[df_turkeys["prep_style"].isin(["Spatchcock Only", "Cleaned & Spatchcock"])]["quantity"].sum())
+
+            tm1, tm2, tm3, tm4 = st.columns(4)
+            tm1.metric("🦃 Total Whole Turkeys", total_whole_birds)
+            tm2.metric("📦 Regular (No Prep)", total_regular)
+            tm3.metric("🪶 Total to Clean", total_to_clean)
+            tm4.metric("🔪 Total to Spatchcock", total_to_spatchcock)
+
+            # Detailed Matrix by Size
+            breakdown_rows = []
+            for t_size in whole_turkey_items:
+                size_df = df_turkeys[df_turkeys["item_name"] == t_size]
+                total_size_qty = int(size_df["quantity"].sum())
+                reg_qty = int(size_df[size_df["prep_style"] == "Regular (No Mods)"]["quantity"].sum())
+                clean_only_qty = int(size_df[size_df["prep_style"] == "Cleaned Only"]["quantity"].sum())
+                spatch_only_qty = int(size_df[size_df["prep_style"] == "Spatchcock Only"]["quantity"].sum())
+                both_qty = int(size_df[size_df["prep_style"] == "Cleaned & Spatchcock"]["quantity"].sum())
+                
+                clean_task_total = clean_only_qty + both_qty
+                spatch_task_total = spatch_only_qty + both_qty
+
+                breakdown_rows.append({
+                    "Turkey Size": t_size,
+                    "Total Birds Needed": total_size_qty,
+                    "Regular (As-Is)": reg_qty,
+                    "Cleaned Only": clean_only_qty,
+                    "Spatchcock Only": spatch_only_qty,
+                    "Both Cleaned & Spatchcock": both_qty,
+                    "Total Birds to Clean": clean_task_total,
+                    "Total Birds to Spatchcock": spatch_task_total,
+                })
+
+            df_turkey_matrix = pd.DataFrame(breakdown_rows)
+
+            # Add Totals Row
+            totals_row = {
+                "Turkey Size": "TOTAL WHOLE BIRDS",
+                "Total Birds Needed": total_whole_birds,
+                "Regular (As-Is)": total_regular,
+                "Cleaned Only": int(df_turkeys[df_turkeys["prep_style"] == "Cleaned Only"]["quantity"].sum()),
+                "Spatchcock Only": int(df_turkeys[df_turkeys["prep_style"] == "Spatchcock Only"]["quantity"].sum()),
+                "Both Cleaned & Spatchcock": int(df_turkeys[df_turkeys["prep_style"] == "Cleaned & Spatchcock"]["quantity"].sum()),
+                "Total Birds to Clean": total_to_clean,
+                "Total Birds to Spatchcock": total_to_spatchcock,
+            }
+            df_turkey_matrix = pd.concat([df_turkey_matrix, pd.DataFrame([totals_row])], ignore_index=True)
+
+            st.dataframe(df_turkey_matrix, use_container_width=True)
+
+            csv_turkey_data = df_turkey_matrix.to_csv(index=False).encode("utf-8")
+            st.download_button(
+                label="📥 Export Turkey Prep Matrix (CSV)",
+                data=csv_turkey_data,
+                file_name=f"Turkey_Prep_Breakdown_{clean_key(date_range_label)}.csv",
+                mime="text/csv",
+            )
+
+            st.markdown("---")
+
+        # ---------------------------------------------------------
+        # 🏆 GRAND TOTALS FOR ALL INVENTORY
+        # ---------------------------------------------------------
+        st.markdown("### 🏆 Production Totals List (All Items)")
         
-        gt_cats = ["All Categories"] + sorted(df_raw["category"].unique().tolist())
-        selected_gt_cat = st.selectbox("Filter Grand Totals by Category:", gt_cats, key="gt_cat_filter")
+        gt_cats = ["All Categories"] + sorted(df_filtered["category"].unique().tolist())
+        selected_gt_cat = st.selectbox("Filter Totals by Category:", gt_cats, key="gt_cat_filter")
         
-        df_grand_totals = df_raw.copy()
+        df_grand_totals = df_filtered.copy()
         if selected_gt_cat != "All Categories":
             df_grand_totals = df_grand_totals[df_grand_totals["category"] == selected_gt_cat]
             
@@ -1160,7 +1301,7 @@ with tab3:
         df_gt_sum.columns = [
             "Category",
             "Item Name",
-            "Unit of Measure",
+            "Unit / Prep Modifier",
             "Grand Total Quantity Needed",
         ]
         df_gt_sum["Grand Total Quantity Needed"] = df_gt_sum["Grand Total Quantity Needed"].apply(format_qty)
@@ -1169,19 +1310,19 @@ with tab3:
 
         csv_data_gt = df_gt_sum.to_csv(index=False).encode("utf-8")
         st.download_button(
-            label="📥 Export Season Grand Totals (CSV)",
+            label="📥 Export Inventory Grand Totals (CSV)",
             data=csv_data_gt,
-            file_name=f"{selected_holiday}_Season_Inventory.csv",
+            file_name=f"{selected_holiday}_Inventory_{clean_key(date_range_label)}.csv",
             mime="text/csv",
         )
 
         st.markdown("---")
-        st.markdown("### 🔍 Master Item Drill-Down")
-        item_choices = ["(Select an item)"] + sorted(df_raw["item_name"].unique().tolist())
-        selected_drilldown = st.selectbox("Select an item to see exactly who ordered it across all dates:", item_choices)
+        st.markdown("### 🔍 Item Customer Drill-Down")
+        item_choices = ["(Select an item)"] + sorted(df_filtered["item_name"].unique().tolist())
+        selected_drilldown = st.selectbox("Select an item to see customer order line items for this date range:", item_choices)
         
         if selected_drilldown != "(Select an item)":
-            drill_df = df_raw[df_raw["item_name"] == selected_drilldown].copy()
+            drill_df = df_filtered[df_filtered["item_name"] == selected_drilldown].copy()
             drill_df["Customer Name"] = drill_df["first_name"] + " " + drill_df["last_name"]
             
             display_cols = ["Daily Order #", "Customer Name", "status", "phone", "pickup_date", "pickup_time", "quantity", "unit", "item_note"]
