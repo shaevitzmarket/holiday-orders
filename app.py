@@ -276,23 +276,28 @@ THANKSGIVING_PREPARED = {
     "Shaevitz Salami Challah Stuffing": {"unit": "each", "is_weight": False},
     "Corn Souffle": {"unit": "each", "is_weight": False},
     "Butternut Squash Souffle": {"unit": "each", "is_weight": False},
-    "Butternut Squash Soup Qt": {"unit": "each", "is_weight": False},
-    "Turkey Gravy": {"unit": "lbs", "is_weight": True},
-    "Maple Cranberry Sauce": {"unit": "lbs", "is_weight": True},
+    "Butternut Squash Soup": {"unit": "each", "is_weight": False},
+    "Turkey Gravy": {"unit": "each", "is_weight": False},
+    "Maple Cranberry Sauce": {"unit": "each", "is_weight": False},
 }
 
 THANKSGIVING_CATERING = {
-    "Complete Thanksgiving Dinner": {"unit": "", "is_weight": False},
+    "Complete Thanksgiving Dinner": {"unit": "each", "is_weight": False},
     "Whole Roasted Turkey & Gravy": {"unit": "each", "is_weight": False},
     "Whole Smoked Turkey & Gravy": {"unit": "each", "is_weight": False},
     "Sliced Roasted Turkey Breast": {"unit": "lbs", "is_weight": True},
-    "Rosemary Roasted Potatoes": {"unit": "each", "is_weight": False},
-    "The Ultimate Deli Platter": {"unit": "", "is_weight": False},
-    "Smoked Brisket Tray": {"unit": "", "is_weight": False},
-    "Chicken Schnitzel Tray": {"unit": "", "is_weight": False},
-    "Sweet & Sour Meatballs Tray": {"unit": "", "is_weight": False},
-    "Grilled BBQ Salami Tray": {"unit": "", "is_weight": False},
-    "Herb Roasted Chicken Tray": {"unit": "", "is_weight": False},
+    "Roasted Potato Tray": {"unit": "each", "is_weight": False},
+    "The Ultimate Deli Platter": {"unit": "each", "is_weight": False},
+    "Smoked Brisket Tray": {"unit": "each", "is_weight": False},
+    "Chicken Schnitzel Tray": {"unit": "each", "is_weight": False},
+    "Sweet & Sour Meatballs Tray": {"unit": "each", "is_weight": False},
+    "Grilled BBQ Salami Tray": {"unit": "each", "is_weight": False},
+    "Herb Roasted Chicken Tray": {"unit": "each", "is_weight": False},
+    "Franks in Blanket": {"unit": "each", "is_weight": False},
+    "Chicken Tenders Tray": {"unit": "each", "is_weight": False},
+    "Deli Wrap Tray": {"unit": "each", "is_weight": False},
+    "Wings Tray": {"unit": "each", "is_weight": False},
+    "Carrots Tray": {"unit": "each", "is_weight": False},
 }
 
 THANKSGIVING_CATALOG = {
@@ -886,7 +891,6 @@ with tab2:
                                         is_weight = (selected_unit == "lbs")
                                         updated_item_units[item_id] = selected_unit
                                     else:
-                                        is_weight = item_catalog_data.get("is_weight", False)
                                         unit_str = item_catalog_data.get("unit", "")
                                         st.markdown(f"<div style='margin-top: 5px; color: gray;'>{unit_str or 'Tray / Dinner'}</div>", unsafe_allow_html=True)
                                         updated_item_units[item_id] = unit_str
