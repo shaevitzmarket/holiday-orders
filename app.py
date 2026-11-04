@@ -1520,3 +1520,21 @@ with tab5:
             index=['Daily Order #', 'status', 'Flags', 'first_name', 'last_name', 'phone', 'pickup_date', 'pickup_time', 'notes'],
             columns='item_name',
             values='pivot_val',
+            aggfunc=lambda x: ' + '.join(str(v) for v in x)
+        ).reset_index()
+
+        pivot_df.fillna("", inplace=True)
+        pivot_df.columns.name = None
+        pivot_df = pivot_df.sort_values(by=['pickup_date', 'Daily Order #'])
+
+        st.dataframe(pivot_df, use_container_width=True)
+        
+        csv_orders = pivot_df.to_csv(index=False).encode("utf-8")
+        st.download_button(
+            label="📥 Export Wide Orders Table (CSV)",
+            data=csv_orders,
+            file_name="Customer_Orders_Wide_Format.csv",
+            mime="text/csv",
+        )
+    else:
+        st.info("No active orders match your criteria.")
