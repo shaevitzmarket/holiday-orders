@@ -29,14 +29,6 @@ GITHUB_TOKEN = st.secrets.get("GITHUB_TOKEN", "")
 GITHUB_REPO = st.secrets.get("GITHUB_REPO", "")
 CSV_FILENAME = "orders.csv"
 
-HEADERS = {
-    "Authorization": f"token {GITHUB_TOKEN}",
-    "Accept": "application/vnd.github.v3+json",
-}
-API_URL = (
-    f"https://api.github.com/repos/{GITHUB_REPO}/contents/{CSV_FILENAME}"
-)
-
 EMPTY_COLUMNS = [
     "id",
     "holiday",
@@ -52,8 +44,17 @@ EMPTY_COLUMNS = [
     "item_note",
     "notes",
     "custom_flag",
+    "paid_flag",
     "status",
 ]
+
+HEADERS = {
+    "Authorization": f"token {GITHUB_TOKEN}",
+    "Accept": "application/vnd.github.v3+json",
+}
+API_URL = (
+    f"https://api.github.com/repos/{GITHUB_REPO}/contents/{CSV_FILENAME}"
+)
 
 PREP_STATIONS = {
     "🥩 Meat & Butcher": ["Beef", "Briskets", "Lamb & Veal"],
@@ -85,9 +86,12 @@ def load_orders():
                 df["status"] = "Pending"
             if "email" not in df.columns:
                 df["email"] = ""
+            if "paid_flag" not in df.columns:
+                df["paid_flag"] = 0
             
             df["status"] = df["status"].fillna("Pending")
             df["email"] = df["email"].fillna("")
+            df["paid_flag"] = df["paid_flag"].fillna(0)
             
             # Dynamically Generate Alphabetical Daily Order Numbers
             if not df.empty and "pickup_date" in df.columns:
@@ -579,10 +583,11 @@ with tab1:
 
                 st.markdown(THIN_HR, unsafe_allow_html=True)
 
-    st.subheader("📝 Special Notes & Off-Menu Requests")
-    custom_flag = st.checkbox(
-        "🚨 Flag as High Maintenance / Custom Request (Needs Kitchen Attention)", key=f"flag_{st.session_state.form_key}"
-    )
+    st.subheader("📝 Order Status & Special Notes")
+    c_flag1, c_flag2 = st.columns(2)
+    custom_flag = c_flag1.checkbox("🚨 Flag as High Maintenance / Custom Request (Needs Kitchen Attention)", key=f"flag_{st.session_state.form_key}")
+    paid_flag = c_flag2.checkbox("💳 Order Paid in Full (Online / Pre-paid)", key=f"paid_{st.session_state.form_key}")
+    
     order_notes = st.text_area(
         "Custom Items, Special Trims, or Special Instructions:",
         placeholder="e.g., Wants 2 lbs of unlisted Item X, or trim all excess fat from brisket.",
@@ -605,6 +610,7 @@ with tab1:
             next_id = int(df_existing["id"].max() + 1) if not df_existing.empty and "id" in df_existing.columns and pd.notna(df_existing["id"].max()) else 1
             formatted_date = f"{pickup_date} ({pickup_date.strftime('%a')})"
             flag_val = 1 if custom_flag else 0
+            paid_val = 1 if paid_flag else 0
 
             if not order_items:
                 order_items.append(("Custom Request Only", "N/A", 1.0, ""))
@@ -627,6 +633,7 @@ with tab1:
                         "item_note": i_note,
                         "notes": order_notes,
                         "custom_flag": flag_val,
+                        "paid_flag": paid_val,
                         "status": "Pending",
                     }
                 )
@@ -668,6 +675,7 @@ with tab2:
         df_raw["item_note"] = df_raw["item_note"].fillna("")
         df_raw["unit"] = df_raw["unit"].fillna("")
         df_raw["status"] = df_raw["status"].fillna("Pending")
+        df_raw["paid_flag"] = df_raw.get("paid_flag", 0).fillna(0).astype(int)
 
         # ⚡ BULK STATUS UPDATE SECTION
         with st.expander("⚡ Bulk Update Order Status (Mark Multiple Orders as Completed)"):
@@ -734,12 +742,13 @@ with tab2:
             df_edit_filtered = df_edit_filtered[df_edit_filtered["status"] != "Completed"]
 
         order_list = []
-        unique_orders = df_edit_filtered[['Daily Order #', 'first_name', 'last_name', 'phone', 'pickup_date', 'pickup_time', 'status']].drop_duplicates()
+        unique_orders = df_edit_filtered[['Daily Order #', 'first_name', 'last_name', 'phone', 'pickup_date', 'pickup_time', 'status', 'paid_flag']].drop_duplicates()
         unique_orders = unique_orders.sort_values(by=['pickup_date', 'Daily Order #'])
         
         for idx, row in unique_orders.iterrows():
             status_icon = "✅" if row['status'] == "Completed" else "⏳"
-            label = f"{status_icon} {row['first_name']} {row['last_name']} | {row['phone']} | {row['pickup_date']} @ {row['pickup_time']}"
+            paid_icon = " 💳" if row.get("paid_flag", 0) == 1 else ""
+            label = f"{status_icon}{paid_icon} {row['first_name']} {row['last_name']} | {row['phone']} | {row['pickup_date']} @ {row['pickup_time']}"
             order_list.append((label, row["phone"], row["pickup_date"]))
 
         if order_list:
@@ -793,13 +802,18 @@ with tab2:
                             else 0,
                         )
                         
-                        st.markdown("##### 📝 Order Notes")
+                        st.markdown("##### 📝 Order Notes & Flags")
                         new_notes = st.text_area(
                             "General Order Notes / Instructions:", value=str(first_row["notes"])
                         )
-                        new_flag = st.checkbox(
+                        c_fl1, c_fl2 = st.columns(2)
+                        new_flag = c_fl1.checkbox(
                             "🚨 Flag as High Maintenance / Custom Request",
                             value=bool(first_row["custom_flag"]),
+                        )
+                        new_paid = c_fl2.checkbox(
+                            "💳 Order Paid in Full",
+                            value=bool(first_row.get("paid_flag", 0)),
                         )
 
                         st.markdown("##### 🥩 Edit Currently Ordered Items:")
@@ -1051,6 +1065,7 @@ with tab2:
                                         df_master.loc[mask, "pickup_time"] = new_time
                                         df_master.loc[mask, "notes"] = new_notes
                                         df_master.loc[mask, "custom_flag"] = 1 if new_flag else 0
+                                        df_master.loc[mask, "paid_flag"] = 1 if new_paid else 0
                                         df_master.loc[mask, "status"] = status_str
 
                                 # 2. Append Newly Added Items
@@ -1071,6 +1086,7 @@ with tab2:
                                         "item_note": item_data["note"],
                                         "notes": new_notes,
                                         "custom_flag": 1 if new_flag else 0,
+                                        "paid_flag": 1 if new_paid else 0,
                                         "status": status_str,
                                     })
                                     next_id += 1
@@ -1194,12 +1210,16 @@ with tab3:
         # ---------------------------------------------------------
         # 🦃 WHOLE TURKEY PRODUCTION & PREP BREAKDOWN
         # ---------------------------------------------------------
-        whole_turkey_items = ["12-16 lb Turkey", "16-20 lb Turkey", "20-24 lb Turkey"]
-        df_turkeys = df_filtered[df_filtered["item_name"].isin(whole_turkey_items)].copy()
+        raw_turkey_items = ["12-16 lb Turkey", "16-20 lb Turkey", "20-24 lb Turkey"]
+        cooked_turkey_items = ["Whole Roasted Turkey & Gravy", "Whole Smoked Turkey & Gravy"]
+        df_turkeys = df_filtered[df_filtered["item_name"].isin(raw_turkey_items + cooked_turkey_items)].copy()
 
         if not df_turkeys.empty:
             st.markdown("### 🦃 Whole Turkey Summary & Butcher Prep Breakdown")
-            st.caption(f"Exact bird counts and prep station tasks for: **{date_range_label}**")
+            st.caption(f"Exact bird counts and prep station tasks for: **{date_range_label}** (Includes cooked Catering Turkeys automatically mapped to the 16-20 lb raw bucket)")
+
+            # Map the catered cooked turkeys into the 16-20lb raw bucket so butchers pull the right total amount of raw birds
+            df_turkeys.loc[df_turkeys["item_name"].isin(cooked_turkey_items), "item_name"] = "16-20 lb Turkey"
 
             df_turkeys["quantity"] = pd.to_numeric(df_turkeys["quantity"], errors="coerce").fillna(0)
 
@@ -1224,14 +1244,14 @@ with tab3:
             total_to_spatchcock = int(df_turkeys[df_turkeys["prep_style"].isin(["Spatchcock Only", "Cleaned & Spatchcock"])]["quantity"].sum())
 
             tm1, tm2, tm3, tm4 = st.columns(4)
-            tm1.metric("🦃 Total Whole Turkeys", total_whole_birds)
+            tm1.metric("🦃 Total Raw Birds Needed", total_whole_birds)
             tm2.metric("📦 Regular (No Prep)", total_regular)
             tm3.metric("🪶 Total to Clean", total_to_clean)
             tm4.metric("🔪 Total to Spatchcock", total_to_spatchcock)
 
             # Detailed Matrix by Size
             breakdown_rows = []
-            for t_size in whole_turkey_items:
+            for t_size in raw_turkey_items:
                 size_df = df_turkeys[df_turkeys["item_name"] == t_size]
                 total_size_qty = int(size_df["quantity"].sum())
                 reg_qty = int(size_df[size_df["prep_style"] == "Regular (No Mods)"]["quantity"].sum())
@@ -1461,6 +1481,7 @@ with tab5:
         df_raw["item_note"] = df_raw["item_note"].fillna("")
         df_raw["unit"] = df_raw["unit"].fillna("")
         df_raw["status"] = df_raw["status"].fillna("Pending")
+        df_raw["paid_flag"] = df_raw.get("paid_flag", 0).fillna(0).astype(int)
 
         if search_term_wide:
             df_raw = df_raw[
@@ -1469,8 +1490,18 @@ with tab5:
             ]
 
     if not df_raw.empty:
-        df_raw['Flag'] = df_raw.groupby(['pickup_date', 'last_name', 'first_name', 'phone'])['custom_flag'].transform('max')
-        df_raw['Flag'] = df_raw['Flag'].apply(lambda x: "🚨 CUSTOM" if str(x) == "1" else "OK")
+        df_raw['Flag_Custom'] = df_raw.groupby(['pickup_date', 'last_name', 'first_name', 'phone'])['custom_flag'].transform('max')
+        df_raw['Flag_Paid'] = df_raw.groupby(['pickup_date', 'last_name', 'first_name', 'phone'])['paid_flag'].transform('max')
+
+        def make_flags(row):
+            flags = []
+            if pd.notna(row['Flag_Custom']) and float(row['Flag_Custom']) > 0:
+                flags.append("🚨 CUSTOM")
+            if pd.notna(row['Flag_Paid']) and float(row['Flag_Paid']) > 0:
+                flags.append("💳 PAID")
+            return " + ".join(flags) if flags else "OK"
+            
+        df_raw['Flags'] = df_raw.apply(make_flags, axis=1)
 
         def make_pivot_val(row):
             val = format_qty(row['quantity'])
@@ -1486,24 +1517,6 @@ with tab5:
         df_raw['pivot_val'] = df_raw.apply(make_pivot_val, axis=1)
 
         pivot_df = df_raw.pivot_table(
-            index=['Daily Order #', 'status', 'Flag', 'first_name', 'last_name', 'phone', 'pickup_date', 'pickup_time', 'notes'],
+            index=['Daily Order #', 'status', 'Flags', 'first_name', 'last_name', 'phone', 'pickup_date', 'pickup_time', 'notes'],
             columns='item_name',
             values='pivot_val',
-            aggfunc=lambda x: ' + '.join(str(v) for v in x)
-        ).reset_index()
-
-        pivot_df.fillna("", inplace=True)
-        pivot_df.columns.name = None
-        pivot_df = pivot_df.sort_values(by=['pickup_date', 'Daily Order #'])
-
-        st.dataframe(pivot_df, use_container_width=True)
-        
-        csv_orders = pivot_df.to_csv(index=False).encode("utf-8")
-        st.download_button(
-            label="📥 Export Wide Orders Table (CSV)",
-            data=csv_orders,
-            file_name="Customer_Orders_Wide_Format.csv",
-            mime="text/csv",
-        )
-    else:
-        st.info("No active orders match your criteria.")
