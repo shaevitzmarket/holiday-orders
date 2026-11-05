@@ -898,9 +898,8 @@ ADD 1 tray franks in blanket",1,,Completed,0
 ",0,,Pending,0
 872,Thanksgiving 2026,KAREN,SILVERSTEIN,(847) 778 - 4007,,2026-11-25 (Wed),10:00 AM - 11:00 AM,Sweet & Sour Meatballs Tray,,1.0,"****ALSO WANTS 10# OF PICKLED DECKLE
 ",0,,Pending,0
-873,Thanksgiving 2026,Katy,Silvers,(708) 243 - 4105,,2026-11-24 (Tue),2:00 PM - 3:00 PM,20-24 lb Turkey,Cleaned,2.0,"*****DELIVERY**************
-ALSO WANTS A WINGS TRAY
-ALSO WANTS A DELI WRAP TRAY",0,,Pending,0
+873,Thanksgiving 2026,Katy,Silvers,(708) 243 - 4105,,2026-11-24 (Tue),2:00 PM - 3:00 PM,20-24 lb Turkey,Cleaned,2.0,"DELIVERY
+",1,,Pending,0
 874,Thanksgiving 2026,AARON,MELMAN,(847) 830 - 7545,,2026-11-25 (Wed),12:00 PM - 1:00 PM,Turkey Breast,pieces,1.0,"ADD RABBINIC DISCOUNT
 I GUESS IT SHOULD BE SUBTRACT, BUT YOU KNOW WHAT I MEAN",1,,Pending,0
 875,Thanksgiving 2026,JACI,KRANDEL,(815) 790 - 5634,,2026-11-25 (Wed),9:00 AM - 10:00 AM,20-24 lb Turkey,Spatchcock,1.0,******ALSO WANTS FATTY CORNED BEEF 2-3#********,0,,Pending,0
@@ -993,3 +992,7 @@ ONLINE ORDER PAID FOR",1,,Pending,0
 954,Thanksgiving 2026,GARY,GRUEN,(847) 778 - 7072,,2026-11-24 (Tue),10:00 AM - 11:00 AM,Skirt Steak,lbs,5.0,,0,Tenderized,Pending,0
 955,Thanksgiving 2026,GARY,GRUEN,(847) 778 - 7072,,2026-11-24 (Tue),10:00 AM - 11:00 AM,Salami Whole,each,2.0,,0,,Pending,0
 956,Thanksgiving 2026,GARY,GRUEN,(847) 778 - 7072,,2026-11-24 (Tue),10:00 AM - 11:00 AM,Turkey Gravy,each,1.0,,0,,Pending,0
+957,Thanksgiving 2026,Katy,Silvers,(708) 243 - 4105,,2026-11-24 (Tue),2:00 PM - 3:00 PM,Deli Wrap Tray,each,1.0,"DELIVERY
+",1,,Pending,0
+958,Thanksgiving 2026,Katy,Silvers,(708) 243 - 4105,,2026-11-24 (Tue),2:00 PM - 3:00 PM,Wings Tray,each,1.0,"DELIVERY
+",1,,Pending,0
